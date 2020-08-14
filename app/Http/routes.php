@@ -1,6 +1,8 @@
 <?php
 
 Route::auth();
+
+Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
 Route::get('/nap', 'DepositController@deposit');
 
