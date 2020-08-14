@@ -1,63 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="{!!url('public/images/logo.png')!!}" alt="logo" width="50" height="20">
+<head>
+  <meta charset="UTF-8">
+   <!-- <meta name="viewport" content="width=device-width, initial-scale=1 /> -->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    
+  <title>Document</title>
 
-    <title>Fshop : Hệ thông bán hàng trực tuyến SCODEWEB</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <!-- Bootstrap core CSS -->
-    <link href="{!!url('public/bootstrap/css/bootstrap.min.css')!!}" rel="stylesheet">
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="public/css/mevivu.min.css">
+  
+  <link rel="stylesheet" href="public/css/style.css">
+</head>
 
-    <style>
-        body {
-            font-family: 'Lato';
-        }
 
-        .fa-btn {
-            margin-right: 6px;
-        }
-    </style>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    {{-- <link href="{!!url('public/bootstrap/css/ie10-viewport-bug-workaround.css')!!}" rel="stylesheet"> --}}
+    
 
-    <!-- Custom styles for this template -->
-    <link href="{!!url('public/front-end/front-end-style.css')!!}" rel="stylesheet">
-    <link rel='stylesheet' id='camera-css'  href="{!!url('public/css/camera.css')!!}" type='text/css' media='all'>
-    <link rel='stylesheet' id='camera-css' href="{!!url('public/css/cam-1.css')!!}" type='text/css' media='all'>
 
-    <link href="{!!asset('css/blueimp-gallery.css')!!}" rel="stylesheet">
-    <!-- <link rel='stylesheet' id='camera-css'  href='public/css/camera.css' type='text/css' media='all'>  -->
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    {{-- <script type='text/javascript' src="{!!url('public/bootstrap/js/ie-emulation-modes-warning.js')!!}"></script> --}}
-    <script type='text/javascript' src="{!!url('public/js/ads.js')!!}"></script> 
+<header id="header_main" class="container">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <div id="divAdLeft" style="display: none; position: absolute;  margin-top: 50px;">       
-      <a href="http://api.hostinger.vn/redir/1309904" target="_blank"><img src="http://www.hostinger.vn/banners/vn/hostinger-160x600-1.gif" alt="Hosting Miễn Phí" border="0" width="170" height="600" /></a>
+      <div class="hidden-sm hidden-lg">
+      
+      <form action="" style="width: 30%; margin-left: 70%;">
+        <select name="language_mobile" class="form-control" style="height: 22px; padding: 0px">
+          <option value=""><span class="glyphicon glyphicon-globe"></span> Language</option>
+          <option value=""><span class="glyphicon glyphicon-globe"></span> English</option>
+          <option value=""><span class="glyphicon glyphicon-globe"></span> French</option>
+          
+        </select>
+        </form>
+      
+      </div>
+    
+        
+      <div class="row">
+    <div class="col-xs-4 col-sm-2">
+        <a href="home.html"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
-    <div id="divAdRight" style="display: none; position: absolute;margin-top: 50px">      
-      <a href="http://api.hostinger.vn/redir/1309904" target="_blank"><img src="http://www.hostinger.vn/banners/vn/hostinger-160x600-2.gif" alt="Hosting Miễn Phí" border="0" width="170" height="600" /></a>
-    </div> 
-{{--     <script>       
-        document.write("<script type='text/javascript' language='javascript'> MainContentW = 1150;LeftBannerW = 150;RightBannerW = 150;LeftAdjust = 35;RightAdjust = 0;TopAdjust = 5;ShowAdDiv();window.onresize=ShowAdDiv;;<\/script>");      
-    </script> --}}
-  </head>
+    <div class="col-sm-3 ngonngu hidden-xs">
+        <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
+
+            <ul class="language_desktop">
+                      <li><a href="#">Spanish</a></li>
+                      <li><a href="deal_story.html">French</a></li>
+                      
+                    </ul>
+
+    </div>
+    <div class="vihanmuc col-xs-5 col-sm-4 text-left">
+      <a href="#"><span class="glyphicon glyphicon-oil"></span> Wallet level</a>
+    </div>
+    <div class="thongbao col-xs-2">
+      <a id="clear_thongbao" class="icon_thongbao" href="#"><span class="glyphicon glyphicon-bell"></span><span id="thongbao" style="margin-top: -20px; padding: 1px 4px; background: red;" class="badge">5</span></a>
+      <ul class="menu_thongbao">
+        <li><a href="#">Bạn có cơ hội trúng iphone 12</a></li>
+        <li><a href="deal_story.html">bạn vừa nhận 500 point từ Allen</a></li>
+      </ul>
+    </div>
+    <div class="menu col-xs-1 text-center">
+      <i class="glyphicon glyphicon-align-justify icon_menu"></i>
+      <ul class="menu-right">
+                      <li><a href="#">Information</a></li>
+                      <li><a href="deal_story.html">Story</a></li>
+                      <li><a href="#">Develop</a></li>
+                      <li><a href="#">Setting</a></li>
+                      <li><a href="#">Change password</a></li>
+                      <li><a href="#">Tutorial video</a></li>
+                      <li><a href="contact.html">Contact</a></li>
+                      <li><a href="login.html">Logout</a></li>
+                    </ul>
+    </div>
+  </div>
+    
+</header>
