@@ -15,9 +15,9 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="public/css/mevivu.min.css">
+  <link rel="stylesheet" href="{!!url('public/css/mevivu.min.css')!!}">
   
-  <link rel="stylesheet" href="public/css/style.css">
+  <link rel="stylesheet" href="{!!url('public/css/style.css')!!}">
 </head>
 
 
@@ -43,7 +43,7 @@
         
       <div class="row">
     <div class="col-xs-4 col-sm-2">
-        <a href="home.html"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
+        <a href="home.html"><img src="{!!url('public/images/customLogo.png')!!}" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
     <div class="col-sm-3 ngonngu hidden-xs">
         <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
