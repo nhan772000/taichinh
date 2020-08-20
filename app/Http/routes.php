@@ -3,6 +3,8 @@
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
 
+//wallet
+Route::get('/wallet','WalletController@showWallet');
 
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
