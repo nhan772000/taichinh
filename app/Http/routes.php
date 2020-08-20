@@ -3,6 +3,7 @@
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
 Route::get('/nap', 'DepositController@deposit');
+Route::get('/tangHM', 'tangHMController@showtangHM');
 
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
