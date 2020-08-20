@@ -2,7 +2,7 @@
 
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
-
+Route::get('/rut', 'RutController@showRut');
 
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
