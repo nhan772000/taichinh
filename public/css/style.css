@@ -1,0 +1,237 @@
+
+
+body {
+    background: #EDEDE7 url(bgHtml.png) top center no-repeat !important;
+} 
+@media only  screen and (max-width: 768px ) {
+     .row .col-xs-4{
+        padding:0px 0px 0px 0px;
+    }
+    .mevivu_home_sesion1 div.col-xs-4, .mevivu_home_sesion3 div.col-xs-4,
+    .mevivu_home_sesion3 div.col-xs-4{
+        padding:0px 2px 0px 2px;
+    }
+    .col-xs-12{
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .row{
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+}
+
+
+@media only  screen and (min-width: 768px ) {
+    
+   
+        .container{
+        max-width: 960px;
+    }
+}
+        
+        .col_margin_bottom{
+            margin-bottom: 20px;
+        }
+        .margin_row{
+            margin:10px 0px 10px 0px;
+        }
+        .navbar-inverse {
+    background-color: #3a6569;
+    border-color: #3a6569;
+        }
+    .navbar-toggle{
+        display:unset;
+    }
+    .nav_toggle{
+        display:none;
+    }
+    .col-xs-6, .col-sm-4{
+        padding-top: 10px;
+    }
+    .button_home{
+            display: inline-grid; 
+            font-size: 14px;
+             line-height: 40px;
+              width: 100%;
+        }
+        .icon_size{
+            font-size: 30px;
+        }
+.btn-success1{
+    background-color: #009E4E;
+    color: white;
+    padding: 6px 2px;
+}
+.btn-success1:hover, .btn-success1:focus{
+    background-color: #228653;
+    color: white;
+}
+.mevivu_home_sesion3{
+    margin:0px 0px 10px 0px;
+}
+.mevivu_home_sesion2 .panel-heading, .mevivu_home_sesion2 .panel-body{
+    padding:0px;
+}
+.mevivu_home_sesion2{
+
+    padding-top: 20px;
+}
+.container{
+    padding:0px;
+}
+#header_main{
+    padding:0px;
+}
+#header_main .row{
+    width: 100%;
+    margin:0px;
+    height: 70px;
+    z-index: 99;
+    position: sticky;
+    top: 0px;
+    box-shadow: 0px 3px 3px 0px #a09c9d;
+    
+   background-color: #009E4E;
+    padding: 10px 0px 10px 0px;
+        
+}
+#header_main .ngonngu>a, #header_main .thongbao>a, #header_main .vihanmuc>a, #header_main .menu i{
+  color: white;
+  line-height: 55px;
+    font-size: 14px;
+} 
+
+#header_main .menu i{
+   z-index: 3;
+}
+
+#header_main .row .logo img{
+        width: 60%;
+    height: 40px;
+}
+#header_main .row .vihanmuc, #header_main .row .ngonngu, #header_main .row .thongbao, #header_main .row .menu   {
+    padding: 0px 0px 0px 0px;
+    text-align: center;
+}
+
+#header_main ul.menu-right li:last-child a, #header_main ul.language_desktop li:last-child a, #header_main ul.menu_thongbao li:last-child a{
+    border-bottom: none;
+}  
+#header_main ul.menu_thongbao li a{
+    padding: 10px 0px 10px 5px;
+    border-bottom: 1px solid white;
+    display: block;
+    transition: 0.3s ease-in-out;
+    color: white;
+    font-size: 12px;
+}  
+#header_main ul.menu-right li a, #header_main ul.language_desktop li a{
+    padding: 10px 0px 10px 15px;
+    border-bottom: 1px solid white;
+    display: block;
+    transition: 0.3s ease-in-out;
+    color: white;
+    font-size: 14px;
+}
+#header_main ul.menu-right li a:before{
+    content:"» ";
+    font-size: 16px;
+}
+#header_main ul.menu_thongbao li a:hover{
+    text-decoration: none;
+}
+#header_main ul.menu_thongbao li a:hover{
+    text-decoration: none;
+    background-color: #4cd24c;
+}
+#header_main ul.menu-right li a:hover, #header_main ul.language_desktop li a:hover{
+    text-decoration: none;
+    padding-left:20px;
+    background-color: #4cd24c;
+}
+#header_main ul.menu-right, #header_main ul.language_desktop, #header_main ul.menu_thongbao{
+    width: 250px;
+    opacity: 0;
+    right: -1px;
+    top: 60px;
+    text-align: left;
+    padding: 0px 0px 5px 0px;
+    list-style: none;
+    background-color: #22b322;
+    position: absolute;
+    z-index: -1;
+    transform: translateY(-140%);
+    transition: 0.3s ease-in;
+    
+}
+.icon_menu{
+    cursor: pointer;
+    color:white;
+    font-size: 20px;
+    z-index: 10;
+}
+.menu-right_show{
+   transform: translateX(0%) !important;
+   opacity: 1 !important;
+   z-index: 2;
+   
+}
+#mevivu_signin div{
+    padding:0px;
+}
+#mevivu_signin label, #mevivu_signin a, #mevivu_signup label, #mevivu_signup a, #mevivu_signup h2{
+  color: white;
+}
+#mevivu_signup, #mevivu_changepass{
+}
+#mevivu_changepass .well{
+    padding:30px;
+    background: #2e6da4;
+}
+#mevivu_signin .well, #mevivu_signup .well {
+        box-shadow: 5px 5px 5px 0px #a09c9d;
+    border: 1px solid #2e6da4;
+    padding: 30px;
+    background:#5cb85c;
+}
+#mevivu_changepass p{
+    line-height: 30px;
+    font-size: 18px;
+}
+    
+#deal_story{
+    margin-top: 5%;
+}
+.mevivu_vi{
+    margin-top: 5%;
+}
+#header_main .logo{
+
+}
+#header_main .vihanmuc{
+  
+}
+#header_main .ngonngu{
+    
+}
+#header_main .thongbao{
+   
+}
+#header_main .menu{
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

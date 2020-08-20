@@ -1,8 +1,14 @@
 <?php
 
 Route::auth();
+Route::get('/', 'HomepageController@showHomepage');
+Route::get('/login', 'loginController@showLogin');
+
+
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
+
+Route::get('/nap', 'DepositController@deposit');
 
 Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
 Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
@@ -14,7 +20,7 @@ Route::get('admin/password/reset', ['as'  => 'getreser', 'uses' =>'Admin\AuthCon
 
 Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@logout']);
 
-Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
+// Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
 // cart - oder
 Route::get('gio-hang', ['as'  => 'getcart', 'uses' =>'PagesController@getcart']);
 // them vao gio hang
