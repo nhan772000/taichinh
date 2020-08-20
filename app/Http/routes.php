@@ -2,6 +2,7 @@
 
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
+Route::get('/accounting', 'AccountingController@showAccounting');
 
 
 Route::get('/user', 'HomeController@index');
