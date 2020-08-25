@@ -16,6 +16,44 @@ use DB,Cart,Datetime;
 
 class PagesController extends Controller
 {
+
+    public function showRutView()
+   {
+        return  view ('rut');
+   }
+
+   public function showNapView()
+   {
+        return  view ('nap');
+   }
+
+   public function showChuyenView()
+   {
+        return  view ('chuyen');
+   }
+
+   public function showWalletMenuView()
+   {
+        return  view ('wallet');
+   }
+
+   public function showTangHMView()
+   {
+        return  view ('tangHM');
+   }
+
+   public function showContactView()
+   {
+        return  view ('contact');
+   }
+
+
+
+
+
+
+
+
     public function index()
     {
         // mobile

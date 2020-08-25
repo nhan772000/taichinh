@@ -4,11 +4,21 @@ Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
 
 
+Route::get('/rut', 'PagesController@showRutView');
+Route::get('/nap', 'PagesController@showNapView');
+Route::get('/chuyen', 'PagesController@showChuyenView');
+Route::get('/walletmenu', 'PagesController@showWalletMenuView');
+Route::get('/tangHM', 'PagesController@showTangHMView');
+Route::get('/contact', 'PagesController@showContactView');
+
+
+
+
+
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
 
-Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
-Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
+
 
 // admin route 
 Route::get('admin/login', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@showLoginForm']);
