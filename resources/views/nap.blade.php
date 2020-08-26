@@ -11,7 +11,12 @@
 
           </div>
           <div class="col-xs-12 text-left">
-              <div class="form-group">
+              
+            
+          </div>
+        </div>
+        <form action="{{url('form-Nap') }}" method="post" enctype="multipart/form-data">
+          <div class="form-group">
             <label for="nap">you want type?:</label>
             <select required id="chonloainap" class="form-control" name="nap">
               <option selected disabled>--Select typer--</option>
@@ -24,11 +29,6 @@
             <div id="select_VND_or_USDT">
               
             </div>
-            
-          </div>
-        </div>
-        <form action="#" method="post">
-
           <div class="form-group">
             <label for="point">Point:</label>
             <input required type="text" id="point_chuyen" class="form-control" name="point" placeholder="point" >

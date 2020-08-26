@@ -23,9 +23,15 @@ class PagesController extends Controller
    }
 
    public function showNapView()
-   {
-        return  view ('nap');
-   }
+   {    
+    if (Auth::check())
+    {
+      return view('nap');
+    }
+    else {
+        return  redirect ('/');
+     }
+    }
 
    public function showChuyenView()
    {
