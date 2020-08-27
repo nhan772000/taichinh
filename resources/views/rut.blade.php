@@ -7,15 +7,15 @@
     <div class="col-xs-12 col-sm-8 col-sm-offset-2">
       <div class="well well-sm">
         <h2 class="text-center">Rút</h2>
-        <form action="#" method="post">
+        <form action="{{url('form-Rut')}}" method="post">
           <p class="alert alert-warning">bạn có thể rút tối đa 1000 point</p>
           <div class="form-group">
             <label for="sodiem">Số điểm bạn muốn rút:</label>
-            <input required type="text" class="form-control" id="sodiem" placeholder="Số điểm" name="sodiem">
+            <input required type="number" class="form-control" id="sodiem" placeholder="Số điểm" name="point">
           </div>
           <div class="form-group">
-            <label for="country">Bạn muốn rút qua:</label>
-            <select required id="chonloairut" class="form-control" id="country" name="country">
+            <label for="currency">Bạn muốn rút qua:</label>
+            <select required id="chonloairut" class="form-control" id="currency" name="currency">
               <option selected disabled>--Select typer--</option>
                   <option value="1">VND</option>
                   <option value="2">USDT</option>
@@ -24,6 +24,10 @@
           </div>
           <div id="select_VND_or_USDT" class="form-group">
            
+          </div>
+           <div class="form-group">
+            <label for="description">Ghi chú:</label>
+            <input type="text" class="form-control" name="description" placeholder="Ghi chú gì đó??">
           </div>
           
           <label for="pwdtt">Account password:</label>

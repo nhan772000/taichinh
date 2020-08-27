@@ -31,7 +31,7 @@
             </div>
           <div class="form-group">
             <label for="point">Point:</label>
-            <input required type="text" id="point_chuyen" class="form-control" name="point" placeholder="point" >
+            <input required type="number" id="point_chuyen" class="form-control" name="point" placeholder="point" >
            <!--  khi nhập điểm thì hiện ra -->
            <div id="thongbaosotien">
               
@@ -51,7 +51,10 @@
             </button>
           </div>
           </div>
-          <p class="alert alert-info">Ghi chú gì đó??</p>
+          <div class="form-group">
+            <label for="description">Ghi chú:</label>
+            <input type="text" class="form-control" name="description" placeholder="Ghi chú gì đó??">
+          </div>
           
           <button type="submit" class="btn btn-success btn-block" name="Pay">Nạp</button>
         </form>

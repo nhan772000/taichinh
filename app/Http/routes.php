@@ -11,7 +11,9 @@ Route::get('/walletmenu', 'PagesController@showWalletMenuView');
 Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');
 
-Route::post('form-Nap','NapController@postTransaction');
+Route::post('form-Nap','WalletMainController@NapTransaction');
+Route::post('form-Rut','WalletMainController@RutTransaction');
+Route::post('form-Chuyen','WalletMainController@ChuyenTransaction');
 
 
 Route::get('/user','HomeController@index');

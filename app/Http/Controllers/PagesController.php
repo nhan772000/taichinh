@@ -19,23 +19,35 @@ class PagesController extends Controller
 
     public function showRutView()
    {
-        return  view ('rut');
+          if (Auth::check())
+    {
+        return view('rut');
+    }
+    else {
+        return  redirect ('/login');
+     }
    }
 
    public function showNapView()
    {    
     if (Auth::check())
     {
-      return view('nap');
+          return view('nap');
     }
     else {
-        return  redirect ('/');
+        return  redirect ('/login');
      }
     }
 
    public function showChuyenView()
    {
-        return  view ('chuyen');
+         if (Auth::check())
+    {
+          return view('chuyen');
+    }
+    else {
+        return  redirect ('/login');
+     }
    }
 
    public function showWalletMenuView()
