@@ -5,7 +5,7 @@
    <!-- <meta name="viewport" content="width=device-width, initial-scale=1 /> -->
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     
-  <title>Document</title>
+  <title>@yield('title')</title>
 
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">

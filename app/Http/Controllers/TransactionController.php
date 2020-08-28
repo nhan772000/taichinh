@@ -61,7 +61,7 @@ class TransactionController extends Controller
       return view('transactionHistory', compact('transactions'));
    }
    //Neu user_hoanve = 1 -> TietKiem 30%
-   // Neu user_hoanve = 2 -> VeLien 5%
+   // Neu user_hoanve = 2 -> Ve Lien 5% 
    public function cashBackTietKiem($points, $idNguoiNhan)
    {
       $id = auth()->user()->id;
