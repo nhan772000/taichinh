@@ -12,7 +12,7 @@ Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');
 
 
-// LICH SU GIAO DICH ...
+// LICH SU GIAO DICH
 Route::get('/transaction', 'TransactionController@showTransactionHistory');
 // Route::post('/transaction', 'TransactionController@submitFormHistory')->name('transaction.submit');
 

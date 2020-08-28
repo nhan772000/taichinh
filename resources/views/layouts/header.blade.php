@@ -16,14 +16,9 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="{!!url('public/css/mevivu.min.css')!!}">
-  
+
   <link rel="stylesheet" href="{!!url('public/css/style.css')!!}">
 </head>
-
-
-    
-
-
 
 <header id="header_main" class="container">
 
@@ -39,8 +34,6 @@
         </form>
       
       </div>
-    
-        
       <div class="row">
     <div class="col-xs-4 col-sm-2">
         <a href="home.html"><img src="{!!url('public/images/customLogo.png')!!}" width="100%" alt="" style="padding-top: 7px;"></a>
