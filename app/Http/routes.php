@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
-
+Route::get('/contact', 'ContactController@showContact');
 
 Route::get('/rut', 'PagesController@showRutView');
 Route::get('/nap', 'PagesController@showNapView');

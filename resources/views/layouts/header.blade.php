@@ -36,7 +36,7 @@
       </div>
       <div class="row">
     <div class="col-xs-4 col-sm-2">
-        <a href="home.html"><img src="{!!url('public/images/customLogo.png')!!}" width="100%" alt="" style="padding-top: 7px;"></a>
+        <a href="{{URL::to('/')}}"><img src="{!!url('public/images/customLogo.png')!!}" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
     <div class="col-sm-3 ngonngu hidden-xs">
         <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
@@ -67,7 +67,7 @@
                       <li><a href="#">Setting</a></li>
                       <li><a href="#">Change password</a></li>
                       <li><a href="#">Tutorial video</a></li>
-                      <li><a href="contact.html">Contact</a></li>
+                      <li><a href="{{URL::to('/contact')}}">Contact</a></li>
                       <li><a href="login.html">Logout</a></li>
                     </ul>
     </div>
