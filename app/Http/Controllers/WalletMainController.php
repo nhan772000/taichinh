@@ -26,16 +26,16 @@ class WalletMainController extends Controller
 	        $file_name = $file->getClientOriginalName(); 
 	        $file->move($destinationPath , $file_name); 
 
-	        $url_phieuCK = "../".$destinationPath. "" .$file_name;
+	        $url_phieuCK = $destinationPath. "" .$file_name;
 	        $point = $request->point;
 	        $amount = $point * $rate;
 
 	        //insert to database
 		    $transaction = new Transaction();
-			$transaction->transaction_teller = $id;
-			$transaction->transaction_order = 0;
-		    $transaction->transaction_type = $request->nap;
-		    $transaction->transaction_amount = $amount;
+			$transaction->transaction_order = 1;
+			$transaction->transaction_ofuser = $id;
+			$transaction->transaction_checker = null;				   
+	   		$transaction->transaction_type = $request->nap;;
 		    $transaction->transaction_point = $point;
 		    $transaction->transaction_description = $request->description;
 		    $transaction->transaction_status = 0;
@@ -59,16 +59,16 @@ class WalletMainController extends Controller
    			if(Hash::check($request->pwdtt,$passWord)){
 	   			$point = $request->point;
 	   			$amount = $point * $rate;
-
+ 
 	   			$transaction = new Transaction();
-	   			$transaction->transaction_teller = $id;
-	   			$transaction->transaction_order = 1;
+	   			$transaction->transaction_order = 0;
+				$transaction->transaction_ofuser = $id;
+				$transaction->transaction_checker = null;				   
 	   			$transaction->transaction_type = $request->currency;
-	   			$transaction->transaction_amount = $amount;
 	   			$transaction->transaction_point = $point;
 	   			$transaction->transaction_description = $request->description;
 	   			$transaction->transaction_status = 0;
-	   			$transaction->transaction_bill= 'null';
+	   			$transaction->transaction_bill= null;
 				$transaction->save();
 				
 				return back()->with('success','Bạn đã rút tiền thành công. Chúng tôi sẽ chuyển tiền của bạn sớm nhất có thể!');
@@ -101,11 +101,12 @@ class WalletMainController extends Controller
 					if($pointSend <= $wallet_amount_send){
 						$wallet_amount_send = $wallet_amount_send - $pointSend;
 						$wallet_amount_receiving = $wallet_amount_receiving + $pointSend;
+
 						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_amount' => $wallet_amount_send]);
 						WalletMain::where('main_wallet_ofuser',$idReceiving)->update(['main_wallet_amount' => $wallet_amount_receiving]);
 
-						$walletMainID_send = WalletExt::where('main_wallet_ofuser', $id)->value('main_wallet_id');
-						$walletMainID_receiving = WalletExt::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_id');
+						$walletMainID_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+						$walletMainID_receiving = WalletMain::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_id');
 				   		
 						$createWalletHistoryController = new WalletMainController();
 
@@ -122,6 +123,7 @@ class WalletMainController extends Controller
 					if($pointSend <= $wallet_amount_send){
 						$wallet_amount_send = $wallet_amount_send - $pointSend;
 						$wallet_amount_receiving = $wallet_amount_receiving + $pointSend;
+
 						WalletExt::where('ext_wallet_ofuser',$id)->update(['ext_wallet_amount' => $wallet_amount_send]);
 						WalletExt::where('ext_wallet_ofuser',$idReceiving)->update(['ext_wallet_amount' => $wallet_amount_receiving]);
 

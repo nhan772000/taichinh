@@ -221,6 +221,18 @@ body {
 #header_main .menu{
     
 }
+#transactiontable thead{
+    background: #009E4E;
+}
+#transactiontable th{
+    border-top: 1px solid #ddd ;
+    color: #fff;
+    border-left: 1px solid #ddd ;
+}
+#transactiontable th:last-child{
+    border-right: 1px solid #ddd ;
+}
+
 
 
 

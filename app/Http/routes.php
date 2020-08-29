@@ -28,8 +28,14 @@ Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController
 Route::get('admin/login', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@showLoginForm']);
 Route::post('admin/login', ['as'  => 'postlogin', 'uses' =>'Admin\AuthController@login']);
 Route::get('admin/password/reset', ['as'  => 'getreser', 'uses' =>'Admin\AuthController@email']);
-
 Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@logout']);
+
+//Xử lý transaction
+Route::get('admin/transactionmanager', 'TransactionManagerController@ShowAllTransaction');
+
+Route::any('admin/transactionmanager/acceptTransaction', 'TransactionManagerController@acceptTransaction');
+Route::post('admin/transactionmanager/cancelTransaction', 'TransactionManagerController@cancelTransaction');
+Route::post('admin/transactionmanager/deleteTransaction', 'TransactionManagerController@deleteTransaction');
 
 // Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
 // cart - oder
@@ -52,10 +58,15 @@ Route::resource('payment', 'PayMentController');
 // --------------------------------cac cong viec trong admin (back-end)--------------------------------------- 
 Route::group(['middleware' => 'admin'], function () {
       Route::group(['prefix' => 'admin'], function() {
-        
+
        	Route::get('/home', function() {         
          return view('back-end.home');       	
-       });
+       }
+
+     );   
+          
+
+
        // -------------------- quan ly danh muc----------------------
        	Route::group(['prefix' => 'danhmuc'], function() {
            Route::get('add',['as'        =>'getaddcat','uses' => 'CategoryController@getadd']);
