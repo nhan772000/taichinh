@@ -31,11 +31,15 @@ Route::get('admin/password/reset', ['as'  => 'getreser', 'uses' =>'Admin\AuthCon
 Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@logout']);
 
 //Xử lý transaction
-Route::get('admin/transactionmanager', 'TransactionManagerController@ShowAllTransaction');
+Route::get('admin/transactionmanager', 'Admin\TransactionManagerController@ShowAllTransaction');
 
-Route::any('admin/transactionmanager/acceptTransaction', 'TransactionManagerController@acceptTransaction');
-Route::post('admin/transactionmanager/cancelTransaction', 'TransactionManagerController@cancelTransaction');
-Route::post('admin/transactionmanager/deleteTransaction', 'TransactionManagerController@deleteTransaction');
+Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+Route::any('/form-editTransaction', 'Admin\TransactionManagerController@postEditTransaction');
+
+
+Route::any('admin/transactionmanager/acceptTransaction', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
 
 // Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
 // cart - oder
@@ -58,7 +62,7 @@ Route::resource('payment', 'PayMentController');
 // --------------------------------cac cong viec trong admin (back-end)--------------------------------------- 
 Route::group(['middleware' => 'admin'], function () {
       Route::group(['prefix' => 'admin'], function() {
-
+          
        	Route::get('/home', function() {         
          return view('back-end.home');       	
        }

@@ -221,7 +221,7 @@ body {
 #header_main .menu{
     
 }
-#transactiontable thead{
+#transactiontable thead,#transactiontable tfoot{
     background: #009E4E;
 }
 #transactiontable th{
@@ -232,8 +232,19 @@ body {
 #transactiontable th:last-child{
     border-right: 1px solid #ddd ;
 }
+#transactiontable tfoot td{
+        color: #fff;
 
+}
+select{
+    height: 34px;
+    width: 100%;
+}
 
+.row{
+    margin-left: 0px ;
+    margin-right: 0px;
+}
 
 
 

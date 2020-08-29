@@ -1,5 +1,6 @@
 @include('back-end.layouts.header')
 @include('back-end.modules.top-nav')
+        @include('back-end.flash-message')
 
 <body>
 	<div class="row">
