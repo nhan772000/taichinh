@@ -61,7 +61,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-lg-3 col-form-label form-control-label">Order Type</label>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-3">
                                                             <select name="transaction_order" value="{{ $transaction->transaction_order}}">
                                                                  @if($transaction->transaction_type == 0)
                                                                     <option value="0" selected>Withdraw</option>
@@ -83,7 +83,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-lg-3 col-form-label form-control-label">Currency Type</label>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-3">
                                                             <select name="transaction_type" value="{{ $transaction->transaction_type}}">
                                                                 @if($transaction->transaction_type == 0)
                                                                     <option value="0" selected>VND</option>
@@ -115,7 +115,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-lg-3 col-form-label form-control-label">Status</label>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-3">
                                                             <select name="transaction_status" value="{{ $transaction->transaction_status}}">
                                                                 @if($transaction->transaction_type == 0)
                                                                     <option value="0" selected>Pending</option>
@@ -135,13 +135,13 @@
                                                     </div>
                                                      <div class="form-group row">
                                                         <label class="col-lg-3 col-form-label form-control-label">Created at</label>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-9">
                                                             <input readonly class="form-control" type="text" name="transaction_created_at" value="{{ $transaction->created_at}}"/>
                                                         </div>
                                                     </div>
                                                      <div class="form-group row">
                                                         <label class="col-lg-3 col-form-label form-control-label">Updated at</label>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-9">
                                                             <input readonly class="form-control" type="text" name="transaction_updated_at" value="{{ $transaction->updated_at}}"/>
                                                         </div>
                                                     </div>

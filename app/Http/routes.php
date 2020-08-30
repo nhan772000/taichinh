@@ -19,6 +19,7 @@ Route::post('form-Chuyen','WalletMainController@ChuyenTransaction');
 Route::get('/user','HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
 
+Route::get('/transaction', 'TransactionController@showTransactionHistory');
 
 
 Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
@@ -30,7 +31,7 @@ Route::post('admin/login', ['as'  => 'postlogin', 'uses' =>'Admin\AuthController
 Route::get('admin/password/reset', ['as'  => 'getreser', 'uses' =>'Admin\AuthController@email']);
 Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@logout']);
 
-//Xử lý transaction
+//Xử lý admin transaction
 Route::get('admin/transactionmanager', 'Admin\TransactionManagerController@ShowAllTransaction');
 
 Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');

@@ -1,5 +1,10 @@
 @extends('back-end.layouts.master')
 @section('content')
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script type="application/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="application/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="application/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <style>
 
 #myImg {
@@ -88,6 +93,24 @@
   }
 }
 </style>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#transactiontable tbody tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  $("#searchtype").on("change", function() {
+    var value = $(this).val().toLowerCase();
+    $("#transactiontable tbody tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+ 
+});
+</script>
             <div style="float: right; margin-top: 10px;" class="col col-xs-10 col-sm-offset-0">
                 <div class="well well-sm">
                     <div class="row ">
@@ -96,22 +119,44 @@
                         </div>
                     </div>
                     <div class="row">
+                    <div class="col-xs-12">
+                                        <div class="row">
+                    <div class="col-xs-2">
+
+                     <input style="height:34px" id="myInput" type="text" placeholder="Search..">
+                     </div>
+                     <div class="col-xs-4">
+                   
+                    
+                     </div>
+                       <div class="col-xs-2">
+
+                     <select id="searchtype" type="text">
+                        <option value="Withdraw">Withdraw</option>
+                        <option value="Deposit">Deposit</option>
+                        <option value="" selected>--Select type--</option>
+
+                     </select>
+                     </div>
+                     
+                     </div>
                         <div class="col-xs-12 text-center">
-                               
+                              
+
                             <table id="transactiontable" class="table table-striped table-bordered dt-responsive nowrap">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>ID user</th>
                                         <th>Type</th>
-                                        <th>Checker</th>
+                                        <th>ID Checker</th>
                                         <th>Currency</th>
                                         <th>Amount</th>
                                         <th>Point</th>
                                         <th>Description</th>
                                         <th>Bill</th>
                                         <th>Status</th>
-                                        <th>Create time</th>
+                                        <th>Updated time</th>
                                         <th>Edit</th>
                                         <th>Accept</th>
                                         <th>Cancel</th>
@@ -170,7 +215,7 @@
                                         @endif
                                     </td>
         
-                                    <td> {{ $transaction->created_at}}</td>
+                                    <td> {{ $transaction->updated_at}}</td>
 
                                     <td><button onclick="window.location.href='<?php echo url()->current(); ?>/editTransaction/{{ $transaction->transaction_id }}'" id="{{ $transaction->transaction_id }}" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></button></td>
 
@@ -218,31 +263,30 @@
                     </div>
                 </div>
             </div>
-  <script>
-// Get the modal
+            <script>
 
- modal = document.getElementById("myModal");
+                 modal = document.getElementById("myModal");
 
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
- function ShowImg(src, alt){
+                // Get the image and insert it inside the modal - use its "alt" text as a caption
+                var modalImg = document.getElementById("img01");
+                var captionText = document.getElementById("caption");
+                 function ShowImg(src, alt){
 
-    modal.style.display = "block";
-  modalImg.src = src;
-  $("#caption").html(alt);
-}
+                    modal.style.display = "block";
+                  modalImg.src = src;
+                  $("#caption").html(alt);
+                }
 
-// Get the <span> element that closes the modal
-var close = document.getElementsById("close");
+                // Get the <span> element that closes the modal
+                var close = document.getElementsById("close");
 
-// When the user clicks on <span> (x), close the modal
-function closeImg(){
+                // When the user clicks on <span> (x), close the modal
+                function closeImg(){
 
-    modal.style.display = "none";
+                    modal.style.display = "none";
   
 }
-</script>
+            </script>
 
     <script type="text/javascript">
   

@@ -20,13 +20,15 @@ use Illuminate\Pagination\Paginator;
 class TransactionManagerController extends Controller
 {
     public function ShowAllTransaction()
-   {        
+   {                    
+        $id_admin = Auth::guard('admin')->user()->id;
         $transactions = DB::table('transaction')-> orderBy('created_at', 'desc')->paginate(10);
         return view('back-end.transactionmanager', ['transactions' => $transactions]);
    }
 
 
     public function acceptTransaction(Request $request){
+            $id_admin = Auth::guard('admin')->user()->id;
             $transaction_id = $request->id;
             $transaction_ofuser = $request->ofuser;
             $point = $request->point;
@@ -38,7 +40,7 @@ class TransactionManagerController extends Controller
                 $wallet_main_amount = $wallet_main_amount -$point;
 
                 WalletMain::where('main_wallet_ofuser',$transaction_ofuser)->update(['main_wallet_amount' => $wallet_main_amount]);
-                Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
+                Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_admin, 'transaction_status' => 1]);
                 return $point;
             }
             elseif($type ==1){
@@ -86,11 +88,15 @@ class TransactionManagerController extends Controller
                     'transaction_type' => $request->transaction_type,
                     'transaction_point' => $request->transaction_point,
                     'transaction_description' => $request->transaction_description,
-                    'transaction_status' => $request->transaction_status
-
+                    'transaction_status' => $request->transaction_status,
+                    'updated_at' =>date('Y-m-d G:i:s')
                 ]);
 
 
             return back()->with('success','Updated');
    }
+  
+        
+
+ 
 }

@@ -92,74 +92,58 @@ class WalletMainController extends Controller
 			return back()->with('error',"Bạn không thể tự chuyển cho bản thân");	   		
 		}
    		if(Hash::check($request->pwdtt,$passWord)){
-   			if ($idReceiving != null){	
-				if (($request->wallet) == 0){
-					$wallet_amount_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-					$wallet_amount_receiving = WalletMain::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_amount');
-
-
-					if($pointSend <= $wallet_amount_send){
-						$wallet_amount_send = $wallet_amount_send - $pointSend;
-						$wallet_amount_receiving = $wallet_amount_receiving + $pointSend;
-
-						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_amount' => $wallet_amount_send]);
-						WalletMain::where('main_wallet_ofuser',$idReceiving)->update(['main_wallet_amount' => $wallet_amount_receiving]);
-
-						$walletMainID_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
-						$walletMainID_receiving = WalletMain::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_id');
-				   		
-						$createWalletHistoryController = new WalletMainController();
-
-				   		$createWalletHistoryController->createWalletHistory($pointSend, $walletMainID_send, 0);
-				   		$createWalletHistoryController->createWalletHistory($pointSend, $walletMainID_receiving, 1);
-					}else{
-						return back()->with('error','Số dư không đủ!');
-					}
-				}elseif (($request->wallet) == 1){
-					$wallet_amount_send = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
-					$wallet_amount_receiving = WalletExt::where('ext_wallet_ofuser', $idReceiving)->value('ext_wallet_amount');
-
-
-					if($pointSend <= $wallet_amount_send){
-						$wallet_amount_send = $wallet_amount_send - $pointSend;
-						$wallet_amount_receiving = $wallet_amount_receiving + $pointSend;
-
-						WalletExt::where('ext_wallet_ofuser',$id)->update(['ext_wallet_amount' => $wallet_amount_send]);
-						WalletExt::where('ext_wallet_ofuser',$idReceiving)->update(['ext_wallet_amount' => $wallet_amount_receiving]);
-
-						$walletExtID_send = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
-						$walletExtID_receiving = WalletExt::where('ext_wallet_ofuser', $idReceiving)->value('ext_wallet_id');
-				   		
-						$createWalletHistoryController = new WalletMainController();
-
-				   		$createWalletHistoryController->createWalletHistory($pointSend, $walletExtID_send, 0);
-				   		$createWalletHistoryController->createWalletHistory($pointSend, $walletExtID_receiving, 1);
-					}else{
-						return back()->with('error','Số dư không đủ!');
-					}
-
-		   		}
-		   		$payment = new Payment();
-	   			$payment->payment_amout = $pointSend;
-	   			$payment->payment_fromuser = $id;
-	   			$payment->payment_touser = $idReceiving;
-	   			$payment->payment_typewallet = $request->wallet;
-	   			$payment->payment_description = $request->description;
-	   			$payment->payment_status = 1;
-				$payment->save();
-
-				
-
-		   		return back()->with('success','Chuyển thành công');
-
-		   	}else{
+		
+   			if ($idReceiving == null){	
 				return back()->with('error',"Email 	".$request->email." không tồn tại!");	   		
-		   	}
-	   	}else{
+			}
+			if (($request->wallet) == 0){
+				$wallet_amount_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+				$wallet_amount_receiving = WalletMain::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_amount');
+
+
+				if($pointSend <= $wallet_amount_send){
+					
+					$cashBackTK = new TransactionController();
+					$cashBackTK->cashBackTietKiem($pointSend, $idReceiving);
+
+					return back()->with('success','Đã chuyển thành công');	
+				}else{
+					return back()->with('error','Số dư không đủ!');
+				}
+			}elseif (($request->wallet) == 1){
+				$wallet_amount_send = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+				$wallet_amount_receiving = WalletExt::where('ext_wallet_ofuser', $idReceiving)->value('ext_wallet_amount');
+				if($pointSend <= $wallet_amount_send){
+					
+				$cashBackTK = new TransactionController();
+					$cashBackTK->cashBackVeLien($pointSend, $idReceiving);
+
+					return back()->with('success','Đã chuyển thành công');	
+	
+				}else{
+					return back()->with('error','Số dư không đủ!');
+				}	
+			}
+		}else{
 	   		return back()->with('error','Sai mật khẩu!');	   		
-	   	}
+		}
+
+
+		$payment = new Payment();
+	   	$payment->payment_amout = $pointSend;
+	   	$payment->payment_fromuser = $id;
+	   	$payment->payment_touser = $idReceiving;
+	   	$payment->payment_typewallet = $request->wallet;
+	   	$payment->payment_description = $request->description;
+	   	$payment->payment_status = 1;
+		$payment->save();
+		return back()->with('success','Chuyển thành công');
+
+			
+	   
 	   	
- 	}
+ 		
+	}
 
  	public function createWalletHistory($amount, $ofwallet, $type){ 		
  	    $wallethistory = new WalletHistory();
