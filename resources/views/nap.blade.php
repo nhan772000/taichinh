@@ -19,9 +19,9 @@
           <div class="form-group">
             <label for="nap">you want type?:</label>
             <select required id="chonloainap" class="form-control" name="nap">
-              <option selected disabled>--Select typer--</option>
-              <option value="1">VND</option>
-              <option value="2">USDT</option>
+              <option value="0">--Select typer--</option>
+              <option value="0">VND</option>
+              <option value="1">USDT</option>
                   
             </select>
           </div>
@@ -41,6 +41,8 @@
           <div class="form-group">
             <label for="picture">Phiếu CK:</label>
             <input required type="file" class="form-control" name="picture">
+            <label for="picture">Phiếu CK 2 (Not require)</label>
+            <input type="file" class="form-control" name="picture2">
           </div>
           <label for="pwdtt">Account password:</label>
           <div class="input-group form-group">

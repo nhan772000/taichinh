@@ -33,14 +33,25 @@ Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@
 
 //Xử lý admin transaction
 Route::get('admin/transactionmanager', 'Admin\TransactionManagerController@ShowAllTransaction');
-
-Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
-Route::any('/form-editTransaction', 'Admin\TransactionManagerController@postEditTransaction');
-
-
-Route::any('admin/transactionmanager/acceptTransaction', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
 Route::get('admin/transactionmanager/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
 Route::get('admin/transactionmanager/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+
+//Xử lý deposit transaction
+Route::get('admin/transactionmanager/deposit', 'Admin\TransactionManagerController@getDepositTransaction');
+Route::any('admin/transactionmanager/deposit/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+Route::get('admin/transactionmanager/deposit/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/deposit/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/deposit/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+
+//Xử lý withdraw transactio
+Route::get('admin/transactionmanager/withdraw', 'Admin\TransactionManagerController@getWithdrawTransaction');
+Route::any('admin/transactionmanager/withdraw/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+Route::get('admin/transactionmanager/withdraw/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/withdraw/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/withdraw/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+Route::any('/form-editTransaction', 'Admin\TransactionManagerController@postEditTransaction');
 
 // Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
 // cart - oder

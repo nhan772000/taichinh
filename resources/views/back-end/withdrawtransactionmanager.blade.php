@@ -26,8 +26,6 @@
                                         <th>Amount</th>
                                         <th>Point</th>
                                         <th>Description</th>
-                                        <th>Bill</th>
-                                        <th>Bill2</th>
                                         <th>Status</th>
                                         <th>Updated time</th>
                                         <th>Edit</th>
@@ -61,40 +59,7 @@
                                     <td> {{ $transaction->transaction_point }}000</td>
                                     <td> {{ $transaction->transaction_point }} </td>
                                     <td> {{ $transaction->transaction_description}}</td>
-                                    <td>
-                                        @if($transaction->transaction_bill == null)
-                                            <span>...</span>
-                                        @else
-                                            <img onclick="ShowImg(this.src,this.alt)" id="img{{ $transaction->transaction_id }}" src="{{asset($transaction->transaction_bill)}}" width="50px" alt="Bill Transaction {{ $transaction->transaction_id }}"/>
-
-                                        @endif
-                                        
-                                        <div id="myModal" class="modal row">
-                                            <img class="modal-content" style="width:300px;" id="img01">
-                                           <div id="caption" style="color: red; font-weight: 700; font-size: 20px;">
-                            
-                                           </div>
-                                       <button onclick="closeImg()" id="close">X</button>
-                                       </div>
-                                            
-                                    </td>
-                                    <td>
-                                        @if($transaction->transaction_bill2 == null)
-                                            <span>...</span>
-                                        @else
-                                            <img onclick="ShowImg(this.src,this.alt)" id="img2{{ $transaction->transaction_id }}" src="{{asset($transaction->transaction_bill2)}}" width="50px" alt="Bill2 Transaction {{ $transaction->transaction_id }}"/>
-
-                                        @endif
-                                        
-                                        <div id="myModal" class="modal row">
-                                            <img class="modal-content" style="width:300px;" id="img01">
-                                           <div id="caption" style="color: red; font-weight: 700; font-size: 20px;">
-                            
-                                           </div>
-                                       <button onclick="closeImg()" id="close">X</button>
-                                       </div>
-                                            
-                                    </td>
+                                 
                                     <td > 
                                         @if($transaction->transaction_status =='0')
                                             <button id="stt{{ $transaction->transaction_id }}"  class="btnt btn btn-secondary" value="{{$transaction->transaction_status}}">Pending</button>
@@ -153,8 +118,6 @@
                                         <td>Amount</td>
                                         <td>Point</td>
                                         <td>Description</td>
-                                        <td>Bill</td>
-                                        <td>Bill2</td>
                                         <td>Status</td>
                                         <td>Updated time</td>
                                         <td>Edit</td>

@@ -736,7 +736,9 @@ h1.page-header {
 }
 
 /*Todo List Widget*/
-
+input[type=date]{
+	line-height: unset !important;
+}
 .todo-list-item .glyphicon { 
 	margin-right:5px; 
 	color: #9fadbb; 

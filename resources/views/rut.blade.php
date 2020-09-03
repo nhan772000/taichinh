@@ -16,9 +16,9 @@
           <div class="form-group">
             <label for="currency">Bạn muốn rút qua:</label>
             <select required id="chonloairut" class="form-control" id="currency" name="currency">
-              <option selected disabled>--Select typer--</option>
-                  <option value="1">VND</option>
-                  <option value="2">USDT</option>
+              <option  value="0">--select type--</option>
+                  <option value="0">VND</option>
+                  <option value="1">USDT</option>
                   
             </select>
           </div>

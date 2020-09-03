@@ -22,11 +22,18 @@ class WalletMainController extends Controller
    		if(Hash::check($request->pwdtt,$passWord)){
    			//upload file
 			$destinationPath = 'uploads/imgChuyenKhoan/';
-		    $file = $request->file('picture'); 
-	        $file_name = $file->getClientOriginalName(); 
-	        $file->move($destinationPath , $file_name); 
+			$file = $request->file('picture'); 
+			$file2 = $request->file('picture2'); 
 
-	        $url_phieuCK = $destinationPath. "" .$file_name;
+	        $file_name = $file->getClientOriginalName(); 
+			$file->move($destinationPath , $file_name); 
+			
+			$file_name2 = $file2->getClientOriginalName(); 
+	        $file2->move($destinationPath , $file_name2); 
+
+			$url_phieuCK = $destinationPath. "" .$file_name;
+			$url_phieuCK2 = $destinationPath. "" .$file_name2;
+
 	        $point = $request->point;
 	        $amount = $point * $rate;
 
@@ -39,7 +46,8 @@ class WalletMainController extends Controller
 		    $transaction->transaction_point = $point;
 		    $transaction->transaction_description = $request->description;
 		    $transaction->transaction_status = 0;
-		    $transaction->Transaction_bill = $url_phieuCK;
+			$transaction->Transaction_bill = $url_phieuCK;
+			$transaction->Transaction_bill2 = $url_phieuCK2;
 			$transaction->save();
 
 			return back()->with('success','Bạn đã nạp tiền thành công. Chúng tôi sẽ cập nhật ví tiền của bạn sớm nhất có thể!');
