@@ -15,8 +15,7 @@ Route::get('/contact', 'PagesController@showContactView');
 
 
 // LICH SU GIAO DICH
-Route::get('/transaction', 'TransactionController@showTransactionHistory');
-// Route::post('/transaction', 'TransactionController@submitFormHistory')->name('transaction.submit');
+Route::get('/transaction', 'TransactionController@showTransaction')->name('transaction.index');
 
 
 Route::get('/user', 'HomeController@index');
