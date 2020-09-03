@@ -233,7 +233,8 @@ body {
     float: left;
 }
 .btnt{
-    font-size: 12px !important;;
+    font-size: 12px !important;
+    line-height: 5px;
 }
 
 #transactiontable th{
