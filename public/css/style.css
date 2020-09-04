@@ -248,7 +248,9 @@ body {
     background-color: #009E4E;
     padding: 10px 0px 10px 0px;
 }
-
+.uppercase{
+    text-transform: uppercase;
+}
 .kcol2{
     width: 100%;
     margin: 0px;

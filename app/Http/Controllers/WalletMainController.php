@@ -15,6 +15,40 @@ use App\Payment;
 
 class WalletMainController extends Controller
 {
+	public function MLM($id, $count){
+		if($count <= 20){
+			
+			$id_ref = User::where('id', $id)->value('id_ref');
+			$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id_ref)->value('eco_wallet_amount');
+			$temp = $eco_wallet_amount - 500;
+			if ($count == 1 ){
+				$rate = 0.03;
+			}else if($count > 1 && $count < 6){
+				$rate = 0.005;
+			}else if($count > 5 && $count < 16){
+				$rate = 0.002;
+			}else{
+				$rate = 0.001;
+			}
+			if($temp > 0){
+				if($temp > ($rate * $eco_wallet_amount)){
+					$ext_wallet_amount_new = WalletExt::where('ext_wallet_ofuser', $id_ref)->value('ext_wallet_amount') + ($rate * $eco_wallet_amount);
+					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
+					return MLM($id_ref, $count +1);
+				}else{
+					$ext_wallet_amount_new = WalletExt::where('ext_wallet_ofuser', $id_ref)->value('ext_wallet_amount') + $temp;
+					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
+					return MLM($id_ref, $count +1);
+				}
+			}else{
+
+				return MLM($id_ref, $count +1);
+			}
+			WalletMain::where('main_wallet_ofuser',$transaction_ofuser)->update(['main_wallet_amount' => $wallet_main_amount]);
+		}else{
+			return null;
+		}
+	}
 	public function getWalletManager(){
 		$id = Auth::user()->id;  
 		$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');

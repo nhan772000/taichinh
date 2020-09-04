@@ -7,7 +7,7 @@
         <div class="col">
             <div class="row">
                 <div class="col kcol text-center uppercase">
-                    <h2 class="ktitle kwhite">Main Wallet</h2>
+                    <h2 class="ktitle kwhite uppercase">Main Wallet</h2>
                     <h3 class="kwhite"><b>Balance: </b><span>{{ $wallet_amount }} Point</span></h3>
                 </div>
             </div>
@@ -22,6 +22,7 @@
                                         <th>Point</th>
                                         <th>Amount</th>
                                         <th>Type Order</th>
+                                        <th>Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>                         
@@ -43,7 +44,8 @@
                                         @elseif($wallet_history->wallet_history_typeorder == 1)
                                             <td><button class="btnt btn btn-success">Deposit</button></td>
                                         @endif
-                                        
+                                        <td>{{ $wallet_history->created_at }}</td>
+
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -53,6 +55,7 @@
                                         <th>Point</th>
                                         <th>Amount</th>
                                         <th>Type Order</th>
+                                        <th>Time</th>
                                     </tr>
                                 </tfoot>
                             </table>

@@ -11,13 +11,19 @@
 	    
 	    <div class="row margin_row mevivu_home_sesion1">
 	      <div class="col-xs-4">
-	        <button href="#" class="btn btn-success1 button_home"><i class="icon_size glyphicon glyphicon-home"></i> <span>M Wallet</span></button>
+			<a href="{!!url('/wallet/walletdetail/0')!!}" class="btn btn-success1 button_home">
+				<i class="icon_size glyphicon glyphicon-home"></i> <span>M Wallet</span>
+			</a>
 	      </div>
 	      <div class="col-xs-4">
-	        <button class="btn btn-success1 button_home"><i  class="icon_size glyphicon glyphicon-piggy-bank"></i>Eco Wallet</button>
+			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
+				<i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Ext Wallet</span>
+			</a>
 	      </div>
 	      <div class="col-xs-4">
-	        <button  class="btn btn-success1 button_home"><i  class="icon_size glyphicon glyphicon-credit-card"></i>Ext Wallet</button>
+			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
+				<i  class="icon_size glyphicon glyphicon-credit-card"></i><span>Eco Wallet</span>
+			</a>
 	      </div>
 	    </div>
 

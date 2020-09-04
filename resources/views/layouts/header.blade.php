@@ -26,9 +26,6 @@
 </head>
 
 
-    
-
-
 
 <header id="header_main" class="container">
 
@@ -47,8 +44,9 @@
     
         
       <div class="row">
-    <div class="col-xs-4 col-sm-2">
-        <a href="home.html"><img src="{!!url('public/images/customLogo.png')!!}" width="100%" alt="" style="padding-top: 7px;"></a>
+   
+    <div class="col-xs-2 col-sm-2">
+        <a href="{!!url('/')!!}">Home</a>
     </div>
     <div class="col-sm-3 ngonngu hidden-xs">
         <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
