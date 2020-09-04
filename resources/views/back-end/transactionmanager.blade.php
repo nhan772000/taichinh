@@ -1,3 +1,8 @@
+<?php 
+use App\User;
+use App\Admin_users;
+
+?>
 @extends('back-end.layouts.master')
 @section('content')
  
@@ -41,7 +46,7 @@
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
-                                    <td> {{ $transaction->transaction_ofuser}} </td>
+                                    <td> {{User::where('id', $transaction->transaction_ofuser)->value('email')}} </td>
                                     <td> 
                                         @if($transaction->transaction_order == 0)
                                             <button class="btnt btn btn-success">Withdraw</button>
@@ -50,7 +55,7 @@
                                         @endif
 
                                     </td>
-                                    <td> {{ $transaction->transaction_checker }} </td>
+                                    <td> {{Admin_users::where('id', $transaction->transaction_checker)->value('name')}} </td>
                                     <td> 
                                           @if($transaction->transaction_type == 0)
                                             <button class="btnt btn btn-success">VND</button>
