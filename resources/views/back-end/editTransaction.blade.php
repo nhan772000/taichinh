@@ -66,17 +66,13 @@
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label form-control-label">Order Type</label>
                                                     <div class="col-lg-3">
-                                                        <select class="kira" name="transaction_order" value="{{ $transaction->transaction_order}}">
-                                                                @if($transaction->transaction_type == 0)
-                                                                <option value="0" selected>Withdraw</option>
-                                                                <option value="1">Deposit</option>
+                                                            @if($transaction->transaction_type == 0)
+                                                            <input readonly class="form-control" type="text" value="Withdraw">
                                                             @else
-                                                                <option value="0" >Withdraw</option>
-                                                                <option value="1" selected>Deposit</option>
+                                                            <input readonly class="form-control" type="text" value="Deposit">
+
                                                             @endif
                                                             
-                                                        </select>
-
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -120,21 +116,16 @@
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label form-control-label">Status</label>
                                                     <div class="col-lg-3">
-                                                        <select  class="kira" name="transaction_status" value="{{ $transaction->transaction_status}}">
-                                                            @if($transaction->transaction_type == 0)
-                                                                <option value="0" selected>Pending</option>
-                                                                <option value="1" >Approved</option>
-                                                                <option value="2">Cancel</option>
-                                                            @elseif($transaction->transaction_type == 1)
-                                                                <option value="0">Pending</option>
-                                                                <option value="1" selected>Approved</option>
-                                                                <option value="2">Cancel</option>
+                                                            @if($transaction->transaction_status == 0)
+                                                            <input readonly class="form-control" type="text" value="Pending">
+
+                                                            @elseif($transaction->transaction_status == 1)
+                                                            <input readonly class="form-control" type="text" value="Approved">
+
                                                             @else   
-                                                                <option value="0">Pending</option>
-                                                                <option value="1">Approved</option>
-                                                                <option value="2" selected>Cancel</option>
+                                                            <input readonly class="form-control" type="text" value="Canceled">
+
                                                             @endif
-                                                        </select>
                                                     </div>
                                                 </div>
                                                     <div class="form-group row">

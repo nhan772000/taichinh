@@ -9,12 +9,47 @@ use App\Transaction;
 use App\User;
 use App\WalletMain;
 use App\WalletExt;
+use App\WalletECo;
 use App\WalletHistory;
 use App\Payment;
 
 class WalletMainController extends Controller
 {
-   public function NapTransaction(Request $request)
+	public function getWalletManager(){
+		$id = Auth::user()->id;  
+		$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+		$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+		$ext_wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+		$arr_wallet_amount = array('main_wallet_amount' => $main_wallet_amount,
+								'eco_wallet_amount' => $eco_wallet_amount,
+								'ext_wallet_amount' => $ext_wallet_amount);
+
+
+
+		return view('walletmanager', ['arr_wallet_amount' => $arr_wallet_amount]);
+	}
+
+	public function getWalletDetail(Request $request){
+		$id = Auth::user()->id;
+		$type_wallet = $request->type;
+		if ($type_wallet == 0){
+			$wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+			$main_wallet_id = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+		}else if ($type_wallet == 1){
+			$wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+			$ext_wallet_id = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
+			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+		}else if ($type_wallet == 2){
+			$wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+			$eco_wallet_id = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_id');
+			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+		}
+
+		
+		return view('walletdetail',['wallet_amount' => $wallet_amount, 'wallet_histories' => $wallet_histories]);
+	}
+    public function NapTransaction(Request $request)
    {			
    		$id = Auth::user()->id;  
    		$passWord = Auth::user()->password;  
@@ -96,6 +131,7 @@ class WalletMainController extends Controller
    		$passWord = Auth::user()->password;
    		$idReceiving = User::where('email', $request->email)->value('id');
 		$pointSend = $request->point;
+
 		if ($idReceiving == $id){
 			return back()->with('error',"Bạn không thể tự chuyển cho bản thân");	   		
 		}
@@ -107,12 +143,16 @@ class WalletMainController extends Controller
 			if (($request->wallet) == 0){
 				$wallet_amount_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
 				$wallet_amount_receiving = WalletMain::where('main_wallet_ofuser', $idReceiving)->value('main_wallet_amount');
-
+				$wallet_id_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+				$wallet_id_receiving = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
 
 				if($pointSend <= $wallet_amount_send){
 					
 					$cashBackTK = new TransactionController();
 					$cashBackTK->cashBackTietKiem($pointSend, $idReceiving);
+					$wallethistory = new WalletMainController();
+					$wallethistory->createWalletHistory($pointSend, $wallet_id_send, 1, 2 );
+					$wallethistory->createWalletHistory($pointSend, $wallet_id_receiving, 1, 2 );
 
 					return back()->with('success','Đã chuyển thành công');	
 				}else{
@@ -121,10 +161,16 @@ class WalletMainController extends Controller
 			}elseif (($request->wallet) == 1){
 				$wallet_amount_send = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
 				$wallet_amount_receiving = WalletExt::where('ext_wallet_ofuser', $idReceiving)->value('ext_wallet_amount');
+				$wallet_id_send = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+				$wallet_id_receiving = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+
 				if($pointSend <= $wallet_amount_send){
 					
-				$cashBackTK = new TransactionController();
+					$cashBackTK = new TransactionController();
 					$cashBackTK->cashBackVeLien($pointSend, $idReceiving);
+					$wallethistory = new WalletMainController();
+					$wallethistory->createWalletHistory($pointSend, $wallet_id_send, 2, 2 );
+					$wallethistory->createWalletHistory($pointSend, $wallet_id_receiving, 2, 2 );
 
 					return back()->with('success','Đã chuyển thành công');	
 	
@@ -153,11 +199,12 @@ class WalletMainController extends Controller
  		
 	}
 
- 	public function createWalletHistory($amount, $ofwallet, $type){ 		
+ 	public function createWalletHistory($amount, $ofwallet, $type, $typeorder){ 		
  	    $wallethistory = new WalletHistory();
 		$wallethistory->wallet_history_amount = $amount;
 		$wallethistory->wallet_history_ofwallet = $ofwallet;
 		$wallethistory->wallet_history_type = $type;
+		$wallethistory->wallet_history_typeorder = $typeorder;
 		$wallethistory->save();
  	}
 }

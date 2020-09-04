@@ -9,7 +9,7 @@
                             <h2>Transaction Manager</h2>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row transactionman">
                      
                         <div class=" col-xs-12 text-center" style="overflow-x:auto;">
                               

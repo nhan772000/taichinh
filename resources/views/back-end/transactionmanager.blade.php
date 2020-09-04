@@ -9,7 +9,7 @@
                             <h2>Transaction Manager</h2>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row transactionman" >
                      
                         <div class=" col-xs-12 text-center" style="overflow-x:auto;">
                               
@@ -248,34 +248,37 @@
                 $(document).ready( function () {
                     $('#actionselected').click(function(){
                         var arr_id = [];
+                        var  arr_ids = [];
                         $(':checkbox:checked').each(function(i){
-                            arr_id[i] = $(this).attr('id');
+                                 arr_id[i] = $(this).attr('id');
                         });
+                        var select = document.getElementById('selectaction');
                         if (arr_id == 0){
                             alert('Check one!');
+                        }else if(select.value == "delete"){
+                            if( confirm("Confirm to delete!")){
+                                        Delete(arr_id);
+                            }
                         }else{
+                            arr_id.pop();
+                            arr_id.shift();
                             arr_id.forEach(function(element){
-                                if($("#stt"+element).val() != 0){
-                                    arr_id.splice(arr_id.indexOf(element), 1);
+                                var stt = document.getElementById('stt' + element).value;
+                                if (stt == 0){
+                                    arr_ids.push(element);
                                 }
                             });
-                            var select = document.getElementById('selectaction');
-                            if (select.value == "delete"){
-                                if( confirm("Confirm to delete!")){
-                                    Delete(arr_id);
-                                }
-                            }else if(select.value == "cancel"){
+                           
+                            if(select.value == "cancel"){
                                 if( confirm("Confirm to cancel!")){
-                                  Cancel(arr_id);
+                                Cancel(arr_ids);
                                 }
                             }else if(select.value == "accept"){
                                 if( confirm("Confirm to accept!")){
-                                    Accept(arr_id);
+                                    Accept(arr_ids);
                                 }
                             }
-                                
-                                
-                            }
+                        }                  
                         
                         
                     });
@@ -323,6 +326,7 @@
                         arr.forEach(function(element){
                             $('#stt' + element).css('color','#fff' );
                             $('#stt' + element).css('background-color','#8ad919');
+                            $('#stt' + element).attr('value',1);
                             $('.c' + element).attr('disabled','disabled');
                             $('.a' + element).attr('disabled','disabled');
                             $('#stt' + element).html('Apporved');
@@ -350,6 +354,7 @@
                             $('#stt' + element).css('color','#fff' );
                             $('#stt' + element).css('background-color','#f9243f' );
                             $('#stt' + element).html('Canceled');
+                            $('#stt' + element).attr('value',2);
                             $('.c' + element).attr('disabled','disabled');
                             $('.a' + element).attr('disabled','disabled');   
                         });

@@ -232,6 +232,48 @@ body {
 .toolbar {
     float: left;
 }
+.kwhite{
+    color: #fff;
+}
+.ktitle{
+    font-size: 30px;;
+}
+.kcol{
+    width: 100%;
+    margin: 0px;
+    z-index: 99;
+    position: sticky;
+    top: 0px;
+    box-shadow: 0px 3px 3px 0px #a09c9d;
+    background-color: #009E4E;
+    padding: 10px 0px 10px 0px;
+}
+
+.kcol2{
+    width: 100%;
+    margin: 0px;
+    z-index: 99;
+    position: sticky;
+    top: 0px;
+    box-shadow: 0px 3px 3px 0px #a09c9d;
+    background-color: #fff;
+    padding: 10px 0px 10px 0px;
+}
+
+.amount{
+    color: #def426;
+}
+.submenu{
+    margin-left: 10px;
+}
+.submenu .active{
+    background: #30a5ff;
+    color: #fff;
+}
+.active{
+    background: #019e4e;
+    color: #fff;
+}
 .btnt{
     font-size: 12px !important;
     line-height: 5px;
@@ -250,8 +292,9 @@ body {
         color: #fff;
 
 }
-.filldate input[type=date]{
-    line-height: unset !important;
+
+.transactionman select, .transactionman input, .transactionman button{
+    height: 30px !important;
 }
  select.kira{
     height: 34px;

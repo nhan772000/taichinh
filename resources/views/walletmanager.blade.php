@@ -3,25 +3,34 @@
 <body>
 
 <div class="container mevivu_vi body">
-        
+  <div class="row">
     <div class="row margin_row mevivu_home_sesion1">
       <div class="col-xs-4">
-        <a href="#" class="btn btn-success1 button_home"><i class="icon_size glyphicon glyphicon-home"></i> <span>Main Wallet</span></a>
+        <a href="{!!url('/wallet/walletdetail/0')!!}" class="btn btn-success1 button_home">
+          <i class="icon_size glyphicon glyphicon-home"></i> <span>Main Wallet</span>
+          <span class="amount">{{ $arr_wallet_amount['main_wallet_amount'] }} Point</span>
+        </a>
       </div>
       <div class="col-xs-4">
-        <button class="btn btn-success1 button_home"><i  class="icon_size glyphicon glyphicon-piggy-bank"></i>Eco Wallet</button>
+        <a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
+          <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Ext Wallet</span>
+          <span class="amount">{{ $arr_wallet_amount['ext_wallet_amount'] }} Point</span>
+        </a>
       </div>
       <div class="col-xs-4">
-        <button  class="btn btn-success1 button_home"><i  class="icon_size glyphicon glyphicon-credit-card"></i>Ext Wallet</button>
+        <a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
+          <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Eco Wallet</span>
+          <span class="amount">{{ $arr_wallet_amount['eco_wallet_amount'] }} Point</span>
+        </a>
       </div>
-    </div>
-
+     
+  </div>
 	<div class="mevivu_home_sesion3 row">
                 <div class="col-xs-4 text-center">
-                    <a href="nap.html" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-save"></i> Nạp</a>
+                    <a href="{!!url('/nap')!!}" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-save"></i> Nạp</a>
                 </div>
                 <div class="col-xs-4  text-center">
-                    <a href="rut.html" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-open"></i> Rút</a>
+                    <a href="{!!url('/rut')!!}" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-open"></i> Rút</a>
                 </div>
                 <div class="col-xs-4  text-center">
                     <a href="tangHM.html" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-list-alt"></i> Inc HM</a>

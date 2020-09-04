@@ -3,7 +3,6 @@
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
 
-
 Route::get('/rut', 'PagesController@showRutView');
 Route::get('/nap', 'PagesController@showNapView');
 Route::get('/chuyen', 'PagesController@showChuyenView');
@@ -11,9 +10,12 @@ Route::get('/walletmenu', 'PagesController@showWalletMenuView');
 Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');
 
+//walletmain controller
 Route::post('form-Nap','WalletMainController@NapTransaction');
 Route::post('form-Rut','WalletMainController@RutTransaction');
 Route::post('form-Chuyen','WalletMainController@ChuyenTransaction');
+Route::get('/wallet', 'WalletMainController@getWalletManager');
+Route::get('/wallet/walletdetail/{type}', 'WalletMainController@getWalletDetail');
 
 
 Route::get('/user','HomeController@index');
