@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 //xử lý ẩn và hiển thị mật khẩu
     $(".showhidepwd").click(function() {
-    var $pwd = $("#pwd");
+    var $pwd = $("#user_password");
     if ($pwd.attr('type') === 'password') {
         $pwd.attr('type', 'text');
         $(".showhidepwd").empty();
@@ -51,7 +51,7 @@ $(document).ready(function(){
 
     //xử lý ẩn và hiển thị mật khẩu thanh toán
     $(".showhidepwdtt").click(function() {
-    var $pwd = $("#pwdtt");
+    var $pwd = $("#user_password_pay");
     if ($pwd.attr('type') === 'password') {
         $pwd.attr('type', 'text');
         $(".showhidepwdtt").empty();
@@ -125,6 +125,20 @@ $(document).ready(function(){
 		
 		
 	});
+    $("#accept").change(function() {
+        if($(this).is(":checked")){
+            $("#register").removeAttr('disabled');
+        }
+        else{
+            $("#register").attr('disabled', 'disabled');
+        }
+    });
+
+
+
+
+
 });
+
 
 

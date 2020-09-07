@@ -43,7 +43,7 @@
         
       <div class="row">
     <div class="col-xs-4 col-sm-2">
-        <a href="home.html"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
+        <a href="{{URL::to('/')}}"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
     <div class="col-sm-3 ngonngu hidden-xs">
         <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
@@ -68,14 +68,14 @@
     <div class="menu col-xs-1 text-center">
       <i class="glyphicon glyphicon-align-justify icon_menu"></i>
       <ul class="menu-right">
-                      <li><a href="#">Information</a></li>
+                      <li><a href="{{URL::to('/userinfo')}}">Information</a></li>
                       <li><a href="deal_story.html">Story</a></li>
                       <li><a href="#">Develop</a></li>
                       <li><a href="#">Setting</a></li>
                       <li><a href="#">Change password</a></li>
                       <li><a href="#">Tutorial video</a></li>
                       <li><a href="contact.html">Contact</a></li>
-                      <li><a href="login.html">Logout</a></li>
+                      <li><a href="{{URL::to('/logout')}}">Logout</a></li>
                     </ul>
     </div>
   </div>

@@ -6,6 +6,69 @@ Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
 Route::get('/nap', 'DepositController@deposit');
 
+//-------------------lấy lại mật khẩu------------------------
+
+//hiển thị giao diện nhập email
+Route::get('/passwordreset', 'UsersController@passwordReset');
+//xử lý dữ liệu và trả về thông tin cho người dùng kiểm tra
+Route::post('/passwordreset', 'UsersController@postPasswordReset');
+
+//gửi mã xác nhận về mail
+Route::get('/passwordreset/send-email/{remember_token}/{user_id}', 'UsersController@passwordResetSendMail');
+
+Route::post('/passwordreset/end-get-password', 'UsersController@endGetPassword');
+
+Route::get('/bb', 'UsersController@bb');
+
+//kết thúc-------------------lấy lại mật khẩu------------------------
+
+
+
+//------------cập nhật, hiển thị và xác minh thông tin người dùng -------------
+
+//Gửi link xác minh email về mail của user
+Route::get('/verify', 'UsersController@verify');
+
+//Khi user truy cập vào link xác minh từ email
+Route::get('/verify/receive-email/{user_verify_code}', 'UsersController@receive_email');
+
+
+//hiển thị thông tin
+Route::get('/userinfo', 'UsersController@userInfo');
+
+//cập nhật thông tin người dùng
+Route::post('/userinfo', 'UsersController@updateUserInfo');
+
+//kết thúc------------cập nhật, hiển thị và xác minh thông tin người dùng -------------
+
+
+
+// ----------------Xử lý đăng nhập, đăng ký, đăng xuất người dùng ------------
+
+//hiển thị giao diện đăng nhập, đăng ký
+Route::get('/register', 'UsersController@register');
+Route::get('/login', 'UsersController@login');
+
+//đăng xuất
+Route::get('/logout', 'UsersController@logOut');
+
+
+//kiểm tra đăng ký tài khoản
+Route::post('/register', 'UsersController@checkUserRegister');
+
+//kiểm tra đăng nhập người dùng
+Route::post('/login', 'UsersController@checkUserLogin');
+
+// kết thúc----------------Xử lý đăng nhập, đăng ký, đăng xuất người dùng ------------
+
+
+
+
+
+
+//send mail
+//Route::get('/get-password-send-mail', 'UsersController@send_mail');
+
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
 
