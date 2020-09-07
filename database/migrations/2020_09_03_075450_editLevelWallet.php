@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategorTable extends Migration
+class EditLevelWallet extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,7 @@ class CreateCategorTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('parent_id');
+        Schema::table('level_wallet', function (Blueprint $table) {
             $table->timestamps();
         });
     }
@@ -28,6 +24,8 @@ class CreateCategorTable extends Migration
      */
     public function down()
     {
-        Schema::drop('category');
+        Schema::table('level_wallet', function (Blueprint $table) {
+            //
+        });
     }
 }

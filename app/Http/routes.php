@@ -12,20 +12,21 @@ Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');
 
 
+//tăng hạn mức
+Route::get('tangHMa','WalletLevelController@ExampleFunction');
+
 
 
 
 Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
 
-<<<<<<< HEAD
 
-=======
 Route::get('/nap', 'DepositController@deposit');
 
 Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
 Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
->>>>>>> 464814e39d66e0dd62654f8bb1f9644c87854dce
+
 
 // admin route 
 Route::get('admin/login', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@showLoginForm']);
