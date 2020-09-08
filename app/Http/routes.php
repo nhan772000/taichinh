@@ -10,12 +10,16 @@ Route::get('/walletmenu', 'PagesController@showWalletMenuView');
 Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');
 
+Route::post('/phattrienthitruong','UserController@Phattrienthitruong');
+
 //walletmain controller
 Route::post('form-Nap','WalletMainController@NapTransaction');
 Route::post('form-Rut','WalletMainController@RutTransaction');
 Route::post('form-Chuyen','WalletMainController@ChuyenTransaction');
 Route::get('/wallet', 'WalletMainController@getWalletManager');
 Route::get('/wallet/walletdetail/{type}', 'WalletMainController@getWalletDetail');
+
+Route::get('/transfer', 'WalletMainController@transfer');
 
 
 Route::get('/user','HomeController@index');

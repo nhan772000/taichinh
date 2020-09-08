@@ -15,6 +15,42 @@ use App\Payment;
 
 class WalletMainController extends Controller
 {
+	public function transfer(Request $request){
+		if (Auth::check())
+		{
+			$id = Auth::user()->id;
+				$transfer_status = User::where('id', $id)->value('transfer_status');
+				$created = date("d/m/Y",strtotime(User::where('id', $id)->value('created_at'))). " +1 month";
+				$today = date("d-m-Y");
+				$today = strtotime($today);
+				if ($transfer_status == 0){
+					if($created <= $today ){
+						$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+						$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+
+						if($main_wallet_amount < 1000){
+							$max_transfer = $main_wallet_amount;
+						}else{
+							$max_transfer = 1000;
+						}
+						$transfer_point = $request->transfer_point * 3;
+						if($transfer_point > $max_transfer){
+							$transfer_point = $max_transfer;
+						}
+						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_amount' => $main_wallet_amount - $request->transfer_point]);
+						WalletEco::where('eco_wallet_ofuser',$id)->update(['eco_wallet_amount' => $eco_wallet_amount + $transfer_point	]);
+						User::where('id',$id)->update(['transfer_status' => 1]);
+
+						return redirect('/')->with('success','Bạn đã chuyển thành công');
+					}else{
+						return redirect('/')->with('error','Your account has not been created after 30 days');
+					}
+				}else{
+					return redirect('/')->with('error','You cannot transfer 2 times');
+				}
+				return redirect('/')->with('error','erroooooor!!!');	
+		}
+	}
 	public function MLM($id, $count){
 		if($count >= 0){
 			$id_ref = User::where('id', $id)->value('id_ref');
@@ -49,38 +85,50 @@ class WalletMainController extends Controller
 		}
 	}
 	public function getWalletManager(){
-		$id = Auth::user()->id;  
-		$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-		$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
-		$ext_wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
-		$arr_wallet_amount = array('main_wallet_amount' => $main_wallet_amount,
-								'eco_wallet_amount' => $eco_wallet_amount,
-								'ext_wallet_amount' => $ext_wallet_amount);
+		if (Auth::check())
+		{
+			$id = Auth::user()->id;  
+			$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+			$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+			$ext_wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+			$arr_wallet_amount = array('main_wallet_amount' => $main_wallet_amount,
+									'eco_wallet_amount' => $eco_wallet_amount,
+									'ext_wallet_amount' => $ext_wallet_amount);
 
 
 
-		return view('walletmanager', ['arr_wallet_amount' => $arr_wallet_amount]);
+			return view('walletmanager', ['arr_wallet_amount' => $arr_wallet_amount]);
+		}
+		else {
+			return  redirect ('/login');
+		}
 	}
 
 	public function getWalletDetail(Request $request){
-		$id = Auth::user()->id;
-		$type_wallet = $request->type;
-		if ($type_wallet == 0){
-			$wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-			$main_wallet_id = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
-			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
-		}else if ($type_wallet == 1){
-			$wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
-			$ext_wallet_id = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
-			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
-		}else if ($type_wallet == 2){
-			$wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
-			$eco_wallet_id = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_id');
-			$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
-		}
+		if (Auth::check())
+		{
+			$id = Auth::user()->id;
+			$type_wallet = $request->type;
+			if ($type_wallet == 0){
+				$wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+				$main_wallet_id = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+			}else if ($type_wallet == 1){
+				$wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+				$ext_wallet_id = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+			}else if ($type_wallet == 2){
+				$wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+				$eco_wallet_id = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_id');
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+			}
 
-		
-		return view('walletdetail',['wallet_amount' => $wallet_amount, 'wallet_histories' => $wallet_histories]);
+			
+			return view('walletdetail',['wallet_amount' => $wallet_amount, 'wallet_histories' => $wallet_histories]);
+		}
+		else {
+			return  redirect ('/login');
+		}
 	}
     public function NapTransaction(Request $request)
    {			
@@ -224,19 +272,15 @@ class WalletMainController extends Controller
 	   	$payment->payment_description = $request->description;
 	   	$payment->payment_status = 1;
 		$payment->save();
-		return back()->with('success','Chuyển thành công');
-
-			
-	   
-	   	
+		return back()->with('success','Chuyển thành công');  	
  		
 	}
 
- 	public function createWalletHistory($amount, $ofwallet, $type, $typeorder){ 		
+ 	public function createWalletHistory($amount, $ofwallet, $typewallet, $typeorder){ 		
  	    $wallethistory = new WalletHistory();
 		$wallethistory->wallet_history_amount = $amount;
 		$wallethistory->wallet_history_ofwallet = $ofwallet;
-		$wallethistory->wallet_history_type = $type;
+		$wallethistory->wallet_history_type = $typewallet;
 		$wallethistory->wallet_history_typeorder = $typeorder;
 		$wallethistory->save();
  	}

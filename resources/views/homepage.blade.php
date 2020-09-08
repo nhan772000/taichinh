@@ -1,13 +1,45 @@
+<?php
+use App\User;
+?>
 @extends('layouts.master')
 @section('content')
 	<body>
 	<div class="container body">
 	        <div class="row margin_row">
 	            <div class="col-sm-12">
-	                <button class="btn btn-success "><i class=" glyphicon glyphicon-refresh"></i> transfer</button>
-	            </div>
+					<?php $id = Auth::user()->id;
+					$transfer_status = User::where('id', $id)->value('transfer_status');?>
+					@if($transfer_status == 0)
+						   <button data-toggle="modal" data-target="#modal_transfer" class="btn btn-success"><i class=" glyphicon glyphicon-refresh"></i> transfer</button>
+					@endif
+				</div>
+		
 	        </div>
-	    
+			<div class="modal fade" id="modal_transfer" tabindex="-1" role="dialog" >
+				<div class="modal-dialog" role="document">
+					<form action="{{url('transfer')}}" method="get">
+						{!! csrf_field() !!}
+
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Transfer form</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<label>Enter point you want to transfer</label>
+								<input id="transfer_point" name="transfer_point" value=""/>
+								<label>Point</label>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary">Transfer</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
 	    
 	    <div class="row margin_row mevivu_home_sesion1">
 	      <div class="col-xs-4">
@@ -57,7 +89,7 @@
 	                    <a href="accounting.html" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-bitcoin"></i> Account</a>
 	                </div>
 	                <div class="col-xs-4  text-center">
-	                    <a href="wallet.html" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-list-alt"></i> Wallet</a>
+	                    <a href="{!!url('/wallet')!!}" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-list-alt"></i> Wallet</a>
 	                </div>
 	      
 				</div>

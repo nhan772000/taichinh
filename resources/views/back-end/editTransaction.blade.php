@@ -13,6 +13,7 @@
                         <div>
                                 <div class="row transaction">
                                     <form  action="{{url('form-editTransaction')}}" method="post" enctype="multipart/form-data">
+                                        {!! csrf_field() !!}
 
                                             <div class="col-lg-1">
                                             </div>

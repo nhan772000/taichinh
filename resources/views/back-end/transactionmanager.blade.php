@@ -255,7 +255,8 @@ use App\Admin_users;
                         var arr_id = [];
                         var  arr_ids = [];
                         $(':checkbox:checked').each(function(i){
-                                 arr_id[i] = $(this).attr('id');
+                                arr_id[i] = $(this).attr('id');
+                            
                         });
                         var select = document.getElementById('selectaction');
                         if (arr_id == 0){
@@ -265,10 +266,12 @@ use App\Admin_users;
                                         Delete(arr_id);
                             }
                         }else{
-                            arr_id.pop();
-                            arr_id.shift();
+                            
                             arr_id.forEach(function(element){
-                                var stt = document.getElementById('stt' + element).value;
+                                var stt = document.getElementById('stt' + element);
+                                if(stt != null){
+                                    stt = stt.value;
+                                }
                                 if (stt == 0){
                                     arr_ids.push(element);
                                 }

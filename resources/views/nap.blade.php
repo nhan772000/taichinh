@@ -16,6 +16,8 @@
           </div>
         </div>
         <form action="{{url('form-Nap') }}" method="post" enctype="multipart/form-data">
+          {!! csrf_field() !!}
+
           <div class="form-group">
             <label for="nap">you want type?:</label>
             <select required id="chonloainap" class="form-control" name="nap">

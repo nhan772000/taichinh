@@ -8,6 +8,8 @@
       <div class="well well-sm">
         <h2 class="text-center">Rút</h2>
         <form action="{{url('form-Rut')}}" method="post">
+          {!! csrf_field() !!}
+
           <p class="alert alert-warning">bạn có thể rút tối đa 1000 point</p>
           <div class="form-group">
             <label for="sodiem">Số điểm bạn muốn rút:</label>
