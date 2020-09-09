@@ -1,3 +1,8 @@
+<?php 
+use App\User;
+use App\Admin_users;
+
+?>
 @extends('back-end.layouts.master')
 @section('content')
  
@@ -9,7 +14,7 @@
                             <h2>Transaction Manager</h2>
                         </div>
                     </div>
-                    <div class="row transactionman">
+                    <div class="row transactionman" >
                      
                         <div class=" col-xs-12 text-center" style="overflow-x:auto;">
                               
@@ -19,15 +24,15 @@
                                     <tr>
                                         <th><input type="checkbox" class="checktop checkrow"></th>
                                         <th>ID</th>
-                                        <th>ID user</th>
-                                        <th>Type</th>
+                                        <th>From User</th>
+                                        <th>Type Order</th>
                                         <th>ID Checker</th>
                                         <th>Currency</th>
                                         <th>Amount</th>
                                         <th>Point</th>
                                         <th>Description</th>
                                         <th>Status</th>
-                                        <th>Updated time</th>
+                                        <th>Created time</th>
                                         <th>Edit</th>
                                         <th>Accept</th>
                                         <th>Cancel</th>
@@ -39,18 +44,34 @@
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
-                                    <td> {{ $transaction->transaction_ofuser}} </td>
+                                    <td> {{User::where('id', $transaction->transaction_fromuser)->value('email')}} </td>
                                     <td> 
-                                        @if($transaction->transaction_order == 0)
-                                            <button class="btnt btn btn-success">Withdraw</button>
-                                        @else
-                                            <button class="btnt btn btn-primary">Deposit</button>
+                                        @if($transaction->transaction_typeorder == 0)
+                                            <button class="btnt btn btn-danger">Withdraw</button>
+                                        @elseif($transaction->transaction_typeorder == 1)
+                                            <button class="btnt btn btn-success">Deposit</button>
+                                        @elseif($transaction->transaction_typeorder == 2)
+                                            <button class="btnt btn btn-primary">Transfer</button>
+                                        @elseif($transaction->transaction_typeorder == 3)
+                                            <button class="btnt btn btn-success">Cashback</button>
+                                        @elseif($transaction->transaction_typeorder == 4)
+                                            <button class="btnt btn btn-info">MLM</button>
+                                        @elseif($transaction->transaction_typeorder == 5)
+                                            <button class="btnt btn btn-success">Phát triển</button>
+                                        @elseif($transaction->transaction_typeorder == 6)
+                                            <button class="btnt btn btn-primary">Transfer special</button>
                                         @endif
 
                                     </td>
-                                    <td> {{ $transaction->transaction_checker }} </td>
+                                    <td> @if($transaction->transaction_checker ==0)
+                                            System
+                                        @elseif($transaction->transaction_checker == null)
+                                            Not yet
+                                        @else
+                                            {{Admin_users::where('id', $transaction->transaction_checker)->value('name')}} </td>
+                                        @endif
                                     <td> 
-                                          @if($transaction->transaction_type == 0)
+                                          @if($transaction->transaction_typecurrency == 0)
                                             <button class="btnt btn btn-success">VND</button>
                                         @else
                                             <button class="btnt btn btn-primary">USDT</button>
@@ -110,20 +131,20 @@
                                <tfoot>
                                 <tr>
                                         <td><input type="checkbox"  class="checkbot checkrow"></td>
-                                        <td>ID</td>
-                                        <td>ID user</td>
-                                        <td>Type</td>
-                                        <td>Checker</td>
-                                        <td>Currency</td>
-                                        <td>Amount</td>
-                                        <td>Point</td>
-                                        <td>Description</td>
-                                        <td>Status</td>
-                                        <td>Updated time</td>
-                                        <td>Edit</td>
-                                        <td>Accept</td>
-                                        <td>Cancel</td>
-                                        <td>Delete</td>
+                                        <th>ID</th>
+                                        <th>From User</th>
+                                        <th>Type Order</th>
+                                        <th>ID Checker</th>
+                                        <th>Currency</th>
+                                        <th>Amount</th>
+                                        <th>Point</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Created time</th>
+                                        <th>Edit</th>
+                                        <th>Accept</th>
+                                        <th>Cancel</th>
+                                        <th>Delete</th>
                                     </tr>
                                </tfoot>
                             </table>
@@ -146,7 +167,7 @@
                                     targets: [0]
                             },
                             {
-                                targets: [11],
+                                targets: [13    ],
                                 "type": "date"
                             }
                             ],
@@ -211,34 +232,40 @@
                 $(document).ready( function () {
                     $('#actionselected').click(function(){
                         var arr_id = [];
+                        var  arr_ids = [];
                         $(':checkbox:checked').each(function(i){
-                            arr_id[i] = $(this).attr('id');
+                                arr_id[i] = $(this).attr('id');
+                            
                         });
+                        var select = document.getElementById('selectaction');
                         if (arr_id == 0){
                             alert('Check one!');
+                        }else if(select.value == "delete"){
+                            if( confirm("Confirm to delete!")){
+                                        Delete(arr_id);
+                            }
                         }else{
+                            
                             arr_id.forEach(function(element){
-                                if($("#stt"+element).val() != 0){
-                                    arr_id.splice(arr_id.indexOf(element), 1);
+                                var stt = document.getElementById('stt' + element);
+                                if(stt != null){
+                                    stt = stt.value;
+                                }
+                                if (stt == 0){
+                                    arr_ids.push(element);
                                 }
                             });
-                            var select = document.getElementById('selectaction');
-                            if (select.value == "delete"){
-                                if( confirm("Confirm to delete!")){
-                                    Delete(arr_id);
-                                }
-                            }else if(select.value == "cancel"){
+                           
+                            if(select.value == "cancel"){
                                 if( confirm("Confirm to cancel!")){
-                                  Cancel(arr_id);
+                                Cancel(arr_ids);
                                 }
                             }else if(select.value == "accept"){
                                 if( confirm("Confirm to accept!")){
-                                    Accept(arr_id);
+                                    Accept(arr_ids);
                                 }
                             }
-                                
-                                
-                            }
+                        }                  
                         
                         
                     });
@@ -286,6 +313,7 @@
                         arr.forEach(function(element){
                             $('#stt' + element).css('color','#fff' );
                             $('#stt' + element).css('background-color','#8ad919');
+                            $('#stt' + element).attr('value',1);
                             $('.c' + element).attr('disabled','disabled');
                             $('.a' + element).attr('disabled','disabled');
                             $('#stt' + element).html('Apporved');
@@ -313,6 +341,7 @@
                             $('#stt' + element).css('color','#fff' );
                             $('#stt' + element).css('background-color','#f9243f' );
                             $('#stt' + element).html('Canceled');
+                            $('#stt' + element).attr('value',2);
                             $('.c' + element).attr('disabled','disabled');
                             $('.a' + element).attr('disabled','disabled');   
                         });

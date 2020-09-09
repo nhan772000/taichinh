@@ -13,6 +13,20 @@ use App\Transaction;
 
 class TransactionController extends Controller
 {
+   public function createTransaction($transaction_typeorder, $transaction_fromuser, $transaction_touser, $transaction_checker ,$transaction_typecurrency, $transaction_point, $transaction_description, $transaction_bill, $transaction_bill2, $transaction_status){ 	
+		$transaction = new Transaction();
+		$transaction->transaction_typeorder = $transaction_typeorder;
+		$transaction->transaction_fromuser = $transaction_fromuser;
+		$transaction->transaction_touser = $transaction_touser;
+		$transaction->transaction_checker = $transaction_checker;
+		$transaction->transaction_typecurrency = $transaction_typecurrency;
+		$transaction->transaction_point = $transaction_point;
+		$transaction->transaction_description = $transaction_description;
+		$transaction->transaction_bill = $transaction_bill;
+		$transaction->transaction_bill2 = $transaction_bill2;
+		$transaction->transaction_status = $transaction_status;
+		$transaction->save();
+	}	
    public function cashBackTietKiem($points, $idNguoiNhan)
    {
       $id = auth()->user()->id;

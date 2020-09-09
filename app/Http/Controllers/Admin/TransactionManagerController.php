@@ -28,15 +28,15 @@ class TransactionManagerController extends Controller
    public function getDepositTransaction()
    {                    
         $id_checker = Auth::guard('admin')->user()->id;
-        $transactions = DB::table('transaction')-> where('transaction_order', 1)->orderBy('created_at', 'desc')->get();
-        return view('back-end.transactionmanager', ['transactions' => $transactions]);
+        $transactions = DB::table('transaction')-> where('transaction_typeorder', 1)->orderBy('created_at', 'desc')->get();
+        return view('back-end.deposittransactionmanager', ['transactions' => $transactions]);
    }
 
    public function getWithdrawTransaction()
    {                    
         $id_checker = Auth::guard('admin')->user()->id;
-        $transactions = DB::table('transaction')-> where('transaction_order', 0)->orderBy('created_at', 'desc')->get();
-        return view('back-end.transactionmanager', ['transactions' => $transactions]);
+        $transactions = DB::table('transaction')-> where('transaction_typeorder', 0)->orderBy('created_at', 'desc')->get();
+        return view('back-end.withdrawtransactionmanager', ['transactions' => $transactions]);
    }
 
 
@@ -51,27 +51,25 @@ class TransactionManagerController extends Controller
             }
 
             foreach ($arr_ids as $transaction_id){
-                $transaction_ofuser = Transaction::where('transaction_id', $transaction_id)->value('transaction_ofuser');
-                $transaction_point = Transaction::where('transaction_id', $transaction_id)->value('transaction_point');
-                $transaction_order = Transaction::where('transaction_id', $transaction_id)->value('transaction_order');
-                $transaction_status = Transaction::where('transaction_id', $transaction_id)->value('transaction_status');
-                    if($transaction_order == 0 ){
-                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction_ofuser)->value('main_wallet_amount');
+                $transaction = Transaction::where('transaction_id', $transaction_id)->first();
+                
+                    if($transaction->transaction_typeorder == 0 ){
+                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction->transaction_fromuser)->value('main_wallet_amount');
         
-                        $wallet_main_amount = $wallet_main_amount - $transaction_point;
+                        $wallet_main_amount = $wallet_main_amount - $transaction->transaction_point;
         
-                        WalletMain::where('main_wallet_ofuser',$transaction_ofuser)->update(['main_wallet_amount' => $wallet_main_amount]);
+                        WalletMain::where('main_wallet_ofuser',$transaction->transaction_fromuser)->update(['main_wallet_amount' => $wallet_main_amount]);
                         Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
                     }
-                    elseif($transaction_order == 1){
-                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction_ofuser)->value('main_wallet_amount');
-                        $wallet_eco_amount = WalletEco::where('eco_wallet_ofuser', $transaction_ofuser)->value('eco_wallet_amount');
+                    elseif($transaction->transaction_typeorder == 1){
+                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction->transaction_touser)->value('main_wallet_amount');
+                        $wallet_eco_amount = WalletEco::where('eco_wallet_ofuser', $transaction->transaction_touser)->value('eco_wallet_amount');
         
-                        $wallet_main_amount = $wallet_main_amount + ($transaction_point*9/10);
-                        $wallet_eco_amount = $wallet_eco_amount + ($transaction_point/10);
+                        $wallet_main_amount = $wallet_main_amount + ($transaction->transaction_point*9/10);
+                        $wallet_eco_amount = $wallet_eco_amount + ($transaction->transaction_point/10);
         
-                        WalletMain::where('main_wallet_ofuser',$transaction_ofuser)->update(['main_wallet_amount' => $wallet_main_amount]);
-                        WalletEco::where('eco_wallet_ofuser',$transaction_ofuser)->update(['eco_wallet_amount' => $wallet_eco_amount]);
+                        WalletMain::where('main_wallet_ofuser',$transaction->transaction_touser)->update(['main_wallet_amount' => $wallet_main_amount]);
+                        WalletEco::where('eco_wallet_ofuser',$transaction->transaction_touser)->update(['eco_wallet_amount' => $wallet_eco_amount]);
         
                         Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
                     }
@@ -105,7 +103,7 @@ class TransactionManagerController extends Controller
             DB::table('transaction')->where('transaction_id', $arr_id)->delete();
         }
         
-        return 'sss';
+        return null;
     }
      public function getEditTransaction(Request $request)
    {        

@@ -20,7 +20,7 @@
 
           <div class="form-group">
             <label for="nap">you want type?:</label>
-            <select required id="chonloainap" class="form-control" name="nap">
+            <select required id="chonloainap" class="form-control" name="currency">
               <option value="0">--Select typer--</option>
               <option value="0">VND</option>
               <option value="1">USDT</option>

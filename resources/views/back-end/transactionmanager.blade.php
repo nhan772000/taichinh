@@ -24,8 +24,9 @@ use App\Admin_users;
                                     <tr>
                                         <th><input type="checkbox" class="checktop checkrow"></th>
                                         <th>ID</th>
-                                        <th>ID user</th>
-                                        <th>Type</th>
+                                        <th>From User</th>
+                                        <th>To User</th>
+                                        <th>Type Order</th>
                                         <th>ID Checker</th>
                                         <th>Currency</th>
                                         <th>Amount</th>
@@ -34,7 +35,7 @@ use App\Admin_users;
                                         <th>Bill</th>
                                         <th>Bill2</th>
                                         <th>Status</th>
-                                        <th>Updated time</th>
+                                        <th>Created time</th>
                                         <th>Edit</th>
                                         <th>Accept</th>
                                         <th>Cancel</th>
@@ -46,18 +47,35 @@ use App\Admin_users;
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
-                                    <td> {{User::where('id', $transaction->transaction_ofuser)->value('email')}} </td>
+                                    <td> {{User::where('id', $transaction->transaction_fromuser)->value('email')}} </td>
+                                    <td> {{User::where('id', $transaction->transaction_touser)->value('email')}} </td>
                                     <td> 
-                                        @if($transaction->transaction_order == 0)
-                                            <button class="btnt btn btn-success">Withdraw</button>
-                                        @else
-                                            <button class="btnt btn btn-primary">Deposit</button>
+                                        @if($transaction->transaction_typeorder == 0)
+                                            <button class="btnt btn btn-danger">Withdraw</button>
+                                        @elseif($transaction->transaction_typeorder == 1)
+                                            <button class="btnt btn btn-success">Deposit</button>
+                                        @elseif($transaction->transaction_typeorder == 2)
+                                            <button class="btnt btn btn-primary">Transfer</button>
+                                        @elseif($transaction->transaction_typeorder == 3)
+                                            <button class="btnt btn btn-success">Cashback</button>
+                                        @elseif($transaction->transaction_typeorder == 4)
+                                            <button class="btnt btn btn-info">MLM</button>
+                                        @elseif($transaction->transaction_typeorder == 5)
+                                            <button class="btnt btn btn-success">Phát triển</button>
+                                        @elseif($transaction->transaction_typeorder == 6)
+                                            <button class="btnt btn btn-primary">Transfer special</button>
                                         @endif
 
                                     </td>
-                                    <td> {{Admin_users::where('id', $transaction->transaction_checker)->value('name')}} </td>
+                                    <td> @if($transaction->transaction_checker ==0)
+                                            System
+                                        @elseif($transaction->transaction_checker == null)
+                                            Not yet
+                                        @else
+                                            {{Admin_users::where('id', $transaction->transaction_checker)->value('name')}} </td>
+                                        @endif
                                     <td> 
-                                          @if($transaction->transaction_type == 0)
+                                          @if($transaction->transaction_typecurrency == 0)
                                             <button class="btnt btn btn-success">VND</button>
                                         @else
                                             <button class="btnt btn btn-primary">USDT</button>
@@ -150,22 +168,23 @@ use App\Admin_users;
                                <tfoot>
                                 <tr>
                                         <td><input type="checkbox"  class="checkbot checkrow"></td>
-                                        <td>ID</td>
-                                        <td>ID user</td>
-                                        <td>Type</td>
-                                        <td>Checker</td>
-                                        <td>Currency</td>
-                                        <td>Amount</td>
-                                        <td>Point</td>
-                                        <td>Description</td>
-                                        <td>Bill</td>
-                                        <td>Bill2</td>
-                                        <td>Status</td>
-                                        <td>Updated time</td>
-                                        <td>Edit</td>
-                                        <td>Accept</td>
-                                        <td>Cancel</td>
-                                        <td>Delete</td>
+                                        <th>ID</th>
+                                        <th>From User</th>
+                                        <th>To User</th>
+                                        <th>Type Order</th>
+                                        <th>ID Checker</th>
+                                        <th>Currency</th>
+                                        <th>Amount</th>
+                                        <th>Point</th>
+                                        <th>Description</th>
+                                        <th>Bill</th>
+                                        <th>Bill2</th>
+                                        <th>Status</th>
+                                        <th>Created time</th>
+                                        <th>Edit</th>
+                                        <th>Accept</th>
+                                        <th>Cancel</th>
+                                        <th>Delete</th>
                                     </tr>
                                </tfoot>
                             </table>
@@ -188,7 +207,7 @@ use App\Admin_users;
                                     targets: [0]
                             },
                             {
-                                targets: [11],
+                                targets: [13    ],
                                 "type": "date"
                             }
                             ],
