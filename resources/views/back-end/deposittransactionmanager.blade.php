@@ -24,6 +24,7 @@ use App\Admin_users;
                                     <tr>
                                         <th><input type="checkbox" class="checktop checkrow"></th>
                                         <th>ID</th>
+                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>
@@ -46,6 +47,7 @@ use App\Admin_users;
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
+                                    <td> {{User::where('id', $transaction->transaction_fromuser)->value('email')}} </td>
                                     <td> {{User::where('id', $transaction->transaction_touser)->value('email')}} </td>
                                     <td> 
                                         @if($transaction->transaction_typeorder == 0)
@@ -167,6 +169,7 @@ use App\Admin_users;
                                 <tr>
                                         <td><input type="checkbox"  class="checkbot checkrow"></td>
                                         <th>ID</th>
+                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>
@@ -211,19 +214,34 @@ use App\Admin_users;
                             "dom": '<"toolbar">frtip',
                             
                                     });
-                        $("div.toolbar").html('<span style="margin-right: 20px;"><select id="selectaction"><option value="No" selected>Action</option><option value="accept">Accept</option><option value="cancel">Cancel</option><option value="delete">Delete</option></select><button id="actionselected">Do Action</button></span><span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span>');
+                        $("div.toolbar").html('<form><span style="margin-right: 20px;"><select id="selectaction"><option value="No" selected>Action</option><option value="accept">Accept</option><option value="cancel">Cancel</option><option value="delete">Delete</option></select><button id="actionselected">Do Action</button></span><span  class="select-date-range"><select id="date-range" name="date-range"><option value="0">--Select--</option><option value="1">Trong ngày</option><option value="7">Trong tuần</option><option value="30"> Trong tháng</option></select></span><span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span><span><input type="reset" id="reset" value="Reset"></span></form>');
                         $.fn.dataTable.ext.search.push(
                         function (settings, data, dataIndex) {
+
                             var valid = true;
                             var min = moment($("#datemin").val());
                             if (!min.isValid()) { min = null; }
-                            console.log(min);
                             var max = moment($("#datemax").val());
                             if (!max.isValid()) { max = null; }
-                    
+
+                            if ($("#date-range").val() != 0) {
+                                var today = new Date();
+                                if ($("#date-range").val() == 7) {
+                                    var mindate = (today.getMonth()+1)+'/'+(today.getDate()-7)+'/'+today.getFullYear();
+                                }else if ($("#date-range").val() == 30) {
+                                    var mindate = today.getMonth()+'/'+today.getDate()+'/'+today.getFullYear();
+                                }else if ($("#date-range").val() == 1) {
+                                    var mindate = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
+                                }
+                                min = moment(mindate);
+                                if (!min.isValid()) { min = null; }
+                                max = null;
+                            }
+
                             if (min === null && max === null) {
                                 // no filter applied or no date columns
                                 valid = true;
+                                
                             }
                             else {
                                 $.each(settings.aoColumns, function (i, col) {
@@ -247,9 +265,14 @@ use App\Admin_users;
                             }
                             return valid;
                     });
-            $("#filldate").click(function () {
-                        $('#transactiontable').DataTable().draw();
-                  });
+                $("#filldate").click(function () {
+                    $('#transactiontable').DataTable().draw();
+                        
+                });
+                $("#date-range").change(function () {
+                    $('#transactiontable').DataTable().draw();
+                });
+           
             });
 
                                    

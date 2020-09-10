@@ -106,6 +106,7 @@ class WalletMainController extends Controller
 						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_amount' => $main_wallet->main_wallet_amount - $request->transfer_point]);
 						WalletEco::where('eco_wallet_ofuser',$id)->update(['eco_wallet_amount' => $eco_wallet->eco_wallet_amount + $transfer_point	]);
 						User::where('id',$id)->update(['transfer_status' => 1]);
+						
 						$transactionConntroller = new TransactionController(); 
 						$transactionConntroller->createTransaction(6, $id, $id, 0, null, $request->transfer_point, 'Transfer tru tien vi chinh', null, null, 1);
 						$transactionConntroller->createTransaction(6, $id, $id, 0, null, $transfer_point, 'Transfer cong tien vi tiet kiem', null, null, 1);
@@ -114,7 +115,7 @@ class WalletMainController extends Controller
 						$walletmainController->createWalletHistory($request->transfer_point, $id, $id, $main_wallet->main_wallet_id , 0, 0 ,6);
 						$walletmainController->createWalletHistory($transfer_point, $id, $id, $eco_wallet->eco_wallet_id , 2, 1 ,6);
 
-
+						$walletmainController->MLM($id,20,$id);
 						return redirect('/')->with('success','Bạn đã chuyển thành công');
 					}else{
 						return redirect('/')->with('error','Your account has not been created after 30 days');
@@ -127,9 +128,9 @@ class WalletMainController extends Controller
 			return redirect('/login')->with('erro','You must logged in');
 		}
 	}
-	public function MLM($id, $count){
+	public function MLM($id, $count, $id_MLM){
 		if($count >= 0){
-			$id_ref = User::where('id', $id)->value('id_ref');
+			$id_ref = User::where('id', $id_MLM)->value('id_ref');
 			$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id_ref)->value('eco_wallet_amount');
 			$temp = $eco_wallet_amount - 500;
 			$mlm = new WalletMainController(); 
@@ -142,18 +143,34 @@ class WalletMainController extends Controller
 			}else{
 				$rate = 0.001;
 			}
+			$wallet_ext = WalletExt::where('ext_wallet_ofuser', $id_ref)->first();
+
 			if($temp > 0){
 				if($temp > ($rate * $eco_wallet_amount)){
-					$ext_wallet_amount_new = WalletExt::where('ext_wallet_ofuser', $id_ref)->value('ext_wallet_amount') + ($rate * $eco_wallet_amount);
+					$ext_wallet_amount_new = $wallet_ext->ext_wallet_amount + ($rate * $eco_wallet_amount);
 					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
-					return $mlm->MLM($id_ref, $count -1);
+				
+					$transactionConntroller = new TransactionController(); 
+					$transactionConntroller->createTransaction(4, $id, $id_ref, 0 ,null , $rate * $eco_wallet_amount, 'MLM cong vao vi phu', null, null, 1);
+
+					$walletmainController = new WalletMainController();
+					$walletmainController->createWalletHistory($rate * $eco_wallet_amount, $id, $id_ref, $wallet_ext->ext_wallet_id, 1, 1 ,4);
+
+					return $mlm->MLM($id, $count -1, $id_ref);
 				}else{
 					$ext_wallet_amount_new = WalletExt::where('ext_wallet_ofuser', $id_ref)->value('ext_wallet_amount') + $temp;
 					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
-					return $mlm->MLM($id_ref, $count -1);
+				
+					$transactionConntroller = new TransactionController(); 
+					$transactionConntroller->createTransaction(4, $id, $id_ref, 0 ,null , $temp, 'MLM cong vao vi phu', null, null, 1);
+
+					$walletmainController = new WalletMainController();
+					$walletmainController->createWalletHistory($temp, $id, $id_ref, $wallet_ext->ext_wallet_id, 1, 1 ,4);
+
+					return $mlm->MLM($id, $count -1,$id_ref);
 				}
 			}else{
-				return $mlm->MLM($id_ref, $count -1);
+				return $mlm->MLM($id, $count -1,$id_ref);
 			}
 		}else{
 			return null;

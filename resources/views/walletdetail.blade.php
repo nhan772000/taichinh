@@ -1,5 +1,7 @@
 <?php
 use App\User;
+$id = Auth::user()->id;
+
 ?>
 @extends('layouts.master')
 @section('content')
@@ -79,8 +81,10 @@ use App\User;
                                         @endif
                                         @if($wallet_history->wallet_history_fromuser == $wallet_history->wallet_history_touser)
                                             <td><b>You do it</b></td>
-                                        @else
-                                            <td><b>From {{User::where('id', $wallet_history->wallet_history_fromuser)->value('email')}} to {{User::where('id', $wallet_history->wallet_history_touser)->value('email')}}</b></td>
+                                        @elseif($wallet_history->wallet_history_fromuser == $id)
+                                            <td><b>From you to {{User::where('id', $wallet_history->wallet_history_touser)->value('email')}}</b></td>
+                                        @elseif($wallet_history->wallet_history_touser == $id)
+                                            <td><b>From {{User::where('id', $wallet_history->wallet_history_touser)->value('email')}} to you</b></td>
                                         @endif
                                         <td>{{date("d/m/Y",strtotime($wallet_history->created_at)) }}</td>
                                         <td>{{date("h:m:s",strtotime($wallet_history->created_at)) }}</td>
