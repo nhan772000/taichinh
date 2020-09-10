@@ -90,5 +90,6 @@ class AuthController extends Controller
     public function email($token)
     {
         $this->notify(new ResetPasswordNotification($token));
-    } 
+    }
+    
 }

@@ -19,4 +19,5 @@ class UsersController extends Controller
    		$data = User::where('id',$id)->first();
    		return view('back-end.users.edit',['data'=>$data]);
    }
+   
 }
