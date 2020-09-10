@@ -12,9 +12,75 @@ use App\WalletExt;
 use App\WalletECo;
 use App\WalletHistory;
 use App\Payment;
+use App\WalletLevel;
 
 class WalletMainController extends Controller
 {
+	public function getPTTT(){
+		if (Auth::check()){
+			
+		}else{
+			return redirect('/login')->with('erro','You must logged in'); 
+		}
+		$id = Auth::user()->id;
+		$array_F1 = User::where(['id_ref' => $id, 'pttt_status' => 0])->get();
+		$array_id_F1= [];
+		foreach($array_F1 as $F1){
+			array_push($array_id_F1, $F1->id); 
+		}
+		if(count($array_id_F1)>=5){
+			$array_F1_qualified = [];
+			foreach ($array_id_F1 as $id_F1){
+				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_amount');
+				if(($main_wallet_amount_F1 >= 500)&&(count($array_F1_qualified) < 5)){
+					array_push($array_F1_qualified, $id_F1);
+				}
+			}
+			if(count($array_F1_qualified) == 5){
+				return view('PTTTview',['checkpttt' => true, 'array_F1_qualified' => $array_F1_qualified]);
+			}else{
+				return view('PTTTview',['checkpttt'=> false]);
+			}
+		}else{
+			return view('PTTTview',['checkpttt'=> false]);	
+		}
+	}
+	public function postPTTT(Request $request){
+		if (Auth::check()){
+			
+		}else{
+			return redirect('/login')->with('error','You must logged in'); 
+		}
+		$id = Auth::user()->id;
+		$array_F1 = User::where(['id_ref' => $id, 'pttt_status' => 0])->get();
+		$array_id_F1= [];
+		$array_F1_qualified = [];
+
+		foreach($array_F1 as $F1){
+			array_push($array_id_F1, $F1->id); 
+		}
+		if(count($array_id_F1)>=5){
+			foreach ($array_id_F1 as $id_F1){
+				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_amount');
+				if(($main_wallet_amount_F1 >= 500)&&(count($array_F1_qualified) < 5)){
+					array_push($array_F1_qualified, $id_F1);
+				}
+			}
+		}
+		if(count($array_F1_qualified) == 5){
+			foreach($array_F1_qualified as $F1_qualified){
+				User::where('id', $F1_qualified)->update(['pttt_status'=> 1]);
+			}
+			$level_wallet = WalletLevel::where('level_wallet_ofuser',$id)->first();
+			WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_amount'=> $level_wallet->level_wallet_amount + 100]);
+			$walletmainController = new WalletMainController();
+			$walletmainController->createWalletHistory(100, $id, $id, $level_wallet->level_wallet_id, 3, 1 , 5);
+
+			return back()->with('success','Thank you for your contribution to system development');
+		}else{
+			return redirect('/pttt')->with('error','Oh, you are not qualified to do this');
+		}
+	}
 	public function transfer(Request $request){
 		if (Auth::check())
 		{
@@ -57,6 +123,8 @@ class WalletMainController extends Controller
 					return redirect('/')->with('error','You cannot transfer 2 times');
 				}
 				return redirect('/')->with('error','erroooooor!!!');	
+		}else{
+			return redirect('/login')->with('erro','You must logged in');
 		}
 	}
 	public function MLM($id, $count){
@@ -119,15 +187,19 @@ class WalletMainController extends Controller
 			if ($type_wallet == 0){
 				$wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
 				$main_wallet_id = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
-				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}else if ($type_wallet == 1){
 				$wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
 				$ext_wallet_id = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
-				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}else if ($type_wallet == 2){
 				$wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
 				$eco_wallet_id = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_id');
-				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->get();
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
+			}else if ($type_wallet == 3){
+				$wallet_amount = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_amount');
+				$level_wallet_id = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_id');
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $level_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}
 
 			

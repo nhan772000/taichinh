@@ -5,9 +5,10 @@
                 <div class="row ">
                         @foreach ($transaction as $transaction)
                     <div class="col-xs-12">
-                            @if($transaction->transaction_bill != null)
+                            @if($transaction->transaction_typeorder == 1)
                             <h2 class="text-center font-weight-light">Edit Deposit Transaction</h2>
-                        @else
+                        @elseif($transaction->transaction_typeorder == 0)
+
                             <h2 class="text-center font-weight-light">Edit Withdraw Transaction</h2>
                         @endif
                         <div>
@@ -22,7 +23,7 @@
 
                                         <!-- edit form column -->
                                         <div class="col-lg-4 bill text-center">
-                                            @if($transaction->transaction_bill != null)
+                                            @if($transaction->transaction_typeorder == 1)
                                                 <style type="text/css">
                                                     .transaction-info{
                                                         border-left: 1px solid #ddd;
@@ -31,11 +32,23 @@
                                                 </style>
                                                     <h3>Bill Image</h3>
                                                     <div>
+                                                        <h4>Bill 1</h4>
                                                     <img width="100%" src="{{asset($transaction->transaction_bill)}}"/>
                                                     </div>
                                                     <div>
                                                         <input type="file" class="form-control" name="transaction_bill"/> 
                                                     </div>
+                                                    <div>
+                                                        <h4>Bill 2</h4>
+                                                        @if($transaction->transaction_bill2 != null)
+                                                            <img width="100%" src="{{asset($transaction->transaction_bill2)}}"/>
+                                                        @else
+                                                            <p>Update Bill 2</p>
+                                                        @endif
+                                                        </div>
+                                                        <div>
+                                                            <input type="file" class="form-control" name="transaction_bill2"/> 
+                                                        </div>
                                             @else
                                                 <style type="text/css">
                                                     
@@ -59,19 +72,34 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-lg-3 col-form-label form-control-label">ID User</label>
+                                                    <label class="col-lg-3 col-form-label form-control-label">From User</label>
                                                     <div class="col-lg-9">
-                                                        <input class="form-control" type="number" name="transaction_ofuser" value="{{ $transaction->transaction_ofuser}}" />
+                                                        <input class="form-control" type="number" name="transaction_fromuser" value="{{ $transaction->transaction_fromuser}}" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label form-control-label">To User</label>
+                                                    <div class="col-lg-9">
+                                                        <input class="form-control" type="number" name="transaction_touser" value="{{ $transaction->transaction_touser}}" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label form-control-label">Order Type</label>
                                                     <div class="col-lg-3">
-                                                            @if($transaction->transaction_type == 0)
-                                                            <input readonly class="form-control" type="text" value="Withdraw">
-                                                            @else
-                                                            <input readonly class="form-control" type="text" value="Deposit">
-
+                                                            @if($transaction->transaction_typeorder == 0)
+                                                            <input readonly class="form-control" type="text" placeholder="Withdraw">
+                                                            @elseif($transaction->transaction_typeorder == 1)
+                                                            <input readonly class="form-control" type="text" placeholder="Deposit">
+                                                            @elseif($transaction->transaction_typeorder == 2)
+                                                            <input readonly class="form-control" type="text" placeholder="Transfer">
+                                                            @elseif($transaction->transaction_typeorder == 3)
+                                                            <input readonly class="form-control" type="text" placeholder="CashBack">
+                                                            @elseif($transaction->transaction_typeorder == 4)
+                                                            <input readonly class="form-control" type="text" placeholder="MLM">
+                                                            @elseif($transaction->transaction_typeorder == 5)
+                                                            <input readonly class="form-control" type="text" placeholder="Phát triển">
+                                                            @elseif($transaction->transaction_typeorder == 6)
+                                                            <input readonly class="form-control" type="text" placeholder="Transfer Special">
                                                             @endif
                                                             
                                                     </div>
@@ -79,14 +107,18 @@
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label form-control-label">Id Checker</label>
                                                     <div class="col-lg-9">
-                                                        <input class="form-control" type="number" name="transaction_checker" value="{{ $transaction->transaction_checker}}"/>
+                                                        @if( $transaction->transaction_checker == 0)
+                                                            <input class="form-control" type="number" name="transaction_checker" placeholder="System" />
+                                                        @else
+                                                            <input class="form-control" type="number" name="transaction_checker" value="{{ $transaction->transaction_checker}}"/>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label form-control-label">Currency Type</label>
                                                     <div class="col-lg-3">
-                                                        <select  class="kira" name="transaction_type" value="{{ $transaction->transaction_type}}">
-                                                            @if($transaction->transaction_type == 0)
+                                                        <select  class="kira" name="transaction_type" value="{{ $transaction->transaction_typecurrency}}">
+                                                            @if($transaction->transaction_typecurrency == 0)
                                                                 <option value="0" selected>VND</option>
                                                                 <option value="1" >USDT</option>
                                                             @else

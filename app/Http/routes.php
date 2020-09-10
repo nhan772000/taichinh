@@ -21,6 +21,8 @@ Route::get('/wallet', 'WalletMainController@getWalletManager');
 Route::get('/wallet/walletdetail/{type}', 'WalletMainController@getWalletDetail');
 
 Route::get('/transfer', 'WalletMainController@transfer');
+Route::get('/pttt', 'WalletMainController@getPTTT');
+Route::get('/postpttt', 'WalletMainController@postPTTT');
 
 
 Route::get('/user','HomeController@index');

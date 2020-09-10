@@ -11,7 +11,10 @@ use App\User;
             <div class="row">
                 <div class="col kcol text-center uppercase">
                     <h2 class="ktitle kwhite uppercase">Main Wallet</h2>
-                    <h3 class="kwhite"><b>Balance: </b><span>{{ $wallet_amount }} Point</span></h3>
+                    <div class="balance">
+                        <span class="balance-mini"><b><i class="fa fa-star"></i></b> {{ $wallet_amount }}</span>
+                        <span class="icon-exchange"><i class="fa fa-exchange"></i></span>
+                        <span class="balance-mini"><b><i class="fa fa-money"></i></b>{{ $wallet_amount }}000</span></div>
                 </div>
             </div>
             <div class="row">
@@ -29,7 +32,7 @@ use App\User;
                                 </span>
 
                                 <span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span>
-                            <span><input type="reset" id="reset" value="Reset">
+                            <span><input type="reset" id="reset" value="Reset"></span>
                             </form>
                         </div>
                     </div>

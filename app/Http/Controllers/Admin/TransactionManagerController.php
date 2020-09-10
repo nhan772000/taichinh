@@ -8,6 +8,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
+use App\Http\Controllers\WalletMainController;
+
 use App\User;
 use App\Admin_users;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +24,7 @@ class TransactionManagerController extends Controller
     public function ShowAllTransaction()
    {                    
         $id_checker = Auth::guard('admin')->user()->id;
-        $transactions = DB::table('transaction')-> orderBy('created_at', 'desc')->get();
+        $transactions = DB::table('transaction')-> where('transaction_typeorder', 0)->orWhere('transaction_typeorder', 1)-> orderBy('created_at', 'desc')->get();
         return view('back-end.transactionmanager', ['transactions' => $transactions]);
    }
    public function getDepositTransaction()
@@ -54,24 +56,30 @@ class TransactionManagerController extends Controller
                 $transaction = Transaction::where('transaction_id', $transaction_id)->first();
                 
                     if($transaction->transaction_typeorder == 0 ){
-                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction->transaction_fromuser)->value('main_wallet_amount');
-        
-                        $wallet_main_amount = $wallet_main_amount - $transaction->transaction_point;
+                        $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_fromuser)->first();
+                        
+                        $wallet_main_amount = $wallet_main->main_wallet_amount - $transaction->transaction_point;
         
                         WalletMain::where('main_wallet_ofuser',$transaction->transaction_fromuser)->update(['main_wallet_amount' => $wallet_main_amount]);
                         Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
+                        $walletmainController = new WalletMainController();
+                        $walletmainController->createWalletHistory($transaction->transaction_point, $transaction->transaction_fromuser, $transaction->transaction_fromuser, $wallet_main->main_wallet_id, 0, 0 , 0);      
                     }
                     elseif($transaction->transaction_typeorder == 1){
-                        $wallet_main_amount = WalletMain::where('main_wallet_ofuser', $transaction->transaction_touser)->value('main_wallet_amount');
-                        $wallet_eco_amount = WalletEco::where('eco_wallet_ofuser', $transaction->transaction_touser)->value('eco_wallet_amount');
+                        $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_touser)->first();
+                        $wallet_eco = WalletEco::where('eco_wallet_ofuser', $transaction->transaction_touser)->first();
         
-                        $wallet_main_amount = $wallet_main_amount + ($transaction->transaction_point*9/10);
-                        $wallet_eco_amount = $wallet_eco_amount + ($transaction->transaction_point/10);
+                        $wallet_main_amount = $wallet_main->wallet_main_amount + ($transaction->transaction_point*9/10);
+                        $wallet_eco_amount = $wallet_eco->wallet_eco_amount + ($transaction->transaction_point/10);
         
                         WalletMain::where('main_wallet_ofuser',$transaction->transaction_touser)->update(['main_wallet_amount' => $wallet_main_amount]);
                         WalletEco::where('eco_wallet_ofuser',$transaction->transaction_touser)->update(['eco_wallet_amount' => $wallet_eco_amount]);
         
                         Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
+                        $walletmainController = new WalletMainController();
+                        $walletmainController->createWalletHistory(($transaction->transaction_point)*9/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 0, 1 , 1);      
+                        $walletmainController->createWalletHistory(($transaction->transaction_point)/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 2, 1 , 1);      
+
                     }
                 
                 
@@ -128,12 +136,23 @@ class TransactionManagerController extends Controller
                 'transaction_bill' => $url_phieuCK
             ]);
         }
+        if ($request->file('transaction_bill2') != null){
+            $destinationPath = 'uploads/imgChuyenKhoan/';
+            $file = $request->file('transaction_bill2'); 
+            $file_name = $file->getClientOriginalName(); 
+            $file->move($destinationPath , $file_name); 
+
+            $url_phieuCK2 = $destinationPath. "" .$file_name;
+            Transaction::where('transaction_id',$transaction_id)->update([
+                'transaction_bill2' => $url_phieuCK2
+            ]);
+        }
         
         Transaction::where('transaction_id',$transaction_id)->update([
-            'transaction_ofuser' => $request->transaction_ofuser,
-            'transaction_order' => $request->transaction_order,
+            'transaction_fromuser' => $request->transaction_fromuser,
+            'transaction_touser' => $request->transaction_touser,
             'transaction_checker' => $request->transaction_checker,
-            'transaction_type' => $request->transaction_type,
+            'transaction_typecurrency' => $request->transaction_typecurrency,
             'transaction_point' => $request->transaction_point,
             'transaction_description' => $request->transaction_description,
             'transaction_status' => $request->transaction_status,

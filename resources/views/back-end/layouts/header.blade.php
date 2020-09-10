@@ -18,7 +18,7 @@
 
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js" defer></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-
+<script src="//cdn.datatables.net/plug-ins/1.10.21/api/fnFilterClear.js"></script>
 
 
 <!-- Latest compiled JavaScript -->
