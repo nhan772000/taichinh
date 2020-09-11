@@ -14,9 +14,9 @@ $id = Auth::user()->id;
                 <div class="col kcol text-center uppercase">
                     <h2 class="ktitle kwhite uppercase">Main Wallet</h2>
                     <div class="balance">
-                        <span class="balance-mini"><b><i class="fa fa-star"></i></b> {{ $wallet_amount }}</span>
+                        <span class="balance-mini"><b><i class="fa fa-star"></i></b> {{ $wallet_point }}</span>
                         <span class="icon-exchange"><i class="fa fa-exchange"></i></span>
-                        <span class="balance-mini"><b><i class="fa fa-money"></i></b>{{ $wallet_amount }}000</span></div>
+                        <span class="balance-mini"><b><i class="fa fa-money"></i></b>{{ $wallet_point }}000</span></div>
                 </div>
             </div>
             <div class="row">
@@ -44,7 +44,7 @@ $id = Auth::user()->id;
                                 <thead>
                                     <tr>
                                         <th>Point</th>
-                                        <th>Amount</th>
+                                        <th>point</th>
                                         <th>Type Order</th>
                                         <th>Description</th>
                                         <th>Date</th>
@@ -96,7 +96,7 @@ $id = Auth::user()->id;
                                 <tfoot>
                                     <tr>
                                         <th>Point</th>
-                                        <th>Amount</th>
+                                        <th>point</th>
                                         <th>Type Order</th>
                                         <th>Date</th>  
                                         <th>Description</th>    

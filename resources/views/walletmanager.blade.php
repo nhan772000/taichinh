@@ -8,19 +8,19 @@
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/0')!!}" class="btn btn-success1 button_home">
           <i class="icon_size glyphicon glyphicon-home"></i> <span>Main Wallet</span>
-          <span class="amount">{{ $arr_wallet_amount['main_wallet_amount'] }} Point</span>
+          <span class="amount">{{ $arr_wallet_point['main_wallet_point'] }} Point</span>
         </a>
       </div>
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
           <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Ext Wallet</span>
-          <span class="amount">{{ $arr_wallet_amount['ext_wallet_amount'] }} Point</span>
+          <span class="amount">{{ $arr_wallet_point['ext_wallet_point'] }} Point</span>
         </a>
       </div>
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
           <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Eco Wallet</span>
-          <span class="amount">{{ $arr_wallet_amount['eco_wallet_amount'] }} Point</span>
+          <span class="amount">{{ $arr_wallet_point['eco_wallet_point'] }} Point</span>
         </a>
       </div>
      

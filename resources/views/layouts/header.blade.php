@@ -62,7 +62,7 @@
 
     </div>
     <div class="vihanmuc col-xs-5 col-sm-4 text-left">
-      <a href="#"><span class="glyphicon glyphicon-oil"></span> Wallet level</a>
+      <a href="{!!url('/wallet/walletdetail/1')!!}"><span class="glyphicon glyphicon-oil"></span> Wallet level</a>
     </div>
     <div class="thongbao col-xs-2">
       <a id="clear_thongbao" class="icon_thongbao" href="#"><span class="glyphicon glyphicon-bell"></span><span id="thongbao" style="margin-top: -20px; padding: 1px 4px; background: red;" class="badge">5</span></a>
