@@ -123,10 +123,11 @@ $id = Auth::user()->id;
                             {
                                 targets: [4 ],
                                 "type": "date"
-                            }
+                            },
+                            
                             ]
                             
-                                    });
+                            });
                         $.fn.dataTable.ext.search.push(
                         function (settings, data, dataIndex) {
 

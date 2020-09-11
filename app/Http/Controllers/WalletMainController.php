@@ -32,12 +32,13 @@ class WalletMainController extends Controller
 			$array_F1_qualified = [];
 			foreach ($array_id_F1 as $id_F1){
 				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_amount');
-				if(($main_wallet_amount_F1 >= 500)&&(count($array_F1_qualified) < 5)){
+				if($main_wallet_amount_F1 >= 500){
 					array_push($array_F1_qualified, $id_F1);
 				}
 			}
+			$count_gift = count($array_F1_qualified)/5;
 			if(count($array_F1_qualified) == 5){
-				return view('PTTTview',['checkpttt' => true, 'array_F1_qualified' => $array_F1_qualified]);
+				return view('PTTTview',['checkpttt' => true, 'count_gift' => $count_gift]);
 			}else{
 				return view('PTTTview',['checkpttt'=> false]);
 			}
