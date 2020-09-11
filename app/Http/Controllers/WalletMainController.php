@@ -94,6 +94,13 @@ class WalletMainController extends Controller
 					if($created <= $today ){
 						$main_wallet = WalletMain::where('main_wallet_ofuser', $id)->first();
 						$eco_wallet = WalletEco::where('eco_wallet_ofuser', $id)->first();
+						if(($request->transfer_point < 100) && ($request->transfer_point >1000)){
+							return redirect('/')->with('error','You can transfer min 100 point and max 1000 point');
+						}
+
+						if($request->transfer_point > $main_wallet->main_wallet_point){
+							return redirect('/')->with('error','You do not have enough points in your main wallet to transfer');
+						}
 
 						if($main_wallet->main_wallet_point < 1000){
 							$max_transfer = $main_wallet->main_wallet_point;
@@ -232,6 +239,9 @@ class WalletMainController extends Controller
    		$id = Auth::user()->id;  
    		$passWord = Auth::user()->password;  
    		if(Hash::check($request->pwdtt,$passWord)){
+			if($request->point < 100 ){
+				return back()->with('error','You must deposit min 100 point!');
+			}
    			//upload file
 			$destinationPath = 'uploads/imgChuyenKhoan/';
 			$file = $request->file('picture'); 
@@ -267,7 +277,7 @@ class WalletMainController extends Controller
    		$id = Auth::user()->id;  
    		$passWord = Auth::user()->password;  
    		$walletmain_point = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
-   		if ($request->point <= $walletmain_point){
+   		if (($request->point <= $walletmain_point) && ($request->point >= 100)){
    			if(Hash::check($request->pwdtt,$passWord)){
  
 				   $transactionConntroller = new TransactionController(); 
@@ -278,7 +288,7 @@ class WalletMainController extends Controller
 	   		}
 
    		}else{
-   			return back()->with('error','Số dư không đủ!!!');
+   			return back()->with('error','Số dư không đủ !!!');
 	   		
    		}
    	}	
