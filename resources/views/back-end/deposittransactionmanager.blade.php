@@ -24,7 +24,6 @@ use App\Admin_users;
                                     <tr>
                                         <th><input type="checkbox" class="checktop checkrow"></th>
                                         <th>ID</th>
-                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>
@@ -47,7 +46,6 @@ use App\Admin_users;
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
-                                    <td> {{User::where('id', $transaction->transaction_fromuser)->value('email')}} </td>
                                     <td> {{User::where('id', $transaction->transaction_touser)->value('email')}} </td>
                                     <td> 
                                         @if($transaction->transaction_typeorder == 0)
@@ -169,7 +167,6 @@ use App\Admin_users;
                                 <tr>
                                         <td><input type="checkbox"  class="checkbot checkrow"></td>
                                         <th>ID</th>
-                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>

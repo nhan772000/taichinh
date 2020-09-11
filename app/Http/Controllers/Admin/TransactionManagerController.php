@@ -42,50 +42,50 @@ class TransactionManagerController extends Controller
    }
 
 
-    public function acceptTransaction(Request $request){
-            $id_checker = Auth::guard('admin')->user()->id;
-            $arr_id = $request->arr_id;
-            $arr_ids = [];
-            if(is_array($arr_id)){
-                $arr_ids = $arr_id;
-            }else{
-                $arr_ids[0] = $arr_id;
-            }
+   public function acceptTransaction(Request $request){
+    $id_checker = Auth::guard('admin')->user()->id;
+    $arr_id = $request->arr_id;
+    $arr_ids = [];
+    if(is_array($arr_id)){
+        $arr_ids = $arr_id;
+    }else{
+        $arr_ids[0] = $arr_id;
+    }
 
-            foreach ($arr_ids as $transaction_id){
-                $transaction = Transaction::where('transaction_id', $transaction_id)->first();
+    foreach ($arr_ids as $transaction_id){
+        $transaction = Transaction::where('transaction_id', $transaction_id)->first();
+        
+            if($transaction->transaction_typeorder == 0 ){
+                $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_fromuser)->first();
                 
-                    if($transaction->transaction_typeorder == 0 ){
-                        $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_fromuser)->first();
-                        
-                        $wallet_main_amount = $wallet_main->main_wallet_amount - $transaction->transaction_point;
-        
-                        WalletMain::where('main_wallet_ofuser',$transaction->transaction_fromuser)->update(['main_wallet_amount' => $wallet_main_amount]);
-                        Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
-                        $walletmainController = new WalletMainController();
-                        $walletmainController->createWalletHistory($transaction->transaction_point, $transaction->transaction_fromuser, $transaction->transaction_fromuser, $wallet_main->main_wallet_id, 0, 0 , 0);      
-                    }
-                    elseif($transaction->transaction_typeorder == 1){
-                        $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_touser)->first();
-                        $wallet_eco = WalletEco::where('eco_wallet_ofuser', $transaction->transaction_touser)->first();
-        
-                        $wallet_main_amount = $wallet_main->wallet_main_amount + ($transaction->transaction_point*9/10);
-                        $wallet_eco_amount = $wallet_eco->wallet_eco_amount + ($transaction->transaction_point/10);
-        
-                        WalletMain::where('main_wallet_ofuser',$transaction->transaction_touser)->update(['main_wallet_amount' => $wallet_main_amount]);
-                        WalletEco::where('eco_wallet_ofuser',$transaction->transaction_touser)->update(['eco_wallet_amount' => $wallet_eco_amount]);
-        
-                        Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
-                        $walletmainController = new WalletMainController();
-                        $walletmainController->createWalletHistory(($transaction->transaction_point)*9/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 0, 1 , 1);      
-                        $walletmainController->createWalletHistory(($transaction->transaction_point)/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 2, 1 , 1);      
+                $wallet_main_point = $wallet_main->main_wallet_amount - $transaction->transaction_point;
 
-                    }
-                
-                
+                WalletMain::where('main_wallet_ofuser',$transaction->transaction_fromuser)->update(['main_wallet_point' => $wallet_main_point]);
+                Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
+                $walletmainController = new WalletMainController();
+                $walletmainController->createWalletHistory($transaction->transaction_point, $transaction->transaction_fromuser, $transaction->transaction_fromuser, $wallet_main->main_wallet_id, 0, 0 , 0);      
             }
-            return null;
-        }
+            elseif($transaction->transaction_typeorder == 1){
+                $wallet_main = WalletMain::where('main_wallet_ofuser', $transaction->transaction_touser)->first();
+                $wallet_eco = WalletEco::where('eco_wallet_ofuser', $transaction->transaction_touser)->first();
+
+                $wallet_main_point = $wallet_main->main_wallet_point + ($transaction->transaction_point * 9/10);
+                $wallet_eco_point = $wallet_eco->eco_wallet_point + ($transaction->transaction_point/10);
+
+                WalletMain::where('main_wallet_ofuser',$transaction->transaction_touser)->update(['main_wallet_point' => $wallet_main_point]);
+                WalletEco::where('eco_wallet_ofuser',$transaction->transaction_touser)->update(['eco_wallet_point' => $wallet_eco_point]);
+
+                Transaction::where('transaction_id',$transaction_id)->update(['transaction_checker' => $id_checker, 'transaction_status' => 1]);
+                $walletmainController = new WalletMainController();
+                $walletmainController->createWalletHistory(($transaction->transaction_point)*9/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 0, 1 , 1);      
+                $walletmainController->createWalletHistory(($transaction->transaction_point)/10, $transaction->transaction_touser, $transaction->transaction_touser, $wallet_main->main_wallet_id, 2, 1 , 1);      
+
+            }
+        
+        
+    }
+    return null;
+}
     public function cancelTransaction(Request $request){
             $arr_id = $request->arr_id;
             $id_checker = Auth::guard('admin')->user()->id;

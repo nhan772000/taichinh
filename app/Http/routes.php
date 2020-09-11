@@ -42,9 +42,9 @@ Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@
 
 //Xử lý admin transaction
 Route::get('admin/transactionmanager', 'Admin\TransactionManagerController@ShowAllTransaction');
-Route::get('admin/transactionmanager/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
-Route::get('admin/transactionmanager/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
-Route::get('admin/transactionmanager/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+Route::get('admin/transactionmanager/acceptTransaction/{arr_id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/cancelTransaction/{arr_id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/deleteTransaction/{arr_id}', 'Admin\TransactionManagerController@deleteTransaction');
 Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
 
 //Xử lý deposit transaction
