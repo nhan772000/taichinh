@@ -48,7 +48,7 @@
 	                    <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-flag"></i> Introduce</button>
 	                </div>
 	                <div class="col-xs-4  text-center">
-	                    <a href="accounting.html" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-bitcoin"></i> Account</a>
+	                    <a href="{{URL::to('/chuyen')}}" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-bitcoin"></i><span>Score Transfer</span></a>
 	                </div>
 	                <div class="col-xs-4  text-center">
 	                    <a href="wallet.html" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-list-alt"></i> Wallet</a>

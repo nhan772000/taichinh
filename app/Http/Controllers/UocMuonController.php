@@ -9,6 +9,9 @@ use App\Uocmuon;
 
 class UocMuonController extends Controller
 {
+	public function hello($truong){
+		echo "hello ".$truong;
+	}
    public function giaodienUocMuon()
    {
 	    if (Auth::check())

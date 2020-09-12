@@ -10,6 +10,8 @@ use App\User;
 use App\Eco_wallet;
 use App\Main_wallet;
 use App\Ext_wallet;
+use App\HM;
+use App\SettingTransferPoint;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -20,6 +22,321 @@ session_start();
 
 class UsersController extends Controller
 {
+  //-------------------chuyen----------------------------
+  public function capnhat(){
+    // $user = Auth::user();
+    // $user_capnhat = User::find($user->id);
+
+    // $pass = Hash::make('01642909557');
+    // $user_capnhat->user_password_pay = $pass;
+    // $user_capnhat->save();
+    // echo $pass;
+    // echo "thanh công";
+    // $call = new UocMuonController;
+    // $call->hello('Trường');
+  }
+
+  public function getChuyen(){
+    
+    if(Auth::check()){
+      $user = Auth::user();
+      $point_main = Main_wallet::where('main_wallet_ofuser', $user->id)->first();
+      $point_ext = Ext_wallet::where('ext_wallet_ofuser', $user->id)->first();
+      $hm = HM::where('hm_wallet_ofuser', $user->id)->first();
+      if($hm->hm_wallet_point > $point_main->main_wallet_point){
+        $point_main = $point_main->main_wallet_point;
+      }
+      else{
+        $point_main = $hm->hm_wallet_point;
+      }
+      if($hm->hm_wallet_point > $point_ext->ext_wallet_point){
+        $point_ext = $point_ext->ext_wallet_point;
+      }
+      else{
+        $point_ext = $hm->hm_wallet_point;
+      }
+      return view('/chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
+    }
+  }
+  public function postChuyen(Request $request){
+    //user_choosewallet, id_user_transfer, point_transfer, transfer_content, user_password_pay
+    if(Auth::check()){
+
+      
+
+      $this->validate($request, [
+        'user_choosewallet' => 'required',
+        'id_user_transfer' => ['required', 'max:255', 'regex:^[0-9]+$^'],
+        'point_transfer' => ['required', 'max:255', 'regex:^[0-9]+$^'],
+        'transfer_content' => 'max:1024',
+        'user_password_pay' => 'required|max:255'
+      ],
+      [
+      ]);
+      $user = Auth::user();
+      $main_wallet = Main_wallet::where('main_wallet_ofuser', $user->id)->first();
+      $ext_wallet = Ext_wallet::where('ext_wallet_ofuser', $user->id)->first();
+      $hm = HM::where('hm_wallet_ofuser', $user->id)->first();
+
+      $user_transfer_point = User::find($request->id_user_transfer);
+
+        if($request->user_choosewallet == 1){
+          $wallet_point = $main_wallet->main_wallet_point;
+        }
+        else if($request->user_choosewallet == 0){
+          $wallet_point = $ext_wallet->ext_wallet_point;
+        }
+        else{
+          Auth::logout();
+          return Redirect::to('login');
+        }
+        //kiểm tra xem có đủ điểm để chuyển không
+        if($wallet_point > $request->point_transfer && $hm->hm_wallet_point > $request->point_transfer){
+
+            //kiểm tra user chuyển có tồn tại không
+            if($user_transfer_point){
+              
+              //kiểm tra mật khẩu thanh toán
+              if (Hash::check($request->user_password_pay, $user->user_password_pay)) {
+                return view('/xacnhan_chuyen')->with('data', $request)->with('user', Auth::user())->with('user_transfer_point', $user_transfer_point);
+              }
+              else{
+                Session::flash('message', 'Mật khẩu thanh toán không đúng.');
+                return Redirect::to('/chuyen');
+              }
+              //------kiểm tra mật khẩu thanh toán
+            }
+            else{
+              Session::flash('message', 'ID member không đúng');
+              return Redirect::to('/chuyen');
+            }
+            //-----kiểm tra user chuyển có tồn tại không
+        }
+        else{
+          Session::flash('message', 'bạn không đủ điều kiệm');
+          return Redirect::to('/chuyen');
+        }
+        //-------kiểm tra xem có đủ điểm để chuyển không     
+    }
+    else{
+      Session::flash('message', 'Vui lòng đăng nhập !');
+      return Redirect::to('/login');
+    }
+  }
+
+  public function xacNhanChuyen(Request $request){
+    //id_transfer, type_wallet, point_transfer
+    if(Auth::check()){
+      //$walletMainController = new walletMainController();
+      $point = $request->point_transfer;
+
+      $user = Auth::user();
+      $fromuser = $user->id;
+      $touser = $request->id_transfer;
+      $user_transfer_point = User::find($request->id_transfer);
+
+      $user_setting = SettingTransferPoint::where('setting_ofuser', $user->id)->first();
+
+      //người dùng cài đặt hoàn về 30% tiết kiệm
+      if($user_setting->setting_type == 0){
+        //ví của người dùng chuyển
+        //xử lý khi người dùng chọn ví chuyển điểm
+        if($request->type_wallet == 1){
+          $main_wallet_transfer = Main_wallet::where('main_wallet_ofuser', $user->id)->first();
+
+          $ofwallet = $main_wallet_transfer->main_wallet_id;
+          $typewallet = 0;
+
+          $main_point = $request->point_transfer * ( 1 / 100 );
+          $main_point = $main_wallet_transfer->main_wallet_point - $request->point_transfer - $main_point;
+          $main_point = sprintf("%1.2f", $main_point);
+          // echo $main_point;
+          // echo "<br/>";
+          $main_wallet_transfer_save = Main_wallet::find($main_wallet_transfer->main_wallet_id);
+
+          $main_wallet_transfer_save->main_wallet_point = $main_point;
+          $main_wallet_transfer_save->save();
+
+
+
+        }
+        else if($request->type_wallet == 0){
+          $ext_wallet_transfer = Ext_wallet::where('ext_wallet_ofuser', $user->id)->first();
+
+          $ofwallet = $ext_wallet_transfer->ext_wallet_id;
+          $typewallet = 1;
+
+          $ext_wallet = $request->point_transfer * ( 1 / 100 );
+          $ext_wallet = $ext_wallet_transfer->ext_wallet_point - $request->point_transfer - $ext_wallet;
+          $ext_wallet = sprintf("%1.2f", $ext_wallet);
+          // echo $ext_wallet;
+          // echo "<br/>";
+          $ext_wallet_transfer_save = Ext_wallet::find($ext_wallet_transfer->ext_wallet_id);
+
+          $ext_wallet_transfer_save->ext_wallet_point = $ext_wallet;
+          $ext_wallet_transfer_save->save();
+
+
+        }
+
+        else{
+        Auth::logout();
+        return Redirect::to('login');
+        }
+        //---------------xử lý khi người dùng chọn ví chuyển điểm
+
+
+
+
+
+        $eco_wallet_transfer = Eco_wallet::where('eco_wallet_ofuser', $user->id)->first();
+         $eco_point = $request->point_transfer*(30/100);
+        $eco_point = $eco_wallet_transfer->eco_wallet_point + $eco_point;
+        $eco_point = sprintf("%1.2f", $eco_point);
+        //echo sprintf("%1.2f",$eco_point);
+        //echo "<br/>";
+        $eco_wallet_transfer_save = Eco_wallet::find($eco_wallet_transfer->eco_wallet_id);
+        $eco_wallet_transfer_save->eco_wallet_point = $eco_point;
+        $eco_wallet_transfer_save->save();
+
+        $hm_transfer = HM::where('hm_wallet_ofuser', $user->id)->first();
+         $hm_point = $hm_transfer->hm_wallet_point - $request->point_transfer;
+        //echo sprintf("%1.2f", $hm_point);
+         $hm_point = sprintf("%1.2f", $hm_point);
+        $hm_transfer_save = HM::find($hm_transfer->hm_wallet_id);
+        $hm_transfer_save->hm_wallet_point = $hm_point;
+        $hm_transfer_save->save();
+        //echo "<br/>";
+
+      }
+
+
+      //người dùng cài đặt hoàn liền 5%
+      else if($user_setting->setting_type == 1){
+
+        //ví của người dùng chuyển
+
+        //kết thúc------------xử lý khi chọn ví------------
+        if($request->type_wallet == 1){
+          $main_wallet_transfer = Main_wallet::where('main_wallet_ofuser', $user->id)->first();
+
+          $ofwallet = $main_wallet_transfer->main_wallet_id;
+          $typewallet = 0;
+
+          $main_point = $request->point_transfer * ( 1 / 100 );
+          $main_point = $main_wallet_transfer->main_wallet_point - $request->point_transfer - $main_point;
+          $main_point = sprintf("%1.2f", $main_point);
+          // echo $main_point;
+          // echo "<br/>";
+          $main_wallet_transfer_save = Main_wallet::find($main_wallet_transfer->main_wallet_id);
+
+          $main_wallet_transfer_save->main_wallet_point = $main_point;
+          $main_wallet_transfer_save->save();
+
+
+
+        }
+        else if($request->type_wallet == 0){
+          $ext_wallet_transfer = Ext_wallet::where('ext_wallet_ofuser', $user->id)->first();
+
+          $ofwallet = $ext_wallet_transfer->ext_wallet_id;
+          $typewallet = 1;
+
+          $ext_wallet = $request->point_transfer * ( 1 / 100 );
+          $ext_wallet = $ext_wallet_transfer->ext_wallet_point - $request->point_transfer - $ext_wallet;
+          $ext_wallet = sprintf("%1.2f", $ext_wallet);
+          // echo $ext_wallet;
+          // echo "<br/>";
+          $ext_wallet_transfer_save = Ext_wallet::find($ext_wallet_transfer->ext_wallet_id);
+
+          $ext_wallet_transfer_save->ext_wallet_point = $ext_wallet;
+          $ext_wallet_transfer_save->save();
+
+
+        }
+
+        else{
+          Auth::logout();
+          return Redirect::to('login');
+        }
+        //kết thúc------------xử lý khi chọn ví------------
+        
+
+
+
+
+
+        $ext_wallet_transfer = Ext_wallet::where('ext_wallet_ofuser', $user->id)->first();
+        $ext_point = $request->point_transfer*(5/100);
+        $ext_point = $ext_wallet_transfer->ext_wallet_point + $ext_point;
+        $ext_point = sprintf("%1.2f", $ext_point);
+        //echo sprintf("%1.2f",$eco_point);
+        //echo "<br/>";
+        $ext_wallet_transfer_save = Ext_wallet::find($ext_wallet_transfer->ext_wallet_id);
+        $ext_wallet_transfer_save->ext_wallet_point = $ext_point;
+        $ext_wallet_transfer_save->save();
+
+        $hm_transfer = HM::where('hm_wallet_ofuser', $user->id)->first();
+         $hm_point = $hm_transfer->hm_wallet_point - $request->point_transfer;
+        //echo sprintf("%1.2f", $hm_point);
+         $hm_point = sprintf("%1.2f", $hm_point);
+        $hm_transfer_save = HM::find($hm_transfer->hm_wallet_id);
+        $hm_transfer_save->hm_wallet_point = $hm_point;
+        $hm_transfer_save->save();
+        //echo "<br/>";
+
+      }
+      //$walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 1, 2);
+      //kết thúc--------------cài đặt hoàn về liền----------------
+        
+
+
+        //ví của người dùng nhận
+        $main_wallet_receive = Main_wallet::where('main_wallet_ofuser', $user_transfer_point->id)->first();
+
+        $main_point = $request->point_transfer * (90/100);
+        $main_point = $main_wallet_receive->main_wallet_point + $main_point;
+        $main_point = sprintf("%1.2f", $main_point);
+        // echo sprintf("%1.2f",$main_point);
+        // echo "<br/>";
+        $main_wallet_receive_save = Main_wallet::find($main_wallet_receive->main_wallet_id);
+        $main_wallet_receive_save->main_wallet_point = $main_point;
+        $main_wallet_receive_save->save();
+
+        $eco_wallet_receive = Eco_wallet::where('eco_wallet_ofuser', $user_transfer_point->id)->first();
+         $eco_point = $request->point_transfer*(10/100);
+        $eco_point = $eco_wallet_receive->eco_wallet_point + $eco_point;
+         $eco_point = sprintf("%1.2f", $eco_point);
+        // echo sprintf("%1.2f",$eco_point);
+        // echo "<br/>";
+        $eco_wallet_receive_save = Eco_wallet::find($eco_wallet_receive->eco_wallet_id);
+        $eco_wallet_receive_save->eco_wallet_point = $eco_point;
+        $eco_wallet_receive_save->save();
+        
+        $hm_receive = HM::where('hm_wallet_ofuser', $user_transfer_point->id)->first();
+        $hm_point = $hm_receive->hm_wallet_point + $request->point_transfer*(90/100);
+         $hm_point = sprintf("%1.2f", $hm_point);
+        // echo sprintf("%1.2f",$hm_point);
+        // echo "<br/>";
+        $hm_receive_save = HM::find($hm_receive->hm_wallet_id);
+        $hm_receive_save->hm_wallet_point = $hm_point;
+        $hm_receive_save->save();
+
+        //$walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 0, 2);
+
+      Session::flash('message', 'Bạn đã chuyển điểm thành công');
+      return Redirect::to('/chuyen');
+
+    }
+    else{
+      Session::flash('message', 'Vui lòng đăng nhập !');
+      return Redirect::to('/login');
+    }
+    
+  }
+
+  //ket thuc------------chuyen--------------------------
+
   //-------------------lấy lại mật khẩu------------------------
 
   //hiển thị giao diện nhập email
@@ -344,19 +661,19 @@ class UsersController extends Controller
 
     //-----------cập nhật thông tin tài khoản ngân hàng----------
     else if(isset($request->update_account_bank)){
-      //user_ownerbank, user_numbank, user_bankname, address_USDT
+      //user_ownerbank, user_numbank, user_bankname, user_address_USDT
       $this->validate($request, [
         'user_ownerbank' => ['min:3', 'max:255', 'regex:^[A-Za-z0-9]+$^'],
         'user_numbank' => ['max:255'],
         'user_bankname' => ['string', 'max:255'],
-        'address_USDT' => [ 'string', 'max:1024']
+        'user_address_USDT' => [ 'string', 'max:1024']
       ],
       [
       ]);
       $user->user_ownerbank = $request->user_ownerbank;
       $user->user_numbank = $request->user_numbank;
       $user->user_bankname = $request->user_bankname;
-      $user->address_USDT = $request->address_USDT;
+      $user->user_address_USDT = $request->user_address_USDT;
       $user->save();
       Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
         return Redirect::to('/userinfo');
@@ -367,13 +684,16 @@ class UsersController extends Controller
 
     else if(isset($request->update_identity)){
       //user_name_identity, user_number_identity, user_identity_image
+      if($request->user_number_identity != $user->user_number_identity){
         $this->validate($request, [
-        'user_name_identity' => ['max:255', 'regex:^[A-Za-z0-9]+$^'],
-        'user_number_identity' => ['max:20', 'unique:users,user_number_identity'],
-        'user_identity_image' => ['file', 'image']
-      ],
-      [
-      ]);
+          'user_name_identity' => ['max:255', 'regex:^[A-Za-z0-9]+$^'],
+          'user_number_identity' => ['max:20', 'unique:users,user_number_identity'],
+          'user_identity_image' => ['file', 'image']
+        ],
+        [
+        ]);
+        $user->user_number_identity = $request->user_number_identity;
+      }
       $get_image = $request->file('user_identity_image');
 
       //kiểm tra và xử lý hình ảnh chứng minh thư khi úp lên
@@ -386,7 +706,7 @@ class UsersController extends Controller
         $get_image->move('public/uploads/image_user', $new_image);
       }
       $user->user_name_identity = $request->user_name_identity;
-      $user->user_number_identity = $request->user_number_identity;
+      
       $user->save();
       Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
         return Redirect::to('/userinfo');
@@ -503,7 +823,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -529,7 +849,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -554,7 +874,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -564,7 +884,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -603,7 +923,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -613,7 +933,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -646,7 +966,7 @@ class UsersController extends Controller
   //         $user->user_ownerbank = $request->user_ownerbank;
   //         $user->user_numbank = $request->user_numbank;
   //         $user->user_bankname = $request->user_bankname;
-  //         $user->address_USDT = $request->address_USDT;
+  //         $user->user_address_USDT = $request->user_address_USDT;
   //         $user->save();
   //         Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //         return Redirect::to('/userinfo');
@@ -669,7 +989,7 @@ class UsersController extends Controller
   //       $user->user_ownerbank = $request->user_ownerbank;
   //       $user->user_numbank = $request->user_numbank;
   //       $user->user_bankname = $request->user_bankname;
-  //       $user->address_USDT = $request->address_USDT;
+  //       $user->user_address_USDT = $request->user_address_USDT;
   //       $user->save();
   //       Session::flash('message', 'Bạn đã cập nhật thông tin thành công !');
   //       return Redirect::to('/userinfo');
@@ -737,7 +1057,7 @@ class UsersController extends Controller
         'user_email' => 'required|email|max:255|unique:users,email',
         'user_username' => ['required', 'min:3', 'max:255', 'unique:users,name', 'regex:^[a-z0-9]+$^'],
         'user_password' => 'required|min:8|max:32',
-        'user_password_pay' => 'required|min:8|max:32',
+        'user_password_pay' => ['required', 'min:6', 'max:32', 'regex:^[0-9]+$^'],
         'user_phone' => 'required|min:7|max:14|unique:users,user_phone',
         'user_introduction' => 'required',
         'user_nation' => 'required'
@@ -760,6 +1080,7 @@ class UsersController extends Controller
         'user_password_pay.required' => 'Bạn chưa nhập mật khẩu',
         'user_password_pay.min' => 'Để tăng tính bảo mật khi giao dịch vui lòng nhập mật khẩu thanh toán ít nhất 8 ký tự',
         'user_password_pay.max' => 'Mật khẩu của bạn quá dài',
+        'user_password_pay.regex' => 'Mật khẩu thanh toán chỉ bao gồm số.',
         'user_phone.required' => 'Bạn chưa nhập số điện thoại',
         'user_phone.unique' => 'Số điện thoại đã có người dùng !',
         'user_phone.min' => 'Số điện thoại không đúng',
@@ -768,44 +1089,63 @@ class UsersController extends Controller
         'user_nation.required' => 'hack web hả !'
       ]
     );
+    if (preg_match('/[óòỏõọôốồổỗộơớờởỡợÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢ@áàảãạăắặằẳẵâấầẩẫậÁÀẢÃẠĂẮẶẰẲẴÂẤẦẨẪẬđĐéèẻẽẹêếềểễệÉÈẺẼẸÊẾỀỂỄỆíìỉĩịÍÌỈĨỊúùủũụưứừửữựÚÙỦŨỤƯỨỪỬỮỰýỳỷỹỵÝỲỶỸỴ\'^£$%&*()}{!#~"?><>,|=.+¬-]/', $request->user_username) || strpos($request->user_username, ' '))
+        {
+            Session::flash('message', 'Username Không hợp lệ !');
+            return Redirect::to('/register');
+        }
 
+    else{
       $date = Carbon::now();
-     $remember_token = $date->toDateString().$date->toTimeString().rand().rand();  
-      //thêm vào bảng users
-    $user = new User;
-    $user->email = $request->user_email;
-    $user->name = $request->user_username;
-    $user->password = bcrypt($request->user_password);
-    $user->user_password_pay = md5($request->user_password_pay);
-    $user->user_name = $request->user_name;
-    $user->user_phone = $request->user_phone;
-    $user->user_introduction = $request->user_introduction;
-    $user->user_nation = $request->user_nation;
+      $remember_token = $date->toDateString().$date->toTimeString().rand().rand();  
+        //thêm vào bảng users
+      $user = new User;
+      $user->email = $request->user_email;
+      $user->name = $request->user_username;
+      $user->password = bcrypt($request->user_password);
+      $user->user_password_pay = Hash::make($request->user_password_pay);
+      $user->user_name = $request->user_name;
+      $user->user_phone = $request->user_phone;
+      $user->user_introduction = $request->user_introduction;
+      $user->user_nation = $request->user_nation;
 
-    $user->remember_token = $remember_token;
-    $user->save();
+      $user->remember_token = $remember_token;
+      $user->save();
 
 
-    $get_new_user = User::where('name', '=', $request->user_username)->first();
-    //Thêm vào bảng main_wallet
-    $main_wallet = new Main_wallet;
+      $get_new_user = User::where('name', '=', $request->user_username)->first();
+      //Thêm vào bảng main_wallet
+      $main_wallet = new Main_wallet;
 
-    $main_wallet->user_id = $get_new_user->id;
-    $main_wallet->save();
+      $main_wallet->main_wallet_ofuser = $get_new_user->id;
+      $main_wallet->save();
 
-    //thêm vào bảng eco_wallet
-    $eco_wallet = new Eco_wallet;
-    $eco_wallet->user_id = $get_new_user->id;
-    $eco_wallet->save();
+      //thêm vào bảng eco_wallet
+      $eco_wallet = new Eco_wallet;
+      $eco_wallet->eco_wallet_ofuser = $get_new_user->id;
+      $eco_wallet->save();
 
-    //thêm vào bảng ext_wallet
-    $ext_wallet = new Ext_wallet;
-    $ext_wallet->user_id = $get_new_user->id;
-    $ext_wallet->save();
-    
-    Session::flash('message', 'Bạn đã đăng ký thành công. Mời bạn đăng nhập !');
+      //thêm vào bảng ext_wallet
+      $ext_wallet = new Ext_wallet;
+      $ext_wallet->ext_wallet_ofuser = $get_new_user->id;
+      $ext_wallet->save();
 
-    return Redirect('/login');
+      //thêm vào bảng ext_wallet
+      $hm = new HM;
+      $hm->hm_wallet_ofuser = $get_new_user->id;
+      $hm->save();
+
+      //thêm vào bảng ext_wallet
+      $setting_transfer = new SettingTransferPoint;
+      $setting_transfer->setting_ofuser = $get_new_user->id;
+      $setting_transfer->save();
+      
+      
+      Session::flash('message', 'Bạn đã đăng ký thành công. Mời bạn đăng nhập !');
+
+      return Redirect('/login');
+    }
+      
     }
     else{
       Session::flash('message', 'Mã giới thiệu không đúng !');

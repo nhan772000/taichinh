@@ -27,4 +27,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function eco_wallet()
+    {
+        return $this->belongsTo('App\Eco_wallet','eco_wallet_id', 'user_id');
+    }
+    public function ext_wallet()
+    {
+        return $this->belongsTo('App\Ext_wallet','ext_wallet_id', 'user_id');
+    }
+    public function hm()
+    {
+        return $this->belongsTo('App\HM','id_HM', 'user_id');
+    }
+    public function mail_wallet()
+    {
+        return $this->belongsTo('App\Main_wallet','main_wallet_id', 'user_id');
+    }
 }

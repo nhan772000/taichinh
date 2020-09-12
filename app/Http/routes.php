@@ -6,6 +6,17 @@ Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
 Route::get('/nap', 'DepositController@deposit');
 
+//-----------------------chuyển------------------
+//Route::get('/capnhat', 'UsersController@capnhat');
+
+Route::get('/chuyen', 'UsersController@getChuyen');
+
+Route::post('/chuyen', 'UsersController@postChuyen');
+Route::post('/xacnhan-chuyen', 'UsersController@xacNhanChuyen');
+
+//kết thúc---------------chuyển-----------------
+
+
 //-------------------lấy lại mật khẩu------------------------
 
 //hiển thị giao diện nhập email

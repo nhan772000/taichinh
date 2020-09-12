@@ -112,8 +112,8 @@
 		            <input  type="text" class="form-control" id="user_bankname" placeholder="bank name" name="user_bankname" value="{{$user->user_bankname}}">
 		          </div>
 		          <div class="form-group">
-		            <label for="address_USDT">Address USDT:</label>
-		            <input  type="text" class="form-control" id="address_USDT" placeholder="Address USDT" name="address_USDT" value="{{$user->address_USDT}}">
+		            <label for="user_address_USDT">Address USDT:</label>
+		            <input  type="text" class="form-control" id="user_address_USDT" placeholder="Address USDT" name="user_address_USDT" value="{{$user->user_address_USDT}}">
 		          </div>
 		          
 		          <button type="submit" class="btn btn-default btn-block" name="update_account_bank">Update Account Bank</button>
