@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::auth();
 Route::get('/', 'HomepageController@showHomepage');
+Route::get('/contact', 'ContactController@showContact');
 
 Route::get('/rut', 'PagesController@showRutView');
 Route::get('/nap', 'PagesController@showNapView');
@@ -155,3 +156,18 @@ Route::group(['middleware' => 'admin'], function () {
       // ---------------van de khac ----------------------
     });     
 });
+
+
+// LICH SU GIAO DICH
+Route::get('/transaction', 'TransactionController@showTransaction')->name('transaction.index');
+
+
+Route::get('/user', 'HomeController@index');
+Route::get('/user/edit', 'HomeController@edit');
+
+
+Route::get('/nap', 'DepositController@deposit');
+
+Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
+Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
+

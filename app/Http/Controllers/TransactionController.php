@@ -6,13 +6,21 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests;
 use App\WalletEco;
-use App\WalletMain;
+use App\Transaction;
 use App\WalletExt;
 use App\WalletLevel;
-use App\Transaction;
+use App\WalletMain;
+use Yajra\Datatables\Datatables;
+
 
 class TransactionController extends Controller
 {
+
+
+   //Hung
+
+
+
    public function createTransaction($transaction_typeorder, $transaction_fromuser, $transaction_touser, $transaction_checker ,$transaction_typecurrency, $transaction_point, $transaction_description, $transaction_bill, $transaction_bill2, $transaction_status){ 	
 		$transaction = new Transaction();
 		$transaction->transaction_typeorder = $transaction_typeorder;
@@ -143,4 +151,36 @@ class TransactionController extends Controller
       }
       return view('transactionHistory', compact('transactions'));
    }
+
+
+
+
+   //-------------------------------------------Quoc Minh-------------------------------------------
+
+   public function __construct()
+   {
+      $this->middleware('auth');
+   }
+
+   public function showTransaction(Request $request)
+   {
+      $id = auth()->user()->id;
+      if($request->ajax())
+      {
+         if(!empty($request->ngaygiaodich))
+         {
+            $transaction = Transaction::where('transaction_ofuser', $id)
+                                 ->where('created_at', "LIKE", "%$request->ngaygiaodich%")
+                                 ->where('transaction_order', $request->loaigiaodich)
+                                 ->get();
+         }else {
+            $transaction = Transaction::where('transaction_ofuser', $id)->get();
+         }
+         return Datatables::of($transaction)->make(true);
+      }
+      $transaction = Transaction::where('transaction_ofuser', $id)->get();
+      return view('transactionHistory', compact('transaction'));
+   }
+
+   
 }
