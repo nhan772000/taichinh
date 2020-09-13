@@ -9,5 +9,6 @@ class WalletLevel extends Model
     protected $table ='hm_wallet';
 	protected $guarded =[];
 
+	protected $primaryKey = 'hm_wallet_id';
 
 }
