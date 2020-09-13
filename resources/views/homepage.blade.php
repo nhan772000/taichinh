@@ -15,6 +15,8 @@ use App\User;
 				</div>
 		
 	        </div>
+
+	        
 			<div class="modal fade" id="modal_transfer" tabindex="-1" role="dialog" >
 				<div class="modal-dialog" role="document">
 					<form action="{{url('transfer')}}" method="get">
