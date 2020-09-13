@@ -11,7 +11,7 @@ use App\SettingRateCurrency;
       <div class="well well-sm">
         <div class="row">
           <div class="col-xs-12 text-center">
-            <h2>Payment</h2>
+            <h2 class="uppercase">Deposit</h2>
 
           </div>
           <div class="col-xs-12 text-left">
@@ -56,13 +56,20 @@ use App\SettingRateCurrency;
                   </ul>
                 </div>
                 <div class="for_USD">
-                  <input id="code_usdt" value="123SDFDSFK432KSD-SDFSDFSDF23423"/>
+                  <div class="input-group form-group">
+                    <input id="code_usdt" class="form-control" value="123SDFDSFK432KSD-SDFSDFSDF23423"/>
+                    <div class="input-group-btn">
+                      <button class="showhidepwdtt btn btn-default" type="button" onclick="coppy_clip()">
+                        <i class="fa fa-copyright"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
             </div>
             <style>
               #deposit_info{
                 display: none;
-                border: 1px solid #000;
+                border: 1px solid #009E4E;
                  border-radius: 5px;
                  padding: 5px;
                  text-align: left;
@@ -72,13 +79,13 @@ use App\SettingRateCurrency;
                 width: 100%;
               }
               #rate_currency{
-                 border: 1px solid #000;
+                 border: 1px solid #009E4E;
                  border-radius: 5px;
                  padding: 5px;
                  text-align: center;
               }
               #rate_currency input{
-                width: 50px;
+                width: 75px;
               }
               .for_VND{
                 display: none;
@@ -88,6 +95,28 @@ use App\SettingRateCurrency;
               }
             </style>
             <script>
+              function toggle_pass() {
+                var x = document.getElementById("pwdtt");
+                if (x.type === "password") {
+                  x.type = "text";
+                } else {
+                  x.type = "password";
+                }
+              }
+              function coppy_clip() {
+                /* Get the text field */
+                var copyText = document.getElementById("code_usdt");
+
+                /* Select the text field */
+                copyText.select();
+                copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                /* Copy the text inside the text field */
+                document.execCommand("copy");
+
+                /* Alert the copied text */
+                alert("Copied the text: " + copyText.value);
+              }
               $(document).ready(function(){
 
                 $("#chonloainap").change(function(){
@@ -133,14 +162,14 @@ use App\SettingRateCurrency;
           <div class="input-group form-group">
             <input required type="password" class="form-control" id="pwdtt" name="pwdtt" placeholder="Account password">
             <div class="input-group-btn">
-            <button class="showhidepwdtt btn btn-default" type="button">
+            <button class="showhidepwdtt btn btn-default" type="button" onclick="toggle_pass()">
               <i class="glyphicon glyphicon-eye-open"></i>
             </button>
           </div>
           </div>
           <div class="form-group">
-            <label for="description">Ghi chú:</label>
-            <input type="text" class="form-control" name="description" placeholder="Ghi chú gì đó??">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" name="description" placeholder="Note:">
           </div>
           
           <button type="submit" class="btn btn-success btn-block" name="Pay">Nạp</button>
