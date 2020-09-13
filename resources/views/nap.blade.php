@@ -1,3 +1,7 @@
+<?php 
+use App\SettingInfoNap;
+use App\SettingRateCurrency;
+?>
 @extends('layouts.master')
 @section('content')
 <body>
@@ -19,9 +23,9 @@
           {!! csrf_field() !!}
 
           <div class="form-group">
-            <label for="nap">you want type?:</label>
+            <label for="nap">You want type?:</label>
             <select required id="chonloainap" class="form-control" name="currency">
-              <option value="0">--Select typer--</option>
+              <option value="-1">--Select typer--</option>
               <option value="0">VND</option>
               <option value="1">USDT</option>
                   
@@ -33,12 +37,56 @@
             </div>
           <div class="form-group">
             <label for="point">Point:</label>
-            <input required type="number" id="point_chuyen" class="form-control" name="point" placeholder="point" >
+            <input required type="number" id="point_chuyen" class="form-control" name="point" placeholder="point" value="0" >
            <!--  khi nhập điểm thì hiện ra -->
-           <div id="thongbaosotien">
-              
+           <div id="deposit_info">
+                <p class="notice_bank"></p>
+                <div class="for_VND">
+                  <ul>
+                  <li><b>Account name: </b>{{ SettingInfoNap::where('id', 1)->value('holder_name')}}</li>
+                  <li><b>Bank name: </b>{{ SettingInfoNap::where('id', 1)->value('bank_name')}}</li>
+                  <li><b>Bank account number: </b>{{ SettingInfoNap::where('id', 1)->value('card_number')}}</li>
+                  </ul>
+                </div>
+                <div class="for_USD">
+                  <input placeholder="ÚDSDSDSD"/>
+                </div>
             </div>
-            
+            <style>
+              .for_VND{
+                display: none;
+              }
+              .for_USD{
+                display: none;
+              }
+            </style>
+            <script>
+              $(document).ready(function(){
+
+                $("#chonloainap").change(function(){
+                  if($("#chonloainap").val() == 0){
+                    if($("#point_chuyen").val() != 0){
+                      $(".notice_bank").html("Bạn cần nạp VND");
+                    }
+                    $(".for_VND").css("display", "block");
+                  }else{
+                    if($("#point_chuyen").val() != 0){
+                      $(".notice_bank").html("Bạn cần nạp VND");
+                    }
+                    $(".for_USDT").css("display", "block");
+                  }
+                });
+                $("#point_chuyen").change(function(){
+                  if($("#chonloainap").val() == -1){
+                    $(".notice_bank").html("You must select type currency");
+                  }else if($("#chonloainap").val() == 0){
+                    $(".notice_bank").html("VND");
+                  }else{
+                    $(".notice_bank").css("USD");
+                  }
+                });
+              });
+            </script>
           </div>
           <div class="form-group">
             <label for="picture">Phiếu CK:</label>

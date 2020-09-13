@@ -94,7 +94,7 @@ class WalletMainController extends Controller
 					if($created <= $today ){
 						$main_wallet = WalletMain::where('main_wallet_ofuser', $id)->first();
 						$eco_wallet = WalletEco::where('eco_wallet_ofuser', $id)->first();
-						if(($request->transfer_point < 100) && ($request->transfer_point >1000)){
+						if(($request->transfer_point < 100) || ($request->transfer_point >1000)){
 							return redirect('/')->with('error','You can transfer min 100 point and max 1000 point');
 						}
 
