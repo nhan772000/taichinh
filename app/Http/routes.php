@@ -9,7 +9,6 @@ Route::auth();
 
 Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
-Route::get('/nap', 'DepositController@deposit');
 
 
 //-----------------------chuyển------------------
@@ -254,7 +253,6 @@ Route::get('/user', 'HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
 
 
-Route::get('/nap', 'DepositController@deposit');
 
 Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
 Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);

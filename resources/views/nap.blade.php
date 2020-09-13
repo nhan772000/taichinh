@@ -32,15 +32,22 @@ use App\SettingRateCurrency;
             </select>
           </div>
             <!-- khi chọn VND hiện ra -->
-            <div id="select_VND_or_USDT">
-              
+            <div id="rate_currency">
+                <div>
+                  <span><b>POINT: </b><input value="1"/></span>
+                  <span><i class="fa fa-exchange"></i></span>
+                  <span><b>VND: </b><input id="rate_VND" value="{{ SettingRateCurrency::where('id', 1)->value('rate_currency')}}"/></span>
+                  <span><i class="fa fa-exchange"></i></span>
+                  <span><b>USDT: </b><input id="rate_USDT" value="{{ SettingRateCurrency::where('id', 2)->value('rate_currency')}}"/></span>
+
+                </div>
             </div>
           <div class="form-group">
             <label for="point">Point:</label>
-            <input required type="number" id="point_chuyen" class="form-control" name="point" placeholder="point" value="0" >
+            <input required type="number" id="point_chuyen" class="form-control" name="point" placeholder="point" value="" >
            <!--  khi nhập điểm thì hiện ra -->
            <div id="deposit_info">
-                <p class="notice_bank"></p>
+                <h3 class="notice_bank"></h3>
                 <div class="for_VND">
                   <ul>
                   <li><b>Account name: </b>{{ SettingInfoNap::where('id', 1)->value('holder_name')}}</li>
@@ -49,10 +56,30 @@ use App\SettingRateCurrency;
                   </ul>
                 </div>
                 <div class="for_USD">
-                  <input placeholder="ÚDSDSDSD"/>
+                  <input id="code_usdt" value="123SDFDSFK432KSD-SDFSDFSDF23423"/>
                 </div>
             </div>
             <style>
+              #deposit_info{
+                display: none;
+                border: 1px solid #000;
+                 border-radius: 5px;
+                 padding: 5px;
+                 text-align: left;
+                 margin: 10px 0px;
+              }
+              #code_usdt{
+                width: 100%;
+              }
+              #rate_currency{
+                 border: 1px solid #000;
+                 border-radius: 5px;
+                 padding: 5px;
+                 text-align: center;
+              }
+              #rate_currency input{
+                width: 50px;
+              }
               .for_VND{
                 display: none;
               }
@@ -65,24 +92,32 @@ use App\SettingRateCurrency;
 
                 $("#chonloainap").change(function(){
                   if($("#chonloainap").val() == 0){
-                    if($("#point_chuyen").val() != 0){
-                      $(".notice_bank").html("Bạn cần nạp VND");
+                    if($("#point_chuyen").val() != null){
+                      $(".notice_bank").html("Bạn cần chuyển "+$('#rate_VND').val()* $("#point_chuyen").val() + " VNĐ vào tài khoản sau:");
                     }
+                    $("#deposit_info").css("display", "block");
                     $(".for_VND").css("display", "block");
+                    $(".for_USD").css("display", "none");
+
                   }else{
-                    if($("#point_chuyen").val() != 0){
-                      $(".notice_bank").html("Bạn cần nạp VND");
+                    if($("#point_chuyen").val() != null){
+                      $(".notice_bank").html("Bạn cần chuyển "+$('#rate_USDT').val()* $("#point_chuyen").val() + " USDT vào tài khoản sau:");
                     }
-                    $(".for_USDT").css("display", "block");
+                    $("#deposit_info").css("display", "block");
+                    $(".for_VND").css("display", "none");
+                    $(".for_USD").css("display", "block");
                   }
                 });
                 $("#point_chuyen").change(function(){
                   if($("#chonloainap").val() == -1){
                     $(".notice_bank").html("You must select type currency");
+                    $("#deposit_info").css("display", "block");
                   }else if($("#chonloainap").val() == 0){
-                    $(".notice_bank").html("VND");
+                    $(".notice_bank").html("Bạn cần chuyển "+$('#rate_VND').val()* $("#point_chuyen").val() + " VNĐ vào tài khoản sau:");
+                    $("#deposit_info").css("display", "block");
                   }else{
-                    $(".notice_bank").css("USD");
+                    $("#deposit_info").css("display", "block");
+                    $(".notice_bank").html("Bạn cần chuyển "+$('#rate_USDT').val()* $("#point_chuyen").val() + " USDT vào tài khoản sau:");
                   }
                 });
               });
