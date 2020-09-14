@@ -16,6 +16,7 @@ Route::get('/', 'HomepageController@showHomepage');
 
 Route::get('/chuyen', 'UsersController@getChuyen');
 
+
 Route::post('/chuyen', 'UsersController@postChuyen');
 Route::post('/xacnhan-chuyen', 'UsersController@xacNhanChuyen');
 
@@ -94,7 +95,7 @@ Route::get('/contact', 'ContactController@showContact');
 
 Route::get('/rut', 'PagesController@showRutView');
 Route::get('/nap', 'PagesController@showNapView');
-Route::get('/chuyen', 'PagesController@showChuyenView');
+//Route::get('/chuyen', 'PagesController@showChuyenView');
 Route::get('/walletmenu', 'PagesController@showWalletMenuView');
 Route::get('/tangHM', 'PagesController@showTangHMView');
 Route::get('/contact', 'PagesController@showContactView');

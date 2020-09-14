@@ -90,6 +90,11 @@
 		            <label for="user_introduction">Introduce code:</label>
 		            <input disabled type="text" class="form-control" id="user_introduction" placeholder="Introduce code" name="user_introduction" value="{{$user->id}}">
 		          </div>
+		          <div class="checkbox">
+				    <label style="font-weight: 600;
+    color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
+Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi được. Nếu bạn muốn thay đổi xin vui lòng liên hệ với công ty để được hỗ trợ.</i></trong></label>
+				  </div>
 		         
 		          
 		          <button type="submit" class="btn btn-default btn-block" name="update_info_basic">Update information basic</button>
@@ -115,7 +120,11 @@
 		            <label for="user_address_USDT">Address USDT:</label>
 		            <input  type="text" class="form-control" id="user_address_USDT" placeholder="Address USDT" name="user_address_USDT" value="{{$user->user_address_USDT}}">
 		          </div>
-		          
+		          <div class="checkbox">
+				    <label style="font-weight: 600;
+    color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
+Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi được. Nếu bạn muốn thay đổi xin vui lòng liên hệ với công ty để được hỗ trợ.</i></trong></label>
+				  </div>
 		          <button type="submit" class="btn btn-default btn-block" name="update_account_bank">Update Account Bank</button>
 		        </form>
 		        <form action="{{URL::to('/userinfo')}}" method="post" enctype="multipart/form-data">
@@ -139,7 +148,11 @@
 		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_identity_image}}" alt="">
 		        	</div>
 		          </div>
-		          
+		          <div class="checkbox">
+				    <label style="font-weight: 600;
+    color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
+Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi được. Nếu bạn muốn thay đổi xin vui lòng liên hệ với công ty để được hỗ trợ.</i></trong></label>
+				  </div>
 		          <button type="submit" class="btn btn-default btn-block" name="update_identity">Update identity</button>
 		        </form>
 
@@ -159,7 +172,12 @@
 		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_address_image}}" alt="">
 		        	</div>
 		          </div>
-		          
+		          <div class="checkbox">
+				    <label style="font-weight: 600;
+    color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
+Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi được. Nếu bạn muốn thay đổi xin vui lòng liên hệ với công ty để được hỗ trợ.</i></trong></label>
+				  </div>
+			
 		          <button type="submit" class="btn btn-default btn-block" name="update_current_address">Update Current Address</button>
 		          
 		        </form>
@@ -185,7 +203,11 @@
 		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_GPKD_image}}" alt="">
 		        	</div>
 		          </div>
-		          
+		          <div class="checkbox">
+				    <label style="font-weight: 600;
+    color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
+Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi được. Nếu bạn muốn thay đổi xin vui lòng liên hệ với công ty để được hỗ trợ.</i></trong></label>
+				  </div>
 		          <button type="submit" class="btn btn-default btn-block" name="update_GPKD">Update Business License</button>
 		          
 		        </form>

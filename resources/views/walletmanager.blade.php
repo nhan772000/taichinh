@@ -7,20 +7,20 @@
     <div class="row margin_row mevivu_home_sesion1">
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/0')!!}" class="btn btn-success1 button_home">
-          <i class="icon_size glyphicon glyphicon-home"></i> <span>Main Wallet</span>
-          <span class="amount">{{ $arr_wallet_point['main_wallet_point'] }} Point</span>
+          <span>Main Wallet</span>
+          <span class="amount icon_size">{{  round($arr_wallet_point['main_wallet_point'], 0, PHP_ROUND_HALF_ODD)}}</span>
         </a>
       </div>
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
-          <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Ext Wallet</span>
-          <span class="amount">{{ $arr_wallet_point['ext_wallet_point'] }} Point</span>
+          <span>Ext Wallet</span>
+          <span class="amount icon_size">{{  round($arr_wallet_point['ext_wallet_point'], 0, PHP_ROUND_HALF_ODD)}}</span>
         </a>
       </div>
       <div class="col-xs-4">
         <a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
-          <i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Eco Wallet</span>
-          <span class="amount">{{ $arr_wallet_point['eco_wallet_point'] }} Point</span>
+          <span>Eco Wallet</span>
+          <span class="amount icon_size">{{  round($arr_wallet_point['eco_wallet_point'], 0, PHP_ROUND_HALF_ODD)}}</span>
         </a>
       </div>
      

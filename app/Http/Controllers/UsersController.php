@@ -56,7 +56,7 @@ class UsersController extends Controller
       else{
         $point_ext = $hm->hm_wallet_point;
       }
-      return view('/chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
+      return view('chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
     }
   }
   public function postChuyen(Request $request){

@@ -6,7 +6,6 @@ function formatNumber (num) {
 
 $(document).ready(function(){
          
-    $('[data-toggle="popover"]').popover();  
 
 //xử lý khi đóng mở menu, thông báo, ngôn ngữ
     $(".icon_menu").click(function(){
@@ -124,6 +123,24 @@ $(document).ready(function(){
 
 
 
+    });
+    // xử lý cho nạp khi chọn loại rút
+    $("#user_choosewallet").change(function() {
+        //alert('hello');
+        var point_main = $(this).find(':selected').attr('data-1');
+        var point_ext = $(this).find(':selected').attr('data-0');
+        var main= '<div class="alert alert-warning vivify popInTop">Bạn có thể chuyển tối đa '+point_main+' point. </div>';
+        var ext= '<div class="alert alert-warning vivify popInTop">Bạn có thể chuyển tối đa '+point_ext+' point.</div>';
+        var layval = $("#user_choosewallet option:selected").val();
+        if(layval == 1){
+            $("#select_wallet").html(main);
+        }
+        else if(layval == 0){
+            $("#select_wallet").html(ext);
+        }
+        else {
+            $("#select_wallet").text("");
+        }
     });
     // xử lý cho nạp khi chọn loại rút
     $("#user_choosewallet").change(function() {

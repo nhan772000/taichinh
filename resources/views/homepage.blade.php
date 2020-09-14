@@ -1,15 +1,11 @@
-<?php
-use App\User;
-?>
+
 @extends('layouts.master')
 @section('content')
 	<body>
 	<div class="container body">
 	        <div class="row margin_row">
 	            <div class="col-sm-12">
-					<?php $id = Auth::user()->id;
-					$transfer_status = User::where('id', $id)->value('transfer_status');?>
-					@if($transfer_status == 0)
+					@if($user->transfer_status == 0)
 						   <button data-toggle="modal" data-target="#modal_transfer" class="btn btn-success"><i class=" glyphicon glyphicon-refresh"></i> transfer</button>
 					@endif
 				</div>
@@ -46,17 +42,17 @@ use App\User;
 	    <div class="row margin_row mevivu_home_sesion1">
 	      <div class="col-xs-4">
 			<a href="{!!url('/wallet/walletdetail/0')!!}" class="btn btn-success1 button_home">
-				<i class="icon_size glyphicon glyphicon-home"></i> <span>M Wallet</span>
+				<span>M Wallet</span><span class="icon_size amount"><?= round($main_wallet->main_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
 	      <div class="col-xs-4">
 			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
-				<i  class="icon_size glyphicon glyphicon-piggy-bank"></i><span>Ext Wallet</span>
+				<span>Ext Wallet</span><span class="icon_size amount"><?= round($ext_wallet->ext_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
 	      <div class="col-xs-4">
-			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
-				<i  class="icon_size glyphicon glyphicon-credit-card"></i><span>Eco Wallet</span>
+			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success button_home">
+				<span>Eco Wallet</span><span class="icon_size amount"><?= round($eco_wallet->eco_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
 	    </div>
@@ -85,26 +81,26 @@ use App\User;
 
 	            <div class="mevivu_home_sesion3 row">
 	                <div class="col-xs-4 text-center">
-	                    <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-flag"></i> Introduce</button>
+	                    <a class="btn btn-success2 button_home"><i class="icon_size fa fa-share-square-o" aria-hidden="true"></i> Introduce</a>
 	                </div>
 	                <div class="col-xs-4  text-center">
-	                    <a href="accounting.html" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-bitcoin"></i> Account</a>
+	                    <a href="{{URL::to('/chuyen')}}" type="button" class="btn btn-success2 button_home"><i class="icon_size fa fa-exchange" aria-hidden="true"></i>Transfer Point</a>
 	                </div>
 	                <div class="col-xs-4  text-center">
-	                    <a href="{!!url('/wallet')!!}" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-list-alt"></i> Wallet</a>
+	                    <a href="{!!url('/wallet')!!}" class="btn btn-success2 button_home"><i class="icon_size fa fa-briefcase" aria-hidden="true"></i> Wallet</a>
 	                </div>
 	      
 				</div>
 
 				<div class="mevivu_home_sesion3 row">
 					<div class="col-xs-4  text-center" >
-	                    <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-ok-circle"></i> Online</button>
+	                    <a href="https://vtopv.com/" target="_blank" class="btn btn-success2 button_home"><i class="icon_size fa fa-cart-arrow-down" aria-hidden="true"></i> Product</a>
 	                </div>
 	                <div class="col-xs-4  text-center" >
-	                    <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-ban-circle"></i> Offline</button>
+	                    <a class="btn btn-success2 button_home"><span class="icon_size glyphicon glyphicon-globe"></span> Commerce</a>
 	                </div>
 	                <div class="col-xs-4 text-center">
-	                    <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success button_home"><i class="icon_size glyphicon glyphicon-send"></i> View more</button>
+	                    <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success2 button_home"><i class="icon_size glyphicon glyphicon-send"></i> View more</a>
 	                </div>
 				</div>
 
@@ -112,23 +108,7 @@ use App\User;
 
 
 
-	    <!-- Modal -->
-	  <div class="modal fade" id="myModal" role="dialog">
-	    <div class="modal-dialog modal-sm">
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	          <h4 class="modal-title">Modal Header</h4>
-	        </div>
-	        <div class="modal-body">
-	          <p>This is a small modal.</p>
-	        </div>
-	        <div class="modal-footer">
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
+	    
 
 	</body>
 @endsection
