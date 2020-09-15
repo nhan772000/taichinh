@@ -9,7 +9,7 @@ use App\Transaction;
 use App\User;
 use App\WalletMain;
 use App\WalletExt;
-use App\WalletECo;
+use App\WalletEco;
 use App\WalletHistory;
 use App\Payment;
 use App\WalletLevel;
