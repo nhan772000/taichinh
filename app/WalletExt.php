@@ -8,6 +8,7 @@ class WalletExt extends Model
 {
     protected $table ='ext_wallet';
 	protected $guarded =[];
-
+	
+	protected $primaryKey = 'ext_wallet_id';
 
 }

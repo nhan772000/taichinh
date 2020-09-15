@@ -7,49 +7,69 @@
       <div class="well well-sm">
         <div class="row">
           <div class="col-xs-12 text-center">
-            <h2>Payment</h2>
+            <h2>Score Transfer</h2>
           </div>
         </div>
-        <form action="{{url('form-Chuyen') }}" method="post">
+        <form action="{{URL::to('/chuyen')}}" method="post">
+          {{ csrf_field() }}
+          @if(count($errors) > 0)
+                <div class="alert alert-danger">
+                  @foreach($errors->all() as $err)
+                    {{$err}}<br/>
+                  @endforeach
+                </div>
+                @endif
+
+                @if(Session('message'))
+
+                <div class="alert alert-danger">
+                  {{Session('message')}}
+                </div>
+                @endif
           <div class="form-group">
-            <label for="ChooseWallet">Choose Wallet:</label>
-            <select required class="form-control" id="ChooseWallet" name="wallet">
-                  <option value="0">Wallet C</option>
-                  <option value="1">Wallet P</option>
+
+            <label for="user_choosewallet">Choose Wallet:</label>
+            <select required class="form-control" id="user_choosewallet" name="user_choosewallet">
+                  <option disabled selected value="2">---Choose Wallet---</option>
+                  <option data-1={{$point_main}} value="1">Wallet C</option>
+                  <option data-0={{$point_ext}} value="0">Wallet P</option>
                   
             </select>
           </div>
           <!-- khi chọn ví chính hiện ra -->
-          <p class="alert alert-info">Bạn có thể chuyển tối đa 1000 Point</p>
+          <div id="select_wallet"></div>
           <div class="form-group">
-            <label for="idmember">Email tài khoản nhận:</label>
-            <input required type="text" class="form-control" id="email" name="email" placeholder="Email tài khoản nhận">
+            <label for="id_user_transfer">ID member:</label>
+            <input required type="text" class="form-control" id="id_user_transfer" name="id_user_transfer" placeholder="ID member">
+          </div>
+
+          <div class="form-group">
+            <label for="point_transfer">Point:</label>
+            <input required type="text" class="form-control" id="point_transfer" name="point_transfer" placeholder="Point">
           </div>
           <div class="form-group">
-            <label for="point">Điểm:</label>
-            <input required type="text" class="form-control" id="point" name="point" placeholder="Điểm cần chuyển">
-          </div>
-          <div class="form-group">
-            <label for="point">Nội dung:</label>
-            <textarea required type="text" class="form-control" id="point" name="description" placeholder="Nội dung"></textarea>
+            <label for="transfer_content">Content:</label>
+            <textarea type="text" class="form-control" id="transfer_content" name="transfer_content" placeholder="Content"></textarea>
             
           </div>
-          <label for="pwdtt">Xác nhận mật khẩu:</label>
           
+          <label for="user_password_pay">Account password:</label>
              <!-- kết thúc khi chọn ví chính hiện ra -->
           <div class="input-group form-group">
-            <input required type="password" class="form-control" name="pwdtt" id="pwdtt" placeholder="Mật khẩu">
+            
+            <input required type="password" class="form-control" name="user_password_pay" id="user_password_pay" placeholder="Account password">
             <div class="input-group-btn">
             <button class="showhidepwdtt btn btn-default" type="button">
               <i class="glyphicon glyphicon-eye-open"></i>
             </button>
           </div>
           </div>
-          <button type="submit" class="btn btn-success btn-block" name="Pay">Chuyển</button>
+          <button type="submit" class="btn btn-success btn-block" name="Pay">Move</button>
         </form>
       </div>
     </div>
   </div>
 </div>
 
+</body>
 @endsection

@@ -6,13 +6,21 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests;
 use App\WalletEco;
-use App\WalletMain;
+use App\Transaction;
 use App\WalletExt;
 use App\WalletLevel;
-use App\Transaction;
+use App\WalletMain;
+use Yajra\Datatables\Datatables;
+
 
 class TransactionController extends Controller
 {
+
+
+   //Hung
+
+
+
    public function createTransaction($transaction_typeorder, $transaction_fromuser, $transaction_touser, $transaction_checker ,$transaction_typecurrency, $transaction_point, $transaction_description, $transaction_bill, $transaction_bill2, $transaction_status){ 	
 		$transaction = new Transaction();
 		$transaction->transaction_typeorder = $transaction_typeorder;
@@ -31,73 +39,73 @@ class TransactionController extends Controller
    {
       $id = auth()->user()->id;
       //lay VI CHINH/VI TK/ VI HM cua user hien tai
-      $amountMainWalletA = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-      $amountMainWalletB = WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->value('main_wallet_amount');
+      $pointMainWalletA = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
+      $pointMainWalletB = WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->value('main_wallet_point');
 
-      $amountEcoWalletA = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
-      $amountEcoWalletB = WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->value('eco_wallet_amount');
+      $pointEcoWalletA = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_point');
+      $pointEcoWalletB = WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->value('eco_wallet_point');
 
-      $amountLvlWalletA = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_ofuser');
-      $amountLvlWalletB = WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->value('level_wallet_ofuser');
+      $pointLvlWalletA = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_ofuser');
+      $pointLvlWalletB = WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->value('level_wallet_ofuser');
 
       //  XU LY VI CHINH A VA B 
-      $amountMainWalletA = $amountMainWalletA - $points - (0.01 * $points);
-      $amountMainWalletB = $amountMainWalletB + (0.9 * $points);
+      $pointMainWalletA = $pointMainWalletA - $points - (0.01 * $points);
+      $pointMainWalletB = $pointMainWalletB + (0.9 * $points);
 
       //XU LY VI TIET KIEM A VA B
-      $amountEcoWalletA = $amountEcoWalletA + (0.3 * $points);
-      $amountEcoWalletB = $amountEcoWalletB + (0.1 * $points);
+      $pointEcoWalletA = $pointEcoWalletA + (0.3 * $points);
+      $pointEcoWalletB = $pointEcoWalletB + (0.1 * $points);
 
       //XU LY VI HAN MUC A VA B
-      $amountLvlWalletA = $amountLvlWalletA - $points;
-      $amountLvlWalletB = $amountLvlWalletB + (0.9 * $points);
+      $pointLvlWalletA = $pointLvlWalletA - $points;
+      $pointLvlWalletB = $pointLvlWalletB + (0.9 * $points);
 
-      WalletMain::where('main_wallet_ofuser', $id)->update(['main_wallet_amount' => $amountMainWalletA]);
-      WalletEco::where('eco_wallet_ofuser', $id)->update(['eco_wallet_amount' => $amountEcoWalletA]);
-      WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_amount' => $amountLvlWalletA]);
+      WalletMain::where('main_wallet_ofuser', $id)->update(['main_wallet_point' => $pointMainWalletA]);
+      WalletEco::where('eco_wallet_ofuser', $id)->update(['eco_wallet_point' => $pointEcoWalletA]);
+      WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_point' => $pointLvlWalletA]);
 
 
-      WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->update(['main_wallet_amount' => $amountMainWalletB]);
-      WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->update(['eco_wallet_amount' => $amountEcoWalletB]);
-      WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->update(['level_wallet_amount' => $amountLvlWalletB]);
+      WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->update(['main_wallet_point' => $pointMainWalletB]);
+      WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->update(['eco_wallet_point' => $pointEcoWalletB]);
+      WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->update(['level_wallet_point' => $pointLvlWalletB]);
    }
 
    public function cashBackVeLien($points, $idNguoiNhan)
    {
       $id = auth()->user()->id;
       //lay VI CHINH/VI TK/ VI HM cua user hien tai
-      $amountMainWalletA = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-      $amountMainWalletB = WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->value('main_wallet_amount');
+      $pointMainWalletA = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
+      $pointMainWalletB = WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->value('main_wallet_point');
       // VI PHU A
-      $amountExtWalletA = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+      $pointExtWalletA = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_point');
       // VI TIET KIEM B
-      $amountEcoWalletB =  WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->value('eco_wallet_amount');
+      $pointEcoWalletB =  WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->value('eco_wallet_point');
 
-      $amountLvlWalletA = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_amount');
-      $amountLvlWalletB = WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->value('level_wallet_amount');
+      $pointLvlWalletA = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_point');
+      $pointLvlWalletB = WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->value('level_wallet_point');
 
       //  XU LY VI CHINH A VA B 
-      $amountMainWalletA = $amountMainWalletA - $points - (0.01 * $points);
-      $amountMainWalletB = $amountMainWalletA + (0.9 * $points);
+      $pointMainWalletA = $pointMainWalletA - $points - (0.01 * $points);
+      $pointMainWalletB = $pointMainWalletA + (0.9 * $points);
 
       //XU LY VI PHU A
-      $amountExtWalletA =  $amountExtWalletA + (0.05 * $points);
+      $pointExtWalletA =  $pointExtWalletA + (0.05 * $points);
 
       //XU LY VI TIET KIEM B
-      $amountEcoWalletB =$amountEcoWalletB + (0.1 * $points);
+      $pointEcoWalletB =$pointEcoWalletB + (0.1 * $points);
 
       //XU LY VI HAN MUC A VA B
-      $amountLvlWalletA = $amountLvlWalletA - $points;
-      $amountLvlWalletB =$amountLvlWalletB + (0.9 * $points);
+      $pointLvlWalletA = $pointLvlWalletA - $points;
+      $pointLvlWalletB =$pointLvlWalletB + (0.9 * $points);
 
-      WalletMain::where('main_wallet_ofuser', $id)->update(['main_wallet_amount' => $amountMainWalletA]);
-      WalletExt::where('ext_wallet_ofuser', $id)->update(['ext_wallet_amount' => $amountExtWalletA]);
-      WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_amount' => $amountLvlWalletA]);
+      WalletMain::where('main_wallet_ofuser', $id)->update(['main_wallet_point' => $pointMainWalletA]);
+      WalletExt::where('ext_wallet_ofuser', $id)->update(['ext_wallet_point' => $pointExtWalletA]);
+      WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_point' => $pointLvlWalletA]);
 
 
-      WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->update(['main_wallet_amount' => $amountMainWalletB]);
-      WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->update(['eco_wallet_amount' => $amountEcoWalletB]);
-      WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->update(['level_wallet_amount' => $amountLvlWalletB]);
+      WalletMain::where('main_wallet_ofuser', $idNguoiNhan)->update(['main_wallet_point' => $pointMainWalletB]);
+      WalletEco::where('eco_wallet_ofuser', $idNguoiNhan)->update(['eco_wallet_point' => $pointEcoWalletB]);
+      WalletLevel::where('level_wallet_ofuser', $idNguoiNhan)->update(['level_wallet_point' => $pointLvlWalletB]);
    }
 
    public function showTransactionHistory(Request $request)
@@ -105,7 +113,7 @@ class TransactionController extends Controller
       $id = auth()->user()->id;
       // $mainWalletA = WalletMain::where('main_wallet_ofuser', $id)->first()->toArray();
 
-      // dd($mainWalletA['main_wallet_amount'] );
+      // dd($mainWalletA['main_wallet_point'] );
       $transactionDate = $request->ngaygiaodich;
       $transactionOrder = $request->sel1;
       $transactions = Transaction::where('transaction_ofuser', $id)->get();
@@ -143,4 +151,36 @@ class TransactionController extends Controller
       }
       return view('transactionHistory', compact('transactions'));
    }
+
+
+
+
+   //-------------------------------------------Quoc Minh-------------------------------------------
+
+   public function __construct()
+   {
+      $this->middleware('auth');
+   }
+
+   public function showTransaction(Request $request)
+   {
+      $id = auth()->user()->id;
+      if($request->ajax())
+      {
+         if(!empty($request->ngaygiaodich))
+         {
+            $transaction = Transaction::where('transaction_ofuser', $id)
+                                 ->where('created_at', "LIKE", "%$request->ngaygiaodich%")
+                                 ->where('transaction_order', $request->loaigiaodich)
+                                 ->get();
+         }else {
+            $transaction = Transaction::where('transaction_ofuser', $id)->get();
+         }
+         return Datatables::of($transaction)->make(true);
+      }
+      $transaction = Transaction::where('transaction_ofuser', $id)->get();
+      return view('transactionHistory', compact('transaction'));
+   }
+
+   
 }

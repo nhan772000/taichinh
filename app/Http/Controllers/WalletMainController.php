@@ -9,7 +9,7 @@ use App\Transaction;
 use App\User;
 use App\WalletMain;
 use App\WalletExt;
-use App\WalletECo;
+use App\WalletEco;
 use App\WalletHistory;
 use App\Payment;
 use App\WalletLevel;
@@ -23,7 +23,7 @@ class WalletMainController extends Controller
 			return redirect('/login')->with('erro','You must logged in'); 
 		}
 		$id = Auth::user()->id;
-		$array_F1 = User::where(['id_ref' => $id, 'pttt_status' => 0])->get();
+		$array_F1 = User::where(['user_introduction' => $id, 'pttt_status' => 0])->get();
 		$array_id_F1= [];
 		foreach($array_F1 as $F1){
 			array_push($array_id_F1, $F1->id); 
@@ -32,6 +32,7 @@ class WalletMainController extends Controller
 			$array_F1_qualified = [];
 			foreach ($array_id_F1 as $id_F1){
 				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_amount');
+				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_point');
 				if($main_wallet_amount_F1 >= 500){
 					array_push($array_F1_qualified, $id_F1);
 				}
@@ -53,7 +54,7 @@ class WalletMainController extends Controller
 			return redirect('/login')->with('error','You must logged in'); 
 		}
 		$id = Auth::user()->id;
-		$array_F1 = User::where(['id_ref' => $id, 'pttt_status' => 0])->get();
+		$array_F1 = User::where(['user_introduction' => $id, 'pttt_status' => 0])->get();
 		$array_id_F1= [];
 		$array_F1_qualified = [];
 
@@ -62,8 +63,8 @@ class WalletMainController extends Controller
 		}
 		if(count($array_id_F1)>=5){
 			foreach ($array_id_F1 as $id_F1){
-				$main_wallet_amount_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_amount');
-				if(($main_wallet_amount_F1 >= 500)&&(count($array_F1_qualified) < 5)){
+				$main_wallet_point_F1 = WalletMain::where('main_wallet_id', $id_F1)->value('main_wallet_point');
+				if(($main_wallet_point_F1 >= 500)&&(count($array_F1_qualified) < 5)){
 					array_push($array_F1_qualified, $id_F1);
 				}
 			}
@@ -72,10 +73,10 @@ class WalletMainController extends Controller
 			foreach($array_F1_qualified as $F1_qualified){
 				User::where('id', $F1_qualified)->update(['pttt_status'=> 1]);
 			}
-			$level_wallet = WalletLevel::where('level_wallet_ofuser',$id)->first();
-			WalletLevel::where('level_wallet_ofuser', $id)->update(['level_wallet_amount'=> $level_wallet->level_wallet_amount + 100]);
+			$hm_wallet = WalletLevel::where('hm_wallet_ofuser',$id)->first();
+			WalletLevel::where('hm_wallet_ofuser', $id)->update(['hm_wallet_point'=> $hm_wallet->hm_wallet_point + 100]);
 			$walletmainController = new WalletMainController();
-			$walletmainController->createWalletHistory(100, $id, $id, $level_wallet->level_wallet_id, 3, 1 , 5);
+			$walletmainController->createWalletHistory(100, $id, $id, $hm_wallet->hm_wallet_id, 3, 1 , 5);
 
 			return back()->with('success','Thank you for your contribution to system development');
 		}else{
@@ -94,9 +95,16 @@ class WalletMainController extends Controller
 					if($created <= $today ){
 						$main_wallet = WalletMain::where('main_wallet_ofuser', $id)->first();
 						$eco_wallet = WalletEco::where('eco_wallet_ofuser', $id)->first();
+						if(($request->transfer_point < 100) || ($request->transfer_point >1000)){
+							return redirect('/')->with('error','You can transfer min 100 point and max 1000 point');
+						}
 
-						if($main_wallet->main_wallet_amount < 1000){
-							$max_transfer = $main_wallet->main_wallet_amount;
+						if($request->transfer_point > $main_wallet->main_wallet_point){
+							return redirect('/')->with('error','You do not have enough points in your main wallet to transfer');
+						}
+
+						if($main_wallet->main_wallet_point < 1000){
+							$max_transfer = $main_wallet->main_wallet_point;
 						}else{
 							$max_transfer = 1000;
 						}
@@ -104,8 +112,8 @@ class WalletMainController extends Controller
 						if($transfer_point > $max_transfer){
 							$transfer_point = $max_transfer;
 						}
-						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_amount' => $main_wallet->main_wallet_amount - $request->transfer_point]);
-						WalletEco::where('eco_wallet_ofuser',$id)->update(['eco_wallet_amount' => $eco_wallet->eco_wallet_amount + $transfer_point	]);
+						WalletMain::where('main_wallet_ofuser',$id)->update(['main_wallet_point' => $main_wallet->main_wallet_point - $request->transfer_point]);
+						WalletEco::where('eco_wallet_ofuser',$id)->update(['eco_wallet_point' => $eco_wallet->eco_wallet_point + $transfer_point	]);
 						User::where('id',$id)->update(['transfer_status' => 1]);
 						
 						$transactionConntroller = new TransactionController(); 
@@ -131,9 +139,9 @@ class WalletMainController extends Controller
 	}
 	public function MLM($id, $count, $id_MLM){
 		if($count >= 0){
-			$id_ref = User::where('id', $id_MLM)->value('id_ref');
-			$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id_ref)->value('eco_wallet_amount');
-			$temp = $eco_wallet_amount - 500;
+			$user_introduction = User::where('id', $id_MLM)->value('user_introduction');
+			$eco_wallet_point = WalletEco::where('eco_wallet_ofuser', $user_introduction)->value('eco_wallet_point');
+			$temp = $eco_wallet_point - 500;
 			$mlm = new WalletMainController(); 
 			if ($count == 1 ){
 				$rate = 0.03;
@@ -144,34 +152,34 @@ class WalletMainController extends Controller
 			}else{
 				$rate = 0.001;
 			}
-			$wallet_ext = WalletExt::where('ext_wallet_ofuser', $id_ref)->first();
+			$wallet_ext = WalletExt::where('ext_wallet_ofuser', $user_introduction)->first();
 
 			if($temp > 0){
-				if($temp > ($rate * $eco_wallet_amount)){
-					$ext_wallet_amount_new = $wallet_ext->ext_wallet_amount + ($rate * $eco_wallet_amount);
-					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
+				if($temp > ($rate * $eco_wallet_point)){
+					$ext_wallet_point_new = $wallet_ext->ext_wallet_point + ($rate * $eco_wallet_point);
+					WalletExt::where('ext_wallet_ofuser',$user_introduction)->update(['ext_wallet_point' => $ext_wallet_point_new]);
 				
 					$transactionConntroller = new TransactionController(); 
-					$transactionConntroller->createTransaction(4, $id, $id_ref, 0 ,null , $rate * $eco_wallet_amount, 'MLM cong vao vi phu', null, null, 1);
+					$transactionConntroller->createTransaction(4, $id, $user_introduction, 0 ,null , $rate * $eco_wallet_point, 'MLM cong vao vi phu', null, null, 1);
 
 					$walletmainController = new WalletMainController();
-					$walletmainController->createWalletHistory($rate * $eco_wallet_amount, $id, $id_ref, $wallet_ext->ext_wallet_id, 1, 1 ,4);
+					$walletmainController->createWalletHistory($rate * $eco_wallet_point, $id, $user_introduction, $wallet_ext->ext_wallet_id, 1, 1 ,4);
 
-					return $mlm->MLM($id, $count -1, $id_ref);
+					return $mlm->MLM($id, $count -1, $user_introduction);
 				}else{
-					$ext_wallet_amount_new = WalletExt::where('ext_wallet_ofuser', $id_ref)->value('ext_wallet_amount') + $temp;
-					WalletExt::where('ext_wallet_ofuser',$id_ref)->update(['ext_wallet_amount' => $ext_wallet_amount_new]);
+					$ext_wallet_point_new = WalletExt::where('ext_wallet_ofuser', $user_introduction)->value('ext_wallet_point') + $temp;
+					WalletExt::where('ext_wallet_ofuser',$user_introduction)->update(['ext_wallet_point' => $ext_wallet_point_new]);
 				
 					$transactionConntroller = new TransactionController(); 
-					$transactionConntroller->createTransaction(4, $id, $id_ref, 0 ,null , $temp, 'MLM cong vao vi phu', null, null, 1);
+					$transactionConntroller->createTransaction(4, $id, $user_introduction, 0 ,null , $temp, 'MLM cong vao vi phu', null, null, 1);
 
 					$walletmainController = new WalletMainController();
-					$walletmainController->createWalletHistory($temp, $id, $id_ref, $wallet_ext->ext_wallet_id, 1, 1 ,4);
+					$walletmainController->createWalletHistory($temp, $id, $user_introduction, $wallet_ext->ext_wallet_id, 1, 1 ,4);
 
-					return $mlm->MLM($id, $count -1,$id_ref);
+					return $mlm->MLM($id, $count -1,$user_introduction);
 				}
 			}else{
-				return $mlm->MLM($id, $count -1,$id_ref);
+				return $mlm->MLM($id, $count -1,$user_introduction);
 			}
 		}else{
 			return null;
@@ -181,16 +189,16 @@ class WalletMainController extends Controller
 		if (Auth::check())
 		{
 			$id = Auth::user()->id;  
-			$main_wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-			$eco_wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
-			$ext_wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
-			$arr_wallet_amount = array('main_wallet_amount' => $main_wallet_amount,
-									'eco_wallet_amount' => $eco_wallet_amount,
-									'ext_wallet_amount' => $ext_wallet_amount);
+			$main_wallet_point = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
+			$eco_wallet_point = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_point');
+			$ext_wallet_point = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_point');
+			$arr_wallet_point = array('main_wallet_point' => $main_wallet_point,
+									'eco_wallet_point' => $eco_wallet_point,
+									'ext_wallet_point' => $ext_wallet_point);
 
 
 
-			return view('walletmanager', ['arr_wallet_amount' => $arr_wallet_amount]);
+			return view('walletmanager', ['arr_wallet_point' => $arr_wallet_point]);
 		}
 		else {
 			return  redirect ('/login');
@@ -203,25 +211,25 @@ class WalletMainController extends Controller
 			$id = Auth::user()->id;
 			$type_wallet = $request->type;
 			if ($type_wallet == 0){
-				$wallet_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
+				$wallet_point = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
 				$main_wallet_id = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_id');
 				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $main_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}else if ($type_wallet == 1){
-				$wallet_amount = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_amount');
+				$wallet_point = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_point');
 				$ext_wallet_id = WalletExt::where('ext_wallet_ofuser', $id)->value('ext_wallet_id');
 				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $ext_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}else if ($type_wallet == 2){
-				$wallet_amount = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_amount');
+				$wallet_point = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_point');
 				$eco_wallet_id = WalletEco::where('eco_wallet_ofuser', $id)->value('eco_wallet_id');
 				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $eco_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}else if ($type_wallet == 3){
-				$wallet_amount = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_amount');
-				$level_wallet_id = WalletLevel::where('level_wallet_ofuser', $id)->value('level_wallet_id');
-				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $level_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
+				$wallet_point = WalletLevel::where('hm_wallet_ofuser', $id)->value('hm_wallet_point');
+				$hm_wallet_id = WalletLevel::where('hm_wallet_ofuser', $id)->value('hm_wallet_id');
+				$wallet_histories = WalletHistory::where(['wallet_history_ofwallet' => $hm_wallet_id,'wallet_history_typewallet' => $type_wallet])->orderBy('created_at', 'desc')->get();
 			}
 
 			
-			return view('walletdetail',['wallet_amount' => $wallet_amount, 'wallet_histories' => $wallet_histories]);
+			return view('walletdetail',['wallet_point' => $wallet_point, 'wallet_histories' => $wallet_histories]);
 		}
 		else {
 			return  redirect ('/login');
@@ -232,6 +240,9 @@ class WalletMainController extends Controller
    		$id = Auth::user()->id;  
    		$passWord = Auth::user()->password;  
    		if(Hash::check($request->pwdtt,$passWord)){
+			if($request->point < 100 ){
+				return back()->with('error','You must deposit min 100 point!');
+			}
    			//upload file
 			$destinationPath = 'uploads/imgChuyenKhoan/';
 			$file = $request->file('picture'); 
@@ -266,8 +277,8 @@ class WalletMainController extends Controller
 	 public function RutTransaction(Request $request){				
    		$id = Auth::user()->id;  
    		$passWord = Auth::user()->password;  
-   		$walletmain_amount = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_amount');
-   		if ($request->point <= $walletmain_amount){
+   		$walletmain_point = WalletMain::where('main_wallet_ofuser', $id)->value('main_wallet_point');
+   		if (($request->point <= $walletmain_point) && ($request->point >= 100)){
    			if(Hash::check($request->pwdtt,$passWord)){
  
 				   $transactionConntroller = new TransactionController(); 
@@ -278,7 +289,7 @@ class WalletMainController extends Controller
 	   		}
 
    		}else{
-   			return back()->with('error','Số dư không đủ!!!');
+   			return back()->with('error','Số dư không đủ !!!');
 	   		
    		}
    	}	

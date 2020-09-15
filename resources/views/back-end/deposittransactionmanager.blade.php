@@ -24,7 +24,6 @@ use App\Admin_users;
                                     <tr>
                                         <th><input type="checkbox" class="checktop checkrow"></th>
                                         <th>ID</th>
-                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>
@@ -47,7 +46,6 @@ use App\Admin_users;
                                 <tr id="row{{ $transaction->transaction_id }}">
                                     <td><input type="checkbox" id="{{ $transaction->transaction_id }}" class="checkrow"></td>
                                     <td>  {{ $transaction->transaction_id }} </td>
-                                    <td> {{User::where('id', $transaction->transaction_fromuser)->value('email')}} </td>
                                     <td> {{User::where('id', $transaction->transaction_touser)->value('email')}} </td>
                                     <td> 
                                         @if($transaction->transaction_typeorder == 0)
@@ -169,7 +167,6 @@ use App\Admin_users;
                                 <tr>
                                         <td><input type="checkbox"  class="checkbot checkrow"></td>
                                         <th>ID</th>
-                                        <th>From User</th>
                                         <th>To User</th>
                                         <th>Type Order</th>
                                         <th>ID Checker</th>
@@ -214,7 +211,7 @@ use App\Admin_users;
                             "dom": '<"toolbar">frtip',
                             
                                     });
-                        $("div.toolbar").html('<form><span style="margin-right: 20px;"><select id="selectaction"><option value="No" selected>Action</option><option value="accept">Accept</option><option value="cancel">Cancel</option><option value="delete">Delete</option></select><button id="actionselected">Do Action</button></span><span  class="select-date-range"><select id="date-range" name="date-range"><option value="0">--Select--</option><option value="1">Trong ngày</option><option value="7">Trong tuần</option><option value="30"> Trong tháng</option></select></span><span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span><span><input type="reset" id="reset" value="Reset"></span></form>');
+                        $("div.toolbar").html('<form><span style="margin-right: 20px;"><select id="selectaction"><option value="No" selected>Action</option><option value="accept">Accept</option><option value="cancel">Cancel</option><option value="delete">Delete</option></select><input id="actionselected" type="button" value="Do Action"></span><span  class="select-date-range"><select id="date-range" name="date-range"><option value="0">--Select--</option><option value="1">Trong ngày</option><option value="7">Trong tuần</option><option value="30"> Trong tháng</option></select></span><span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span><span><input type="reset" id="reset" value="Reset"></span></form>');
                         $.fn.dataTable.ext.search.push(
                         function (settings, data, dataIndex) {
 
