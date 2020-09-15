@@ -2,6 +2,7 @@
 use App\User;
 $id = Auth::user()->id;
 $user = User::where('id', $id)->first();
+$email_otp = $user->email_verified;
 ?>
 @extends('layouts.master')
 @section('content')
@@ -12,7 +13,7 @@ $user = User::where('id', $id)->first();
     <div class="col-xs-12 col-sm-8 col-sm-offset-2">
       <div class="well well-sm">
         <h2 class="text-center uppercase">withdraw</h2>
-        <form action="{{url('form-Rut')}}" method="post">
+        <form action="{{url('form-Rut')}}" method="post" id="form-rut">
           {!! csrf_field() !!}
 
           <p class="alert alert-warning">You can withdraw up to 1000 points</p>
@@ -46,6 +47,9 @@ $user = User::where('id', $id)->first();
           <style>
               #show_info_rut{
                   display: none;
+              }
+              .enter_otp{
+                display: none;
               }
           </style>
           <script>
@@ -91,10 +95,67 @@ $user = User::where('id', $id)->first();
               <i class="glyphicon glyphicon-eye-open"></i>
             </button>
           </div>
+        </div>
+        <div class="enter_otp">
+          <label for="otp">OTP:</label>
+          <div class="form-group">
+            <div class="input-group form-group">
+              <input type="number" class="form-control" id="otp" placeholder="OTP" name="otp">
+              <div class="input-group-btn">
+              <button class="otp-btn btn btn-default" id="resendotp" type="button" onclick="sendOTP(this.id, '<?php echo $email_otp;?>')">
+                <i class="glyphicon glyphicon-repeat"></i>
+              </button>
+            </div>
+            </div>
+            <div>
+            <p id="notice-opt"></p>
+            </div>
           </div>
-         
-          <button type="submit" class="btn btn-success btn-block" name="rut">Rút</button>
+        </div>
+        
+          <button id="hinddenBtn" style="display: none;" type="submit"></button>
+        <button onclick="sendOTP(this.id, '<?php echo $email_otp;?>')" type="button" id="submit" class="btn btn-success btn-block" name="rut">Rút</button>
         </form>
+        <script type="text/javascript">
+          
+          function sendOTP(id, email){
+            
+            $('.enter_otp').css('display', 'block');
+            if(id== "submit"){
+              if($('#otp').val() == ""){
+                $.ajax({
+                  url:'http://web13.mevivu.com/taichinh/sendOTP/' + email,
+                  type:'get',
+                  data: {email: email},
+                  success: function(response){
+                    sessionStorage.setItem("otp", response.otp);
+                    $("#notice-opt").html("OPT was send to your email!");
+                  }
+                });
+              }else if(sessionStorage.getItem("otp") == $('#otp').val()){
+                sessionStorage.setItem("otp", Math.floor(Math.random() * 100000));
+                $('#hinddenBtn').trigger("click");
+             }else{
+              $("#notice-opt").html("Wrong OTP!");
+
+             }
+            }else if(id == "resendotp"){
+              $.ajax({
+                  url:'http://web13.mevivu.com/taichinh/sendOTP/' + email,
+                  type:'get',
+                  data: {email: email},
+                  success: function(response){
+                    sessionStorage.setItem("otp", response.otp);
+                    $("#notice-opt").html("OPT was resend to your email!");
+                    
+                  }
+                });
+            }
+             
+         
+          }
+          
+          </script>
       </div>
     </div>
   </div>

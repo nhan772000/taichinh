@@ -34,7 +34,8 @@ class TransactionController extends Controller
 		$transaction->transaction_bill2 = $transaction_bill2;
 		$transaction->transaction_status = $transaction_status;
 		$transaction->save();
-	}	
+   }	
+   
    public function cashBackTietKiem($points, $idNguoiNhan)
    {
       $id = auth()->user()->id;

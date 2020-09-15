@@ -1,5 +1,6 @@
 <?php
 use App\User;
+use App\SettingRateCurrency;
 $id = Auth::user()->id;
 
 ?>
@@ -13,11 +14,16 @@ $id = Auth::user()->id;
             <div class="row">
                 <div class="col kcol text-center uppercase">
                     <h2 class="ktitle kwhite uppercase">Main Wallet</h2>
-                    <div class="balance">
-                        <span class="balance-mini"><b><i class="fa fa-star"></i></b> {{ $wallet_point }}</span>
-                        <span class="icon-exchange"><i class="fa fa-exchange"></i></span>
-                        <span class="balance-mini"><b><i class="fa fa-money"></i></b>{{ $wallet_point }}000</span></div>
-                </div>
+                    <div id="balance">
+                        <div>
+                          <span><input readonly value="{{intval($wallet_point)}} POINT"/></span>
+                          <span><i class="fa fa-exchange"></i></span>
+                          <span><input readonly id="rate_VND" value="{{intval( SettingRateCurrency::where('id', 1)->value('rate_currency') * $wallet_point)}} VND"/></span>
+                          <span><i class="fa fa-exchange"></i></span>
+                          <span><input readonly id="rate_USDT" value="{{ intval(SettingRateCurrency::where('id', 2)->value('rate_currency') * $wallet_point)}} USDT"/></span>
+        
+                        </div>
+                    </div>
             </div>
             <div class="row">
                 <div class="col kcol2  text-center uppercase" style="overflow: scroll;">

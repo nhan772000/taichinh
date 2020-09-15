@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::auth();
 
+//OTP by Kira
+Route::get('/sendOTP/{email}','WalletMainController@sendOTP');
 //truong
 
 
