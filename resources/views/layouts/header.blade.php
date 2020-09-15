@@ -53,7 +53,7 @@
     <div class="col-xs-4 col-sm-2">
         <a href="{{URL::to('/')}}"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
-    <div class="thongbao col-xs-3">
+    <div class="thongbao col-xs-2">
       <a id="clear_thongbao" class="icon_thongbao" href="#"><span class="glyphicon glyphicon-bell"></span><span id="thongbao" style="margin-top: -20px; padding: 1px 4px; background: red;" class="badge">5</span></a>
       <ul class="menu_thongbao">
         <li><a href="#">Bạn có cơ hội trúng iphone 12</a></li>

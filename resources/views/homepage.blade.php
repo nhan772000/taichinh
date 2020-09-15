@@ -46,12 +46,12 @@
 			</a>
 	      </div>
 	      <div class="col-xs-4">
-			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
+			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success button_home">
 				<span>Ext Wallet</span><span class="icon_size amount"><?= round($ext_wallet->ext_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
 	      <div class="col-xs-4">
-			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success button_home">
+			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
 				<span>Eco Wallet</span><span class="icon_size amount"><?= round($eco_wallet->eco_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
@@ -63,7 +63,7 @@
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-	          <img src="public/images/1594702586.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
+	          <img src="public/images/scan.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
 	          </div>
 	        </div>
 	                
