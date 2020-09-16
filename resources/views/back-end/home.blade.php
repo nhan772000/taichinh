@@ -8,13 +8,8 @@
 				<li class="active">Home</li>
 			</ol>
 		</div><!--/.row-->
-		<?php 
-          $oder = DB::table('oders')->count('*'); 
-          $oder_new = DB::table('oders')->where('status',0)->count('*'); 
-          $mem = DB::table('users')->count('*');            
-          $pro = DB::table('products')->count('*');            
+      
 
-        ?>
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">Dashboard</h1>
@@ -29,7 +24,7 @@
 							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"/></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">{!!$oder!!}</div>
+							<div class="large"></div>
 							<div class="text-muted"> tổng đơn hàng</div>
 						</div>
 					</div>
@@ -42,7 +37,7 @@
 							<svg class="glyph stroked app-window-with-content"><use xlink:href="#stroked-app-window-with-content"/></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">{!!$oder_new!!}</div>
+							<div class="large"></div>
 							<div class="text-muted"> Đơn hàng mới</div>
 						</div>
 					</div>
@@ -55,7 +50,7 @@
 							<svg class="glyph stroked bag"><use xlink:href="#stroked-bag"/></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">{!!$pro!!}</div>
+							<div class="large"></div>
 							<div class="text-muted">Sản phẩm</div>
 						</div>
 					</div>
@@ -68,7 +63,7 @@
 							<svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>
 						</div>
 						<div class="col-sm-9 col-lg-7 widget-right">
-							<div class="large">{!!$mem!!}</div>
+							<div class="large"></div>
 							<div class="text-muted">Khách hàng</div>
 						</div>
 					</div>

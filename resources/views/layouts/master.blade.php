@@ -1,4 +1,5 @@
 @include('layouts.header')
+        @include('flash-message')
 
 			@yield('content')
      

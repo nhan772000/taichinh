@@ -6,7 +6,6 @@ function formatNumber (num) {
 
 $(document).ready(function(){
          
-    $('[data-toggle="popover"]').popover();  
 
 //xử lý khi đóng mở menu, thông báo, ngôn ngữ
     $(".icon_menu").click(function(){
@@ -36,14 +35,14 @@ $(document).ready(function(){
     if ($pwd.attr('type') === 'password') {
         $pwd.attr('type', 'text');
         $(".showhidepwd").empty();
-    	$(".showhidepwd").append('<i class="glyphicon glyphicon-eye-close"></i>');
+        $(".showhidepwd").append('<i class="glyphicon glyphicon-eye-close"></i>');
     } else {
         $pwd.attr('type', 'password');
         $(".showhidepwd").empty();
-    	$(".showhidepwd").append('<i class="glyphicon glyphicon-eye-open"></i>');
+        $(".showhidepwd").append('<i class="glyphicon glyphicon-eye-open"></i>');
     }
 
-    	
+
 
 
 
@@ -55,76 +54,94 @@ $(document).ready(function(){
     if ($pwd.attr('type') === 'password') {
         $pwd.attr('type', 'text');
         $(".showhidepwdtt").empty();
-    	$(".showhidepwdtt").append('<i class="glyphicon glyphicon-eye-close"></i>');
+        $(".showhidepwdtt").append('<i class="glyphicon glyphicon-eye-close"></i>');
     } else {
         $pwd.attr('type', 'password');
         $(".showhidepwdtt").empty();
-    	$(".showhidepwdtt").append('<i class="glyphicon glyphicon-eye-open"></i>');
+        $(".showhidepwdtt").append('<i class="glyphicon glyphicon-eye-open"></i>');
     }
     });
 
     //xử lý khi click vào thông báo
     $("#clear_thongbao").click(function() {
-    	//$("#thongbao").empty();
-    	$("#thongbao").text("");
+        //$("#thongbao").empty();
+        $("#thongbao").text("");
     });
 
     // xử lý cho nạp khi chọn loại nạp
     $("#chonloainap").change(function() {
-		var vnd= '<div class="alert alert-warning vivify popInTop"><p>Bạn muốn chuyển tiền vào STK dưới đây và gửi chứng từ chuyển tiền để xác nhận</p><p>Ngân hàng: Vietcombank</p><p>Tên: Nguyen Van A</p><p>STK: 1551120126</p><p>Chi nhánh: Gò Vấp</p><p>Nội dung chuyển</p><p>Nạp vào [ID] [Số điểm]</p></div>';
-		var USDT= '<div class="alert alert-warning vivify popInTop"><p>hiện ra khi chọn USDT</p></div>';
-		var layval = $("#chonloainap option:selected").val();
+        var vnd= '<div class="alert alert-warning vivify popInTop"><p>Bạn muốn chuyển tiền vào STK dưới đây và gửi chứng từ chuyển tiền để xác nhận</p><p>Ngân hàng: Vietcombank</p><p>Tên: Nguyen Van A</p><p>STK: 1551120126</p><p>Chi nhánh: Gò Vấp</p><p>Nội dung chuyển</p><p>Nạp vào [ID] [Số điểm]</p></div>';
+        var USDT= '<div class="alert alert-warning vivify popInTop"><p>hiện ra khi chọn USDT</p></div>';
+        var layval = $("#chonloainap option:selected").val();
 
-		if(layval == 1){
-			$("#select_VND_or_USDT").html(vnd);
-		}
-		else if(layval == 2){
-			$("#select_VND_or_USDT").html(USDT);
-		}
-		else {
-			$("#select_VND_or_USDT").text("");
-		}
-	});
-	// xử lý cho nạp khi chọn loại rút
+        if(layval == 1){
+            $("#select_VND_or_USDT").html(vnd);
+        }
+        else if(layval == 2){
+            $("#select_VND_or_USDT").html(USDT);
+        }
+        else {
+            $("#select_VND_or_USDT").text("");
+        }
+    });
+    // xử lý cho nạp khi chọn loại rút
     $("#chonloairut").change(function() {
-		var vnd= '<div class="alert alert-warning vivify popInTop"><p>Tên ngân hàng: Vietcombank</p> <p>Tên chủ thể: Nguyen Van A</p> <p>STK: 1551120126 </p></div>';
-		var USDT= '<div class="alert alert-warning vivify popInTop"><p>hiện ra khi chọn USDT</p></div>';
-		var layval = $("#chonloairut option:selected").val();
+        var vnd= '<div class="alert alert-warning vivify popInTop"><p>Tên ngân hàng: Vietcombank</p> <p>Tên chủ thể: Nguyen Van A</p> <p>STK: 1551120126 </p></div>';
+        var USDT= '<div class="alert alert-warning vivify popInTop"><p>hiện ra khi chọn USDT</p></div>';
+        var layval = $("#chonloairut option:selected").val();
 
-		if(layval == 1){
-			$("#select_VND_or_USDT").html(vnd);
-		}
-		else if(layval == 2){
-			$("#select_VND_or_USDT").html(USDT);
-		}
-		else {
-			$("#select_VND_or_USDT").text("");
-		}
-	});
+        if(layval == 1){
+            $("#select_VND_or_USDT").html(vnd);
+        }
+        else if(layval == 2){
+            $("#select_VND_or_USDT").html(USDT);
+        }
+        else {
+            $("#select_VND_or_USDT").text("");
+        }
+    });
 
-	//xử lý khi nhập điểm vào
-	$("#point_chuyen").change(function(){
-		var point = $("#point_chuyen").val();
-		if($.isNumeric(point))
-		{
-				if(point > 50 )
-			{
-				point = point * 1000;
-				point = formatNumber(point);
-				var text = '<p class="alert alert-warning vivify popInTop">Bạn cần chuyển '+ point +' VND</p>';
-			$("#thongbaosotien").html(text);
-			}
-			else{
-				$("#thongbaosotien").html('<p class="alert alert-danger vivify popInTop">Số điểm bạn nhập không hợp lệ !!</p>');
-			}popInTop
-		}
-		else{
-			$("#thongbaosotien").html('<p class="alert alert-danger vivify popInTop">Số điểm bạn nhập không hợp lệ !!</p>') 
-		}
-		
-		
-		
-	});
+    //xử lý khi nhập điểm vào
+    $("#point_chuyen").change(function(){
+        var point = $("#point_chuyen").val();
+        if($.isNumeric(point))
+        {
+                if(point > 50 )
+            {
+                point = point * 1000;
+                point = formatNumber(point);
+                var text = '<p class="alert alert-warning vivify popInTop">Bạn cần chuyển '+ point +' VND</p>';
+            $("#thongbaosotien").html(text);
+            }
+            else{
+                $("#thongbaosotien").html('<p class="alert alert-danger vivify popInTop">Số điểm bạn nhập không hợp lệ !!</p>');
+            }popInTop
+        }
+        else{
+            $("#thongbaosotien").html('<p class="alert alert-danger vivify popInTop">Số điểm bạn nhập không hợp lệ !!</p>') 
+        }
+
+
+
+    });
+    // xử lý cho nạp khi chọn loại rút
+    $("#user_choosewallet").change(function() {
+        //alert('hello');
+        var point_main = $(this).find(':selected').attr('data-1');
+        var point_ext = $(this).find(':selected').attr('data-0');
+        var main= '<div class="alert alert-warning vivify popInTop">Bạn có thể chuyển tối đa '+point_main+' point. </div>';
+        var ext= '<div class="alert alert-warning vivify popInTop">Bạn có thể chuyển tối đa '+point_ext+' point.</div>';
+        var layval = $("#user_choosewallet option:selected").val();
+        if(layval == 1){
+            $("#select_wallet").html(main);
+        }
+        else if(layval == 0){
+            $("#select_wallet").html(ext);
+        }
+        else {
+            $("#select_wallet").text("");
+        }
+    });
     // xử lý cho nạp khi chọn loại rút
     $("#user_choosewallet").change(function() {
         //alert('hello');
@@ -157,6 +174,3 @@ $(document).ready(function(){
 
 
 });
-
-
-

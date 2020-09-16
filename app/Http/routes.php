@@ -1,15 +1,21 @@
 <?php
+use Illuminate\Support\Facades\Route;
+
 
 Route::auth();
 
+//truong
+
+
 Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
-Route::get('/nap', 'DepositController@deposit');
+
 
 //-----------------------chuyển------------------
 //Route::get('/capnhat', 'UsersController@capnhat');
 
 Route::get('/chuyen', 'UsersController@getChuyen');
+
 
 Route::post('/chuyen', 'UsersController@postChuyen');
 Route::post('/xacnhan-chuyen', 'UsersController@xacNhanChuyen');
@@ -17,7 +23,6 @@ Route::post('/xacnhan-chuyen', 'UsersController@xacNhanChuyen');
 //kết thúc---------------chuyển-----------------
 
 
-//-------------------lấy lại mật khẩu------------------------
 
 //hiển thị giao diện nhập email
 Route::get('/passwordreset', 'UsersController@passwordReset');
@@ -80,8 +85,40 @@ Route::post('/login', 'UsersController@checkUserLogin');
 //send mail
 //Route::get('/get-password-send-mail', 'UsersController@send_mail');
 
-Route::get('/user', 'HomeController@index');
+
+
+
+
+//-----------------------------------------------
+Route::get('/', 'HomepageController@showHomepage');
+Route::get('/contact', 'ContactController@showContact');
+
+Route::get('/rut', 'PagesController@showRutView');
+Route::get('/nap', 'PagesController@showNapView');
+//Route::get('/chuyen', 'PagesController@showChuyenView');
+Route::get('/walletmenu', 'PagesController@showWalletMenuView');
+Route::get('/tangHM', 'PagesController@showTangHMView');
+Route::get('/contact', 'PagesController@showContactView');
+
+Route::post('/phattrienthitruong','UserController@Phattrienthitruong');
+
+//walletmain controller
+Route::post('form-Nap','WalletMainController@NapTransaction');
+Route::post('form-Rut','WalletMainController@RutTransaction');
+Route::post('form-Chuyen','WalletMainController@ChuyenTransaction');
+Route::get('/wallet', 'WalletMainController@getWalletManager');
+Route::get('/wallet/walletdetail/{type}', 'WalletMainController@getWalletDetail');
+
+Route::get('/transfer', 'WalletMainController@transfer');
+Route::get('/pttt', 'WalletMainController@getPTTT');
+Route::get('/postpttt', 'WalletMainController@postPTTT');
+
+
+Route::get('/user','HomeController@index');
 Route::get('/user/edit', 'HomeController@edit');
+
+Route::get('/transaction', 'TransactionController@showTransactionHistory');
+
 
 Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
 Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
@@ -90,8 +127,29 @@ Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController
 Route::get('admin/login', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@showLoginForm']);
 Route::post('admin/login', ['as'  => 'postlogin', 'uses' =>'Admin\AuthController@login']);
 Route::get('admin/password/reset', ['as'  => 'getreser', 'uses' =>'Admin\AuthController@email']);
-
 Route::get('admin/logout', ['as'  => 'getlogin', 'uses' =>'Admin\AuthController@logout']);
+
+//Xử lý admin transaction
+Route::get('admin/transactionmanager', 'Admin\TransactionManagerController@ShowAllTransaction');
+Route::get('admin/transactionmanager/acceptTransaction/{arr_id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/cancelTransaction/{arr_id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/deleteTransaction/{arr_id}', 'Admin\TransactionManagerController@deleteTransaction');
+Route::any('admin/transactionmanager/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+
+//Xử lý deposit transaction
+Route::get('admin/transactionmanager/deposit', 'Admin\TransactionManagerController@getDepositTransaction');
+Route::any('admin/transactionmanager/deposit/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+Route::get('admin/transactionmanager/deposit/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/deposit/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/deposit/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+
+//Xử lý withdraw transactio
+Route::get('admin/transactionmanager/withdraw', 'Admin\TransactionManagerController@getWithdrawTransaction');
+Route::any('admin/transactionmanager/withdraw/editTransaction/{id}', 'Admin\TransactionManagerController@getEditTransaction');
+Route::get('admin/transactionmanager/withdraw/acceptTransaction/{id}', 'Admin\TransactionManagerController@acceptTransaction');
+Route::get('admin/transactionmanager/withdraw/cancelTransaction/{id}', 'Admin\TransactionManagerController@cancelTransaction');
+Route::get('admin/transactionmanager/withdraw/deleteTransaction/{id}', 'Admin\TransactionManagerController@deleteTransaction');
+Route::any('/form-editTransaction', 'Admin\TransactionManagerController@postEditTransaction');
 
 // Route::get('/', ['as'  => 'index', 'uses' =>'PagesController@index']);
 // cart - oder
@@ -114,10 +172,15 @@ Route::resource('payment', 'PayMentController');
 // --------------------------------cac cong viec trong admin (back-end)--------------------------------------- 
 Route::group(['middleware' => 'admin'], function () {
       Route::group(['prefix' => 'admin'], function() {
-        
+          
        	Route::get('/home', function() {         
          return view('back-end.home');       	
-       });
+       }
+
+     );   
+          
+
+
        // -------------------- quan ly danh muc----------------------
        	Route::group(['prefix' => 'danhmuc'], function() {
            Route::get('add',['as'        =>'getaddcat','uses' => 'CategoryController@getadd']);
@@ -181,3 +244,17 @@ Route::group(['middleware' => 'admin'], function () {
       // ---------------van de khac ----------------------
     });     
 });
+
+
+// LICH SU GIAO DICH
+Route::get('/transaction', 'TransactionController@showTransaction')->name('transaction.index');
+
+
+Route::get('/user', 'HomeController@index');
+Route::get('/user/edit', 'HomeController@edit');
+
+
+
+Route::get('/uocmuon', [ 'as' => 'uocmuon', 'uses' => 'UocMuonController@giaodienUocMuon']);
+Route::any('/danguocmuon', [ 'as' => 'danguocmuon', 'uses' => 'UocMuonController@danguocmuon']);
+

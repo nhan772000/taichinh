@@ -16,6 +16,62 @@ use DB,Cart,Datetime;
 
 class PagesController extends Controller
 {
+
+    public function showRutView()
+   {
+          if (Auth::check())
+    {
+        return view('rut');
+    }
+    else {
+        return  redirect ('/login');
+     }
+   }
+
+   public function showNapView()
+   {    
+    if (Auth::check())
+    {
+          return view('nap');
+    }
+    else {
+        return  redirect ('/login');
+     }
+    }
+
+   public function showChuyenView()
+   {
+         if (Auth::check())
+    {
+          return view('chuyen');
+    }
+    else {
+        return  redirect ('/login');
+     }
+   }
+
+   public function showWalletMenuView()
+   {
+        return  view ('wallet');
+   }
+
+   public function showTangHMView()
+   {
+        return  view ('tangHM');
+   }
+
+   public function showContactView()
+   {
+        return  view ('contact');
+   }
+
+
+
+
+
+
+
+
     public function index()
     {
         // mobile

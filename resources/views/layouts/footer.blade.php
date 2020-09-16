@@ -1,2 +1,2 @@
-<script src="public/js/js.js"></script>
+<script src="{!!url('public/js/js.js')!!}"></script>
 </html>
