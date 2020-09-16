@@ -168,7 +168,13 @@ $(document).ready(function(){
             $("#register").attr('disabled', 'disabled');
         }
     });
-
+    $("#id_user_transfer").change(function() {
+        var user_id = $(this).val();
+        $.get("info-user-recei/"+user_id, function(data){
+            //alert("thành công !");
+            $("#info_user_recei").html(data);
+        });
+    });
 
 
 

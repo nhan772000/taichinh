@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests;
@@ -9,13 +9,27 @@ use App\Transaction;
 use App\User;
 use App\WalletMain;
 use App\WalletExt;
-use App\WalletECo;
+use App\WalletEco;
 use App\WalletHistory;
 use App\Payment;
 use App\WalletLevel;
-
+use Illuminate\Support\Facades\Mail;
 class WalletMainController extends Controller
-{
+{	
+	
+	public function sendOTP(Request $request){
+		if (Auth::check()){
+			session()->put('email',$request->email);
+			$otp = mt_rand(100000,999999);
+        	Mail::send('otpTemplate', array('otp'=> $otp), function($message){
+			
+				$message->to(session()->get('email'), 'OTP')->subject('OTP!');
+			});
+		return response()->json(['otp'=>$otp]);
+		}else{
+			return redirect('/login')->with('erro','You must logged in'); 
+		}
+	}
 	public function getPTTT(){
 		if (Auth::check()){
 			
@@ -36,8 +50,8 @@ class WalletMainController extends Controller
 					array_push($array_F1_qualified, $id_F1);
 				}
 			}
-			$count_gift = count($array_F1_qualified)/5;
-			if(count($array_F1_qualified) == 5){
+			$count_gift = intval(count($array_F1_qualified)/5);
+			if(count($array_F1_qualified) >= 5){
 				return view('PTTTview',['checkpttt' => true, 'count_gift' => $count_gift]);
 			}else{
 				return view('PTTTview',['checkpttt'=> false]);
@@ -281,7 +295,7 @@ class WalletMainController extends Controller
    			if(Hash::check($request->pwdtt,$passWord)){
  
 				   $transactionConntroller = new TransactionController(); 
-				   $transactionConntroller->createTransaction(0, $id, null, null ,$request->currency, $request->point, null, null, null, 0);
+				   $transactionConntroller->createTransaction(0, $id, null, null ,$request->currency, $request->point, $request->description, null, null, 0);
 				return back()->with('success','Bạn đã rút tiền thành công. Chúng tôi sẽ chuyển tiền của bạn sớm nhất có thể!');
 	   		}else{
 	   			return back()->with('error','Sai mật khẩu!');

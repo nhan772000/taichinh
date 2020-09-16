@@ -1,3 +1,7 @@
+<?php 
+use App\User;
+$userRecei = User::where('id',$id_recei)->first();
+?>
 @extends('layouts.master')
 @section('content')
 <body>
@@ -40,9 +44,13 @@
           <div id="select_wallet"></div>
           <div class="form-group">
             <label for="id_user_transfer">ID member:</label>
-            <input required type="text" class="form-control" id="id_user_transfer" name="id_user_transfer" placeholder="ID member">
+            <input readonly required type="text" class="form-control" value="{{$id_recei}}" id="id_user_transfer" name="id_user_transfer" placeholder="ID member">
           </div>
-          <div id="info_user_recei"></div>
+          <div class="form-group">
+            <label for="id_user_transfer">Name Receiver:</label>
+          <input readonly class="form-control" value="{{$userRecei->user_name}}">
+          </div>
+
           <div class="form-group">
             <label for="point_transfer">Point:</label>
             <input required type="text" class="form-control" id="point_transfer" name="point_transfer" placeholder="Point">

@@ -4,8 +4,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::auth();
 
+//OTP by Kira
+Route::get('/sendOTP/{email}','WalletMainController@sendOTP');
+Route::get('/chuyen/{id}', 'UsersController@getChuyenQR');
+
 //truong
 
+Route::get('/ngay', 'UsersController@ngay');
 
 Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
@@ -19,6 +24,8 @@ Route::get('/chuyen', 'UsersController@getChuyen');
 
 Route::post('/chuyen', 'UsersController@postChuyen');
 Route::post('/xacnhan-chuyen', 'UsersController@xacNhanChuyen');
+
+Route::get('/info-user-recei/{user_id}', 'UsersController@infoUserRecei');
 
 //kết thúc---------------chuyển-----------------
 

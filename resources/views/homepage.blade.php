@@ -1,4 +1,7 @@
-
+<?php
+use App\User;
+$id = auth()->user()->id;
+?>
 @extends('layouts.master')
 @section('content')
 	<body>
@@ -46,12 +49,12 @@
 			</a>
 	      </div>
 	      <div class="col-xs-4">
-			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success1 button_home">
+			<a href="{!!url('/wallet/walletdetail/1')!!}" class="btn btn-success button_home">
 				<span>Ext Wallet</span><span class="icon_size amount"><?= round($ext_wallet->ext_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
 	      <div class="col-xs-4">
-			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success button_home">
+			<a href="{!!url('/wallet/walletdetail/2')!!}" class="btn btn-success1 button_home">
 				<span>Eco Wallet</span><span class="icon_size amount"><?= round($eco_wallet->eco_wallet_point, 0, PHP_ROUND_HALF_ODD); // 9 ?></span>
 			</a>
 	      </div>
@@ -63,7 +66,7 @@
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-	          <img src="public/images/1594702586.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
+	          <img src="public/images/scan.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
 	          </div>
 	        </div>
 	                
@@ -72,11 +75,23 @@
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-	          <img src="public/images/1594702586.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
+				<canvas id="qr-code"></canvas> 
 	          </div>
 	        </div>
 	                
-	      </div>
+		  </div>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+		  <script>
+			  var qr;
+			(function() {
+                    qr = new QRious({
+                    element: document.getElementById('qr-code'),
+                    size: 200,
+                    value: 'http://localhost:8888/taichinh/chuyen/'+'<?php echo $id; ?>'
+                });
+            })();
+		  </script>
 	        </div>
 
 	            <div class="mevivu_home_sesion3 row">
@@ -104,7 +119,23 @@
 	                </div>
 				</div>
 
-
+	    <!-- Modal -->
+	  <div class="modal fade" id="myModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Modal Header</h4>
+	        </div>
+	        <div class="modal-body">
+	          <p>This is a small modal.</p>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
 
 
 

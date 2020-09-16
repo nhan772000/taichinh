@@ -13,7 +13,7 @@ use App\WalletMain;
 use App\WalletExt;
 use App\WalletLevel;
 use App\SettingTransferPoint;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -23,6 +23,10 @@ session_start();
 
 class UsersController extends Controller
 {
+  public function ngay(){
+    Session::put('resetPoint', 50);
+   echo Session('resetPoint');
+  }
    public function getlist()
    {
    		$data = User::paginate(10);
@@ -37,7 +41,7 @@ class UsersController extends Controller
       return view('phattrienthitruong');
    }
 
-     public function getChuyen(){
+    public function getChuyen(){
 
     if(Auth::check()){
       $user = Auth::user();
@@ -56,7 +60,45 @@ class UsersController extends Controller
       else{
         $point_ext = $hm->hm_wallet_point;
       }
+      
       return view('chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
+    }
+  }
+  //get info user recei ajax
+  public function infoUserRecei($user_id){
+    $user = User::where('id', $user_id)->first();
+    if($user){
+      echo '<p class="alert-warning">Tên:'.$user->user_name.'<br/>User Type: '.$user->user_type.'</p>';
+    }
+    else{
+      echo '<p class="alert-warning">No user member.</p>';
+    }
+    
+  }
+
+
+
+  //getchuyenQR by Kira
+  public function getChuyenQR(Request $request){
+
+    if(Auth::check()){
+      $user = Auth::user();
+      $point_main = WalletMain::where('main_wallet_ofuser', $user->id)->first();
+      $point_ext = WalletExt::where('ext_wallet_ofuser', $user->id)->first();
+      $hm = WalletLevel::where('hm_wallet_ofuser', $user->id)->first();
+      if($hm->hm_wallet_point > $point_main->main_wallet_point){
+        $point_main = $point_main->main_wallet_point;
+      }
+      else{
+        $point_main = $hm->hm_wallet_point;
+      }
+      if($hm->hm_wallet_point > $point_ext->ext_wallet_point){
+        $point_ext = $point_ext->ext_wallet_point;
+      }
+      else{
+        $point_ext = $hm->hm_wallet_point;
+      }
+      return view('chuyenqr')->with('point_main', $point_main)->with('point_ext', $point_ext)->with('id_recei', $request->id);
     }
   }
   public function postChuyen(Request $request){
@@ -80,19 +122,19 @@ class UsersController extends Controller
       $hm = WalletLevel::where('hm_wallet_ofuser', $user->id)->first();
 
       $user_transfer_point = User::find($request->id_user_transfer);
-
         if($request->user_choosewallet == 1){
           $wallet_point = $main_wallet->main_wallet_point;
         }
         else if($request->user_choosewallet == 0){
           $wallet_point = $ext_wallet->ext_wallet_point;
         }
+        
         else{
           Auth::logout();
           return Redirect::to('login');
         }
         //kiểm tra xem có đủ điểm để chuyển không
-        if($wallet_point > $request->point_transfer && $hm->hm_wallet_point > $request->point_transfer){
+        if($wallet_point > ($request->point_transfer + 10) && $request->point_transfer > 1 && $wallet_point > 0){
 
             //kiểm tra user chuyển có tồn tại không
             if($user_transfer_point){
@@ -128,7 +170,13 @@ class UsersController extends Controller
   public function xacNhanChuyen(Request $request){
     //id_transfer, type_wallet, point_transfer
     if(Auth::check()){
-      //$walletMainController = new walletMainController();
+      // $session_point = Session($user->id) - $request->point_transfer;
+      // Session::forget($user->id);
+
+      // Session::put($user->id, $session_point);
+
+
+      $walletMainController = new walletMainController();
       $point = $request->point_transfer;
 
       $user = Auth::user();
@@ -287,7 +335,7 @@ class UsersController extends Controller
         //echo "<br/>";
 
       }
-      //$walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 1, 2);
+      $walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 1, 2);
       //kết thúc--------------cài đặt hoàn về liền----------------
 
 
@@ -323,7 +371,7 @@ class UsersController extends Controller
         $hm_receive_save->hm_wallet_point = $hm_point;
         $hm_receive_save->save();
 
-        //$walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 0, 2);
+        $walletMainController->createWalletHistory($point, $fromuser, $touser, $ofwallet, $typewallet, 0, 2);
 
       Session::flash('message', 'Bạn đã chuyển điểm thành công');
       return Redirect::to('/chuyen');

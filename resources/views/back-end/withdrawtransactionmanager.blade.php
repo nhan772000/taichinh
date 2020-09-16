@@ -139,7 +139,6 @@ use App\Admin_users;
                                         <th>Amount</th>
                                         <th>Point</th>
                                         <th>Description</th>
-                                
                                         <th>Status</th>
                                         <th>Created time</th>
                                         <th>Edit</th>
@@ -178,13 +177,11 @@ use App\Admin_users;
                         $("div.toolbar").html('<form><span style="margin-right: 20px;"><select id="selectaction"><option value="No" selected>Action</option><option value="accept">Accept</option><option value="cancel">Cancel</option><option value="delete">Delete</option></select><input id="actionselected" type="button" value="Do Action"></span><span  class="select-date-range"><select id="date-range" name="date-range"><option value="0">--Select--</option><option value="1">Trong ngày</option><option value="7">Trong tuần</option><option value="30"> Trong tháng</option></select></span><span  class="filldate"><input type="date" id="datemin" name="datemin"><input type="date" id="datemax" name="datemax"><button id="filldate" type="button">Fillter</button></span><span><input type="reset" id="reset" value="Reset"></span></form>');
                         $.fn.dataTable.ext.search.push(
                         function (settings, data, dataIndex) {
-
                             var valid = true;
                             var min = moment($("#datemin").val());
                             if (!min.isValid()) { min = null; }
                             var max = moment($("#datemax").val());
                             if (!max.isValid()) { max = null; }
-
                             if ($("#date-range").val() != 0) {
                                 var today = new Date();
                                 if ($("#date-range").val() == 7) {
