@@ -117,9 +117,18 @@ Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi đư�
 		            <input  type="text" class="form-control" id="user_bankname" placeholder="bank name" name="user_bankname" value="{{$user->user_bankname}}">
 		          </div>
 		          <div class="form-group">
-		            <label for="user_address_USDT">Address USDT:</label>
+		            <label for="user_address_USDT">Address USDT: <img src="public/images/usdt.png" alt="" style="width:7%"></label>
 		            <input  type="text" class="form-control" id="user_address_USDT" placeholder="Address USDT" name="user_address_USDT" value="{{$user->user_address_USDT}}">
 		          </div>
+
+		          <div class="form-group">
+		            <label for="user_qrcode_image">QR Code:</label>
+		            <input type="file" class="form-control" id="user_qrcode_image" name="user_qrcode_image">
+		            <div class="mevivu_img_upload">
+		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_qrcode_image}}" alt="">
+		        	</div>
+		          </div>
+
 		          <div class="checkbox">
 				    <label style="font-weight: 600;
     color: #ab1515;"><input type="checkbox"> <trong><i>Tôi cam kết đây là những thông tin chính xác và tôi hoàn toàn chịu trách nhiệm những thông tin trên.							
@@ -142,11 +151,27 @@ Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi đư�
 		            <input <?php if($user->user_type == 3 || $user->user_type == 4 || $user->user_type == 5) echo $disabled; ?> {{$user_type_0}} type="tel" class="form-control" id="user_number_identity" placeholder="Identity Number" name="user_number_identity" value="{{$user->user_number_identity}}">
 		          </div>
 		          <div class="form-group">
-		            <label for="user_identity_image">Identity Card:</label>
+		            <label for="user_identity_image">Identity Card Before:</label>
 		            <input <?php if($user->user_type == 3 || $user->user_type == 4 || $user->user_type == 5) echo $disabled.' style="display: none;"'; ?> type="file" class="form-control" id="user_identity_image" name="user_identity_image">
 		            <div class="mevivu_img_upload">
 		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_identity_image}}" alt="">
 		        	</div>
+
+		        	<div class="form-group">
+		            <label for="user_identity_image_a">Identity Card After:</label>
+		            <input <?php if($user->user_type == 3 || $user->user_type == 4 || $user->user_type == 5) echo $disabled.' style="display: none;"'; ?> type="file" class="form-control" id="user_identity_image_a" name="user_identity_image_a">
+		            <div class="mevivu_img_upload">
+		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_identity_image_a}}" alt="">
+		        	</div>
+
+		          </div>
+		          <div class="form-group">
+		            <label for="user_identity_image_body">Identity Card And Body:</label>
+		            <input <?php if($user->user_type == 3 || $user->user_type == 4 || $user->user_type == 5) echo $disabled.' style="display: none;"'; ?> type="file" class="form-control" id="user_identity_image_body" name="user_identity_image_body">
+		            <div class="mevivu_img_upload">
+		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_identity_image_body}}" alt="">
+		        	</div>
+
 		          </div>
 		          <div class="checkbox">
 				    <label style="font-weight: 600;
@@ -162,7 +187,7 @@ Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi đư�
 		          <div class="form-group">
 		            <label for="user_current_address">Địa chỉ:</label>
 		            <input <?php if($user->user_type == 5 || $user->user_type == 4) echo $disabled; ?> type="text" class="form-control" id="user_current_address" placeholder="địa chỉ" name="user_current_address" value="{{$user->user_current_address}}">
-		            <span>Ví dụ: 954 Quang Trung, Phường 8, Gò Vấp, TP.HCM, Việt Nam.</span>
+		            <span>1. Địa chỉ số nhà(kèm đường xã phường); 2. cấp huyện, thành phố; 3. Tỉnh, Đất Nước</span>
 		          </div>
 
 		          <div class="form-group">

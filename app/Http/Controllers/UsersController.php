@@ -23,10 +23,7 @@ session_start();
 
 class UsersController extends Controller
 {
-  public function ngay(){
-    Session::put('resetPoint', 50);
-   echo Session('resetPoint');
-  }
+
    public function getlist()
    {
    		$data = User::paginate(10);
@@ -48,30 +45,35 @@ class UsersController extends Controller
       $point_main = WalletMain::where('main_wallet_ofuser', $user->id)->first();
       $point_ext = WalletExt::where('ext_wallet_ofuser', $user->id)->first();
       $hm = WalletLevel::where('hm_wallet_ofuser', $user->id)->first();
-      if($hm->hm_wallet_point > $point_main->main_wallet_point){
-        $point_main = $point_main->main_wallet_point;
+
+      $point_main_check = $user->user_point_everyday;
+
+      if($hm->hm_wallet_point < $point_main_check){
+        $point_main_check = $hm->hm_wallet_point;
       }
-      else{
-        $point_main = $hm->hm_wallet_point;
+      if($point_main->main_wallet_point < $point_main_check){
+        $point_main_check = $point_main->main_wallet_point;
       }
-      if($hm->hm_wallet_point > $point_ext->ext_wallet_point){
-        $point_ext = $point_ext->ext_wallet_point;
+
+      $point_ext_check = $user->user_point_everyday;
+      if($hm->hm_wallet_point < $point_ext_check){
+        $point_ext_check = $hm->hm_wallet_point;
       }
-      else{
-        $point_ext = $hm->hm_wallet_point;
+      if($point_ext->ext_wallet_point < $point_ext_check){
+        $point_ext_check = $point_ext->ext_wallet_point;
       }
       
-      return view('chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
+      return view('chuyen')->with('point_main', $point_main_check)->with('point_ext', $point_ext_check);
     }
   }
   //get info user recei ajax
   public function infoUserRecei($user_id){
     $user = User::where('id', $user_id)->first();
     if($user){
-      echo '<p class="alert-warning">Tên:'.$user->user_name.'<br/>User Type: '.$user->user_type.'</p>';
+      echo '<p class="alert alert-warning vivify rollInRight">Tên:'.$user->user_name.'<br/>User Type: '.$user->user_type.'</p>';
     }
     else{
-      echo '<p class="alert-warning">No user member.</p>';
+      echo '<p class="alert alert-warning vivify rollInRight">No user member.</p>';
     }
     
   }
@@ -123,10 +125,25 @@ class UsersController extends Controller
 
       $user_transfer_point = User::find($request->id_user_transfer);
         if($request->user_choosewallet == 1){
-          $wallet_point = $main_wallet->main_wallet_point;
+          $wallet_point = $user->user_point_everyday;
+
+          if($hm->hm_wallet_point < $wallet_point){
+            $wallet_point = $hm->hm_wallet_point;
+          }
+          if($main_wallet->main_wallet_point < $wallet_point){
+            $wallet_point = $main_wallet->main_wallet_point;
+          }
         }
+
         else if($request->user_choosewallet == 0){
-          $wallet_point = $ext_wallet->ext_wallet_point;
+          $wallet_point = $user->user_point_everyday;
+
+          if($hm->hm_wallet_point < $wallet_point){
+            $wallet_point = $hm->hm_wallet_point;
+          }
+          if($ext_wallet->ext_wallet_point < $wallet_point){
+            $wallet_point = $ext_wallet->ext_wallet_point;
+          }
         }
         
         else{
@@ -134,7 +151,7 @@ class UsersController extends Controller
           return Redirect::to('login');
         }
         //kiểm tra xem có đủ điểm để chuyển không
-        if($wallet_point > ($request->point_transfer + 10) && $request->point_transfer > 1 && $wallet_point > 0){
+        if($wallet_point > 0 && $wallet_point > ($request->point_transfer + 10) && $request->point_transfer > 1){
 
             //kiểm tra user chuyển có tồn tại không
             if($user_transfer_point){
@@ -170,16 +187,18 @@ class UsersController extends Controller
   public function xacNhanChuyen(Request $request){
     //id_transfer, type_wallet, point_transfer
     if(Auth::check()){
-      // $session_point = Session($user->id) - $request->point_transfer;
-      // Session::forget($user->id);
-
-      // Session::put($user->id, $session_point);
+      
 
 
       $walletMainController = new walletMainController();
       $point = $request->point_transfer;
 
       $user = Auth::user();
+
+      //update point everyday
+      $user->user_point_everyday = $user->user_point_everyday - $request->point_transfer;
+      $user->save();
+
       $fromuser = $user->id;
       $touser = $request->id_transfer;
       $user_transfer_point = User::find($request->id_transfer);
@@ -575,6 +594,8 @@ class UsersController extends Controller
     }
   }
 
+
+
   //cập nhật thông tin người dùng
   public function updateUserInfo(Request $request){
     if(Auth::check()){
@@ -710,15 +731,26 @@ class UsersController extends Controller
 
     //-----------cập nhật thông tin tài khoản ngân hàng----------
     else if(isset($request->update_account_bank)){
-      //user_ownerbank, user_numbank, user_bankname, user_address_USDT
+      //user_ownerbank, user_numbank, user_bankname, user_address_USDT, user_qrcode_image
       $this->validate($request, [
         'user_ownerbank' => ['min:3', 'max:255', 'regex:^[A-Za-z0-9]+$^'],
         'user_numbank' => ['max:255'],
         'user_bankname' => ['string', 'max:255'],
-        'user_address_USDT' => [ 'string', 'max:1024']
+        'user_address_USDT' => [ 'string', 'max:1024'],
+        'user_qrcode_image' => ['file', 'image']
       ],
       [
       ]);
+      $get_image = $request->file('user_qrcode_image');
+      if($get_image){
+        //$get_name_image = $get_image->getClientOriginalName();
+        //$name_image = current(explode('.', $get_name_image));
+
+        $new_image = $user_auth->id.rand().'.'.$get_image->getClientOriginalExtension();
+        $user->user_qrcode_image =$new_image;
+        $get_image->move('public/uploads/image_user', $new_image);
+      }
+
       $user->user_ownerbank = $request->user_ownerbank;
       $user->user_numbank = $request->user_numbank;
       $user->user_bankname = $request->user_bankname;
@@ -732,7 +764,7 @@ class UsersController extends Controller
     //-----------cập nhật thông tin chứng minh nhân dân----------
 
     else if(isset($request->update_identity)){
-      //user_name_identity, user_number_identity, user_identity_image
+      //user_name_identity, user_number_identity, user_identity_image, user_identity_image_a, user_identity_image_body
       if($request->user_number_identity != $user->user_number_identity){
         $this->validate($request, [
           'user_name_identity' => ['max:255', 'regex:^[A-Za-z0-9]+$^'],
@@ -743,17 +775,42 @@ class UsersController extends Controller
         ]);
         $user->user_number_identity = $request->user_number_identity;
       }
+
+      //ảnh mặt trước
       $get_image = $request->file('user_identity_image');
 
       //kiểm tra và xử lý hình ảnh chứng minh thư khi úp lên
       if($get_image){
-        //$get_name_image = $get_image->getClientOriginalName();
-        //$name_image = current(explode('.', $get_name_image));
+      
 
         $new_image = $user_auth->id.rand().'.'.$get_image->getClientOriginalExtension();
         $user->user_identity_image =$new_image;
         $get_image->move('public/uploads/image_user', $new_image);
       }
+
+      //ảnh mặt sau CMT
+      $get_image = $request->file('user_identity_image_a');
+
+      //kiểm tra và xử lý hình ảnh chứng minh thư khi úp lên
+      if($get_image){
+        
+
+        $new_image = $user_auth->id.rand().'.'.$get_image->getClientOriginalExtension();
+        $user->user_identity_image_a =$new_image;
+        $get_image->move('public/uploads/image_user', $new_image);
+      }
+      //ảnh CMT và người
+      $get_image = $request->file('user_identity_image_body');
+
+      //kiểm tra và xử lý hình ảnh chứng minh thư khi úp lên
+      if($get_image){
+        
+
+        $new_image = $user_auth->id.rand().'.'.$get_image->getClientOriginalExtension();
+        $user->user_identity_image_body =$new_image;
+        $get_image->move('public/uploads/image_user', $new_image);
+      }
+
       $user->user_name_identity = $request->user_name_identity;
 
       $user->save();

@@ -1,3 +1,10 @@
+<?php
+use App\WalletLevel;
+use App\User;
+$id = auth()->user()->id;
+$hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +70,7 @@
     
     <div class="vihanmuc col-xs-5 col-sm-4 text-left">
       <span class="icon_size amount">
-        <?php echo Session('hm_wallet');?>
+        {{$hm->hm_wallet_point}}
       </span>
     </div>
     <div class="col-sm-2 ngonngu hidden-xs">

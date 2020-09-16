@@ -17,7 +17,7 @@ Route::get('/', 'HomepageController@showHomepage');
 
 
 //-----------------------chuyển------------------
-//Route::get('/capnhat', 'UsersController@capnhat');
+//Route::get('/capnhat/{kvc}/{dayOld}', 'UsersController@capnhat');
 
 Route::get('/chuyen', 'UsersController@getChuyen');
 
