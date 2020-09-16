@@ -13,7 +13,7 @@ use App\WalletMain;
 use App\WalletExt;
 use App\WalletLevel;
 use App\SettingTransferPoint;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -57,6 +57,30 @@ class UsersController extends Controller
         $point_ext = $hm->hm_wallet_point;
       }
       return view('chuyen')->with('point_main', $point_main)->with('point_ext', $point_ext);
+    }
+  }
+
+  //getchuyenQR by Kira
+  public function getChuyenQR(Request $request){
+
+    if(Auth::check()){
+      $user = Auth::user();
+      $point_main = WalletMain::where('main_wallet_ofuser', $user->id)->first();
+      $point_ext = WalletExt::where('ext_wallet_ofuser', $user->id)->first();
+      $hm = WalletLevel::where('hm_wallet_ofuser', $user->id)->first();
+      if($hm->hm_wallet_point > $point_main->main_wallet_point){
+        $point_main = $point_main->main_wallet_point;
+      }
+      else{
+        $point_main = $hm->hm_wallet_point;
+      }
+      if($hm->hm_wallet_point > $point_ext->ext_wallet_point){
+        $point_ext = $point_ext->ext_wallet_point;
+      }
+      else{
+        $point_ext = $hm->hm_wallet_point;
+      }
+      return view('chuyenqr')->with('point_main', $point_main)->with('point_ext', $point_ext)->with('id_recei', $request->id);
     }
   }
   public function postChuyen(Request $request){

@@ -1,5 +1,6 @@
 <?php
 use App\User;
+$id = auth()->user()->id;
 ?>
 @extends('layouts.master')
 @section('content')
@@ -74,11 +75,23 @@ use App\User;
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-	          <img src="public/images/1594702586.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
+				<canvas id="qr-code"></canvas> 
 	          </div>
 	        </div>
 	                
-	      </div>
+		  </div>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+		  <script>
+			  var qr;
+			(function() {
+                    qr = new QRious({
+                    element: document.getElementById('qr-code'),
+                    size: 200,
+                    value: 'http://localhost:8888/taichinh/chuyen/'+'<?php echo $id; ?>'
+                });
+            })();
+		  </script>
 	        </div>
 
 	            <div class="mevivu_home_sesion3 row">

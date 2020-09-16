@@ -6,6 +6,8 @@ Route::auth();
 
 //OTP by Kira
 Route::get('/sendOTP/{email}','WalletMainController@sendOTP');
+Route::get('/chuyen/{id}', 'UsersController@getChuyenQR');
+
 //truong
 
 
