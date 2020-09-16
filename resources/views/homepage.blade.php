@@ -66,7 +66,7 @@ $id = auth()->user()->id;
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-	          <img src="public/images/scan.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
+	          <img onclick="window.location.href='<?php echo url()->current(); ?>/scanner'" src="public/images/scan.png" class="img-thumbnail" alt="Cinque Terre" width="100%"> 
 	          </div>
 	        </div>
 	                
@@ -75,20 +75,19 @@ $id = auth()->user()->id;
 	        <div class="panel panel-default">
 	          <div class="panel-heading text-center">Scaner QR</div>
 	          <div class="panel-body">
-				<canvas id="qr-code"></canvas> 
+				<canvas id="qr-code" style="width: 100%;"></canvas> 
 	          </div>
 	        </div>
 	                
 		  </div>
-		  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 		  <script>
 			  var qr;
 			(function() {
                     qr = new QRious({
                     element: document.getElementById('qr-code'),
-                    size: 200,
-                    value: 'http://localhost:8888/taichinh/chuyen/'+'<?php echo $id; ?>'
+                    size: 100,
+                    value: '<?php echo $id; ?>',
                 });
             })();
 		  </script>
