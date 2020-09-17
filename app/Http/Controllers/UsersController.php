@@ -68,9 +68,9 @@ class UsersController extends Controller
   }
   //get info user recei ajax
   public function infoUserRecei($user_id){
-    $user = User::where('id', $user_id)->first();
+    $user = User::where('id', $user_id)->orwhere('name', $user_id)->first();
     if($user){
-      echo '<p class="alert alert-warning vivify rollInRight">Tên:'.$user->user_name.'<br/>User Type: '.$user->user_type.'</p>';
+      echo '<p class="alert alert-warning vivify rollInRight">User Name:'.$user->user_name.'<br/>User Type: '.$user->user_type.'</p>';
     }
     else{
       echo '<p class="alert alert-warning vivify rollInRight">No user member.</p>';
@@ -111,7 +111,7 @@ class UsersController extends Controller
 
       $this->validate($request, [
         'user_choosewallet' => 'required',
-        'id_user_transfer' => ['required', 'max:255', 'regex:^[0-9]+$^'],
+        'id_user_transfer' => ['required', 'max:255'],
         'point_transfer' => ['required', 'max:255', 'regex:^[0-9]+$^'],
         'transfer_content' => 'max:1024',
         'user_password_pay' => 'required|max:255'
@@ -123,7 +123,9 @@ class UsersController extends Controller
       $ext_wallet = WalletExt::where('ext_wallet_ofuser', $user->id)->first();
       $hm = WalletLevel::where('hm_wallet_ofuser', $user->id)->first();
 
-      $user_transfer_point = User::find($request->id_user_transfer);
+      $user_tranfer_point1 = User::where('id', $request->id_user_transfer)->orwhere('name', $request->id_user_transfer)->first();
+
+      $user_transfer_point = User::find($user_tranfer_point1->id);
         if($request->user_choosewallet == 1){
           $wallet_point = $user->user_point_everyday;
 
@@ -1053,7 +1055,7 @@ class UsersController extends Controller
       ]);
         $user_username = $request->user_username;
         $user_password = $request->user_password;
-        if(Auth::attempt(['name' => $user_username, 'password' => $user_password]))
+        if(Auth::attempt(['name' => $user_username, 'password' => $user_password]) || Auth::attempt(['id' => $user_username, 'password' => $user_password]))
         {
           if(Auth::check()) {
             return Redirect::to('/');

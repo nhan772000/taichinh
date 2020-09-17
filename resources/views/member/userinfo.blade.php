@@ -122,7 +122,7 @@ Khi bạn cập nhật thông tin trên sẽ không thể tự thay đổi đư�
 		          </div>
 
 		          <div class="form-group">
-		            <label for="user_qrcode_image">QR Code:</label>
+		            <label for="user_qrcode_image">USDT QR:</label>
 		            <input type="file" class="form-control" id="user_qrcode_image" name="user_qrcode_image">
 		            <div class="mevivu_img_upload">
 		            	<img class="img-thumbnail" src="public/uploads/image_user/{{$user->user_qrcode_image}}" alt="">

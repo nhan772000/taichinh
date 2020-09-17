@@ -40,7 +40,7 @@ $hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
 
 <header id="header_main" class="container">
 
-      <div class="hidden-sm hidden-lg">
+      <!-- <div class="hidden-sm hidden-lg">
       
       <form action="" style="width: 30%; margin-left: 70%;">
         <select name="language_mobile" class="form-control" style="height: 22px; padding: 0px">
@@ -51,7 +51,7 @@ $hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
         </select>
         </form>
       
-      </div>
+      </div> -->
     
         
       <div class="row">
@@ -59,8 +59,8 @@ $hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
     <div class="col-xs-4 col-sm-2">
         <a href="{{URL::to('/')}}"><img src="public/images/customLogo.png" width="100%" alt="" style="padding-top: 7px;"></a>
     </div>
-    <div class="thongbao col-xs-2">
-      <a id="clear_thongbao" class="icon_thongbao" href="#"><span class="glyphicon glyphicon-bell"></span><span id="thongbao" style="margin-top: -20px; padding: 1px 4px; background: red;" class="badge">5</span></a>
+    <div class="thongbao col-xs-2 hidden-xs">
+      <a id="clear_thongbao hidden-xs" class="icon_thongbao" href="#"><span class="glyphicon glyphicon-bell"></span><span id="thongbao" style="margin-top: -20px; padding: 1px 4px; background: red;" class="badge">5</span></a>
       <ul class="menu_thongbao">
         <li><a href="#">Bạn có cơ hội trúng iphone 12</a></li>
         <li><a href="deal_story.html">bạn vừa nhận 500 point từ Allen</a></li>
@@ -73,19 +73,21 @@ $hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
         {{$hm->hm_wallet_point}}
       </span>
     </div>
-    <div class="col-sm-2 ngonngu hidden-xs">
-        <a href="#" class="icon_language"><span class="glyphicon glyphicon-globe"></span> English</a>
+    <div class="col-xs-3 col-sm-2 ngonngu">
+      
+        <a href="#" class="icon_language">Language <i class="fa fa-angle-down" aria-hidden="true"></i></a>
 
             <ul class="language_desktop">
-                      <li><a href="#">Spanish</a></li>
-                      <li><a href="deal_story.html">French</a></li>
+              <li><a href="#">English</a></li>
+                <li><a href="#">Spanish</a></li>
+                <li><a href="deal_story.html">French</a></li>
                       
-                    </ul>
+            </ul>
 
     </div>
 
 
-    <div class="menu col-xs-1 text-center">
+    <div class="menu col-xs-1 text-center hidden-xs">
       <i class="glyphicon glyphicon-align-justify icon_menu"></i>
       <ul class="menu-right">
                       <li><a href="{{URL::to('/userinfo')}}">Information</a></li>
@@ -99,5 +101,4 @@ $hm = WalletLevel::where('hm_wallet_ofuser', $id)->first();
                     </ul>
     </div>
   </div>
-    
 </header>

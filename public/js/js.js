@@ -17,6 +17,7 @@ $(document).ready(function(){
         $(".language_desktop").toggleClass("menu-right_show");
         $(".menu-right").removeClass("menu-right_show");
         $(".menu_thongbao").removeClass("menu-right_show");
+        $(".sub_menu_mobile").removeClass("sub_menu_mobile_show");
 });
     $(".icon_thongbao").click(function(){
         $(".menu_thongbao").toggleClass("menu-right_show");
@@ -27,6 +28,12 @@ $(document).ready(function(){
         $(".menu-right").removeClass("menu-right_show");
         $(".language_desktop").removeClass("menu-right_show");
         $(".menu_thongbao").removeClass("menu-right_show");
+        //$(".sub_menu_mobile").removeClass("sub_menu_mobile_show");
+    });
+    //toggle_menu_mobile
+    $("#toggle_menu_mobile").click(function() {
+        $(".sub_menu_mobile").toggleClass("sub_menu_mobile_show");
+        $(".language_desktop").removeClass("menu-right_show");
     });
 
 //xử lý ẩn và hiển thị mật khẩu

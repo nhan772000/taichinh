@@ -119,7 +119,7 @@ body {
 #header_main .row .vihanmuc{
   line-height: 50px;
 }
-#header_main ul.menu-right li:last-child a, #header_main ul.language_desktop li:last-child a, #header_main ul.menu_thongbao li:last-child a{
+#header_main ul.menu-right li:last-child a, ul.sub_menu_mobile li:last-child a,#header_main ul.language_desktop li:last-child a, #header_main ul.menu_thongbao li:last-child a{
     border-bottom: none;
 }  
 #header_main ul.menu_thongbao li a{
@@ -130,7 +130,7 @@ body {
     color: white;
     font-size: 12px;
 }  
-#header_main ul.menu-right li a, #header_main ul.language_desktop li a{
+#header_main ul.menu-right li a, #header_main ul.language_desktop li a, ul.sub_menu_mobile li a{
     padding: 10px 0px 10px 15px;
     border-bottom: 1px solid white;
     display: block;
@@ -138,7 +138,7 @@ body {
     color: white;
     font-size: 14px;
 }
-#header_main ul.menu-right li a:before{
+#header_main ul.menu-right li a:before, ul.sub_menu_mobile li a:before{
     content:"» ";
     font-size: 16px;
 }
@@ -149,7 +149,7 @@ body {
     text-decoration: none;
     background-color: #4cd24c;
 }
-#header_main ul.menu-right li a:hover, #header_main ul.language_desktop li a:hover{
+#header_main ul.menu-right li a:hover, #header_main ul.language_desktop li a:hover, ul.sub_menu_mobile li a:hover{
     text-decoration: none;
     padding-left:20px;
     background-color: #4cd24c;
@@ -429,4 +429,45 @@ body {
   .modal-content {
     width: 100%;
   }
+}
+#menu_mobile{
+  width: 100%;
+  height: 70px;
+  bottom: 0;
+  background: white;
+  position: fixed;
+  box-shadow: 0px -1px 3px 0px rgba(0,0,0,0.75);
+}
+#menu_mobile div{
+  padding:15px 0px;
+}
+#menu_mobile>div>a{
+  display: grid;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  color: #333333;
+}
+#menu_mobile div a:hover{
+  color: #5cb85c;
+}
+.sub_menu_mobile{
+  position: absolute;
+  bottom: 66px;
+  width: 250px;
+    opacity: 0;
+    right: 1px;
+    text-align: left;
+    padding: 0px 0px 5px 0px;
+    list-style: none;
+    background-color: #22b322;
+    
+    z-index: -1;
+    transform: translateX(100%);
+    transition: 0.3s ease-in;
+
+}
+.sub_menu_mobile_show{
+  opacity: 1;
+  transform: translateX(0%);
 }
