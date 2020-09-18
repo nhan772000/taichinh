@@ -21,9 +21,23 @@ body {
     }
 }
 
+ul.menu_thongbao{
+    padding: 10px;
+    border: 2px solid #ccc;
+    list-style: none;
+    background: #fff;
+    z-index: 9;
+}
+ul.menu_thongbaoli{
+    color: #fff;
+    font-weight: 400;
+    heigh: 25px;
+}
 
 @media only  screen and (min-width: 768px ) {
     
+
+   
    
         .container{
         max-width: 960px;
@@ -56,7 +70,7 @@ body {
               width: 100%;
         }
         .icon_size{
-            font-size: 30px;
+            font-size: 20px;
         }
 .btn-success1{
     background-color: #009E4E;
@@ -93,7 +107,7 @@ body {
     box-shadow: 0px 3px 3px 0px #a09c9d;
     
    background-color: #009E4E;
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0px 10px 0px; 
         
 }
 #header_main .ngonngu>a, #header_main .thongbao>a, #header_main .vihanmuc>a, #header_main .menu i{
@@ -105,7 +119,9 @@ body {
 #header_main .menu i{
    z-index: 3;
 }
-
+.col-trans{
+    padding: 0px !important;
+}
 #header_main .row .logo img{
         width: 60%;
     height: 40px;
@@ -114,7 +130,9 @@ body {
     padding: 0px 0px 0px 0px;
     text-align: center;
 }
-
+#header_main .row .vihanmuc{
+     line-height: 50px;
+}
 #header_main ul.menu-right li:last-child a, #header_main ul.language_desktop li:last-child a, #header_main ul.menu_thongbao li:last-child a{
     border-bottom: none;
 }  
@@ -204,7 +222,7 @@ body {
     margin-top: 5%;
 }
 .mevivu_vi{
-    margin-top: 5%;
+    margin-top: 1%;
 }
 #header_main .logo{
 
@@ -221,17 +239,249 @@ body {
 #header_main .menu{
     
 }
+#transactiontable thead,#transactiontable tfoot{
+    background: #009E4E;
+}
+#transactiontable tfoot td{
+    text-align: left;
+}
+.toolbar {
+    float: left;
+}
+.kwhite{
+    color: #fff;
+}
+.ktitle{
+    font-size: 30px;;
+}
+.kcol{
+    width: 100%;
+    margin: 0px;
+    z-index: 99;
+    position: sticky;
+    top: 0px;
+    box-shadow: 0px 3px 3px 0px #a09c9d;
+    background-color: #009E4E;
+    padding: 10px 0px 10px 0px;
+}
+
+.uppercase{
+    text-transform: uppercase   ;
+}
+.kcol2{
+    width: 100%;
+    margin: 0px;
+    z-index: 99;
+    position: sticky;
+    top: 0px;
+    box-shadow: 0px 3px 3px 0px #a09c9d;
+    background-color: #fff;
+    padding: 10px 0px 10px 0px;
+}
+
+.amount{
+    color: #def426;
+}
+.submenu{
+    margin-left: 10px;
+}
+.submenu .active{
+    background: #30a5ff;
+    color: #fff;
+}
+.active{
+    background: #019e4e;
+    color: #fff;
+}
+.btnt{
+    font-size: 12px !important;
+}
+.balance{
+    font-size: 20px;
+}
+.balance .balance-mini{
+    border: #000;
+    background: #fff;
+    color: #019e4e;
+}
+.balance .balance-mini i{
+    color: yellow;
+}
+
+#transactiontable th{
+    padding-right: 20px;
+    border-top: 1px solid #ddd ;
+    color: #fff;
+    border-left: 1px solid #ddd ;
+}
+#transactiontable th:last-child{
+    border-right: 1px solid #ddd ;
+}
+#transactiontable tfoot td{
+        color: #fff;
+
+}
+
+.transactionman select, .transactionman input, .toolbar button{
+    height: 30px !important;
+}
+ select.kira{
+    height: 34px;
+    width: 100%;
+}
 
 
+#myImg {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.row{
+    margin-left: 0px;
+    margin-right: 0px;
+}
 
+#myImg:hover {opacity: 0.7;}
 
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 999999; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
 
+/* Modal Content (image) */
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
 
+/* Caption of Modal Image */
+#caption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+}
 
+/* Add Animation */
+.modal-content, #caption {  
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
 
+@-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)} 
+  to {-webkit-transform:scale(1)}
+}
 
+@keyframes zoom {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
 
+/* The Close Button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
 
-
-
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mevivu_img_upload{
+    width: 100%;
+    height: 300px;
+    overflow: scroll;
+    text-align: center;
+    margin: 5px;
+}
+.mevivu_alert_verify{
+    font-weight: 600;
+    color: #ba1e1e !important;
+    float: right;
+}
+.btn-success2{
+  background: none;
+  border: 5px solid #5cb85c;
+  border-radius: 50px;
+  color:black;
+  transition: all .2s;
+}
+.btn-success2:hover{
+  background: #5cb85c;
+  border: 5px solid #009E4E;
+  color:white;
+}
     
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
+#menu_mobile{
+  width: 100%;
+  height: 70px;
+  bottom: 0;
+  background: white;
+  position: fixed;
+  box-shadow: 0px -1px 3px 0px rgba(0,0,0,0.75);
+  z-index: 30;
+}
+#menu_mobile div{
+  padding:15px 0px;
+}
+#menu_mobile>div>a{
+  display: grid;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  color: #333333;
+}
+#menu_mobile div a:hover{
+  color: #5cb85c;
+}
+.sub_menu_mobile{
+  position: absolute;
+  bottom: 66px;
+  width: 250px;
+    opacity: 0;
+    right: 1px;
+    text-align: left;
+    padding: 0px 0px 5px 0px;
+    list-style: none;
+    background-color: #22b322;
+    
+    z-index: 31;
+    transform: translateX(100%);
+    transition: 0.3s ease-in;
+
+}
+.sub_menu_mobile_show{
+  opacity: 1;
+  transform: translateX(0%);
+}

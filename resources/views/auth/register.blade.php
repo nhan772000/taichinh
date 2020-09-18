@@ -1,108 +1,140 @@
-@extends('layouts.master')
+<?php 
+use App\User;
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+  <title>Document</title>
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Đăng ký tài khoản mới</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
-                        {{ csrf_field() }}
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Họ tên</label>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name"  value="{{ old('name') }}">
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="public/css/style.css">
+</head>
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Địa chỉ E-Mail</label>
+    
+<body>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Mật khẩu</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control"  name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Xác nhận mật khẩu</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" >
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-                            <label for="phone" class="col-md-4 control-label">Số điện thoại</label>
-
-                            <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control" name="phone"  value="{{ old('phone') }}">
-
-                                @if ($errors->has('phone'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('phone') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                            <label for="address" class="col-md-4 control-label">Địa chỉ</label>
-
-                            <div class="col-md-6">
-                                <input id="address" type="text" class="form-control" name="address"  value="{{ old('address') }}">
-
-                                @if ($errors->has('address'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i> Đăng ký 
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div id="mevivu_signup" class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-lg-8 col-lg-offset-2 ">
+      <div class="well well-sm">
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <img src="public/images/customLogo.png" alt="" width="70%" />
+          </div>
         </div>
+        <form action="{{URL::to('/register')}}" method="post">
+            {{ csrf_field() }}
+              @if(count($errors) > 0)
+            <div class="alert alert-danger">
+              @foreach($errors->all() as $err)
+                {{$err}}<br/>
+              @endforeach
+            </div>
+            @endif
+
+            @if(Session('message'))
+
+            <div class="alert alert-danger">
+              {{Session('message')}}
+            </div>
+            @endif
+          <div class="form-group">
+            <label for="user_introduction">Introduce code:</label>
+            @if($user_introduction != null)
+                      <div class="form-group">
+
+                <input readonly required type="text" class="form-control" id="user_introduction" value="{{$user_introduction}}" name="user_introduction">
+                </div>
+                          <div class="form-group">
+            <label for="user_introduction">User inntroduction:</label>
+
+                <input readonly required type="text" class="form-control" id="user_introduction_name" value="{{User::where('id',$user_introduction)->value('user_name')}}" name="user_introduction_name">
+            </div>
+            @else
+                <input required type="text" class="form-control" id="user_introduction" placeholder="Introduce code" name="user_introduction">
+
+            @endif
+          </div>
+          <div class="form-group">
+            <label for="user_username">Username:</label>
+            <input required type="text" class="form-control" id="user_username" placeholder="Username" name="user_username">
+          </div>
+          <div class="form-group">
+            <label for="user_name">Name:</label>
+            <input required type="text" class="form-control" id="user_name" placeholder="Name" name="user_name">
+          </div>
+
+          <div class="form-group">
+            <label for="user_email">Email address:</label>
+            <input required type="email" class="form-control" id="user_email" placeholder="Email address" name="user_email">
+          </div>
+          <div class="form-group">
+            <label for="user_phone">Phone number:</label>
+            <input required type="tel" class="form-control" id="user_phone" placeholder="Phone number" name="user_phone">
+          </div>
+         
+            <label for="user_password">Password:</label>
+          <div class="input-group form-group">
+            
+            <input required type="password" class="form-control" id="user_password" placeholder="password" name="user_password">
+            <div class="input-group-btn">
+            <button class="showhidepwd btn btn-default" type="button">
+              <i class="glyphicon glyphicon-eye-open"></i>
+            </button>
+          </div>
+          </div>
+          <label for="user_password_pay">Account password:</label>
+          <div class="input-group form-group">
+            <input required type="password" class="form-control" id="user_password_pay" placeholder="Account password" name="user_password_pay">
+            <div class="input-group-btn">
+            <button class="showhidepwdtt btn btn-default" type="button">
+              <i class="glyphicon glyphicon-eye-open"></i>
+            </button>
+          </div>
+          </div>
+          <div class="form-group">
+            <label for="  user_nation">Country:</label>
+            <select required class="form-control" id="  user_nation" name=" user_nation">
+                  <option value="VN">VN</option>
+                  <option value="EN">EN</option>
+                  
+            </select>
+          </div>
+          <div class="form-group">
+            <a href="{{URL::to('/login')}}">Login ?</a>
+          </div>
+          <div class="alert-danger alert">
+            Đây là điều khoản của chúng tôi!
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" id="accept" name="accept">Chấp nhận điều khoản?</label>
+          </div>
+          <button disabled type="submit" class="btn btn-default btn-block" id="register" name="register">Register</button>
+        </form>
+      </div>
     </div>
+  </div>
+  
+  
 </div>
-@endsection
+
+
+
+<script src="public/js/js.js"></script>
+</body>
+<footer>
+
+</footer>
+</html>

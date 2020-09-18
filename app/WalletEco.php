@@ -10,4 +10,6 @@ class WalletEco extends Model
 	protected $guarded =[];
 
 
+	//truong
+	protected $primaryKey = 'eco_wallet_id';
 }

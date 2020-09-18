@@ -18,6 +18,15 @@ return [
 
     'driver' => env('MAIL_DRIVER', 'smtp'),
 
+    //code gửi mail
+    
+    // 'stream' => [
+    // 'ssl'=> [
+    //     'allow_self_signed' => true,
+    //     'verify_peer' => false,
+    //     'verify_peer_name' => false,
+    // ],
+    // ],
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address
@@ -29,7 +38,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'host' => env('MAIL_HOST', 'smtp.googlemail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +64,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'tranvantruongpro12345@gmail.com', 'name' => 'Trường'],
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +90,7 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => env('MAIL_USERNAME', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +103,7 @@ return [
     |
     */
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => env('MAIL_PASSWORD', ''),
 
     /*
     |--------------------------------------------------------------------------
