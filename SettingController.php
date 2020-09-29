@@ -22,9 +22,11 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-seesion_start();
 class SettingController extends Controller
 {
+    public function settingMarket(Request $request){
+      
+    }
     public function getGift(Request $request){
         //lấy ngày h hiện tại
         $datetimeNow = Carbon::now('Asia/Ho_Chi_Minh');
