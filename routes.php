@@ -4,10 +4,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::auth();
 
+
+//tăng hạn mức
+Route::get('/tanghanmuc' , 'WalletLevelController@tangHanMuc');
+
 //setting user cash back
 Route::get('/setting', 'UsersController@getSettingCashBack');
 Route::post('/setting', 'UsersController@postSettingCashBack');
 
+
+Route::get('/phattrienthitruong','SettingController@settingMarket');
 
 //route by Kira
 Route::get('/notice/readNotice/{id}','UsersController@readNotice');
@@ -27,7 +33,6 @@ Route::get('/ngay', 'UsersController@ngay');
 
 Route::get('/signup', 'SignUpController@signup');
 Route::get('/', 'HomepageController@showHomepage');
-
 
 //-----------------------chuyển------------------
 //Route::get('/capnhat', 'UsersController@capnhat');
@@ -89,15 +94,14 @@ Route::get('/login', 'UsersController@login');
 //đăng xuất
 Route::get('/logout', 'UsersController@logOut');
 
+//Kiểm tra nhận thưởng
+Route::get('/tangqua' , 'SettingController@getGift');
 
 //kiểm tra đăng ký tài khoản
 Route::post('/register', 'UsersController@checkUserRegister');
 
 //kiểm tra đăng nhập người dùng
 Route::post('/login', 'UsersController@checkUserLogin');
-
-//Kiểm tra nhận thưởng
-Route::get('/tangqua' , 'SettingController@getGift');
 
 // kết thúc----------------Xử lý đăng nhập, đăng ký, đăng xuất người dùng ------------
 
